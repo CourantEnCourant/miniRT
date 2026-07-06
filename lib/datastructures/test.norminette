@@ -1,0 +1,282 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: weizhang <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/24 20:12:32 by weizhang          #+#    #+#             */
+/*   Updated: 2026/02/02 21:34:49 by weizhang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <assert.h>
+#include <string.h>
+#include "libft.h"
+#include "gc_libft.h"
+#include "datastructures.h"
+
+static void	repr_str(void *value)
+{
+	ft_printf("%s", (char *)value);
+}
+
+void	test_darray(t_gc *gc)
+{
+	t_darray	*list;
+
+	ft_printf("==========darray test==========\n");
+	list = init_darray(gc);
+
+	ft_printf("Test empty darray\n");
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop() from empty darray\n");
+	assert(list->pop(list) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop_i() from empty darray\n");
+	assert(list->pop_i(list, 1) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek() from empty darray\n");
+	assert(list->peek(list) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(0) from empty darray\n");
+	assert(list->peek_i(list, 0) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(5) from empty darray\n");
+	assert(list->peek_i(list, 5) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test insert(OUT_OF_RANGE_INDEX)\n");
+	list->insert(list, 50000, gc_strdup("OUT_OF_RANGE_INDEX test", gc));
+	assert(list->len == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test insert(NEGATIVE_INDEX)\n");
+	list->insert(list, -5, gc_strdup("NEGATIVE_INDEX test", gc));
+	assert(list->len == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Push 4 strs to list\n");
+	list->push(list, gc_strdup("Hello", gc));
+	list->push(list, gc_strdup("World", gc));
+	list->push(list, gc_strdup("Mine", gc));
+	list->push(list, gc_strdup("Craft", gc));
+	assert(list->len == 4);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek() returns last element\n");
+	assert(strcmp((char *)list->peek(list), "Craft") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(0)\n");
+	assert(strcmp((char *)list->peek_i(list, 0), "Hello") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(1)\n");
+	assert(strcmp((char *)list->peek_i(list, 1), "World") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(2)\n");
+	assert(strcmp((char *)list->peek_i(list, 2), "Mine") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(3)\n");
+	assert(strcmp((char *)list->peek_i(list, 3), "Craft") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek_i(OUT_OF_RANGE)\n");
+	assert(list->peek_i(list, 100) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test peek() does not remove elements\n");
+	list->peek(list);
+	list->peek(list);
+	assert(list->len == 4);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop()\n");
+	assert(strcmp((char *)list->pop(list), "Craft") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop_i(1)\n");
+	assert(strcmp((char *)list->pop_i(list, 1), "World") == 0);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop_i(OUT_OF_RANGE_INDEX)\n");
+	assert(list->pop_i(list, 5000) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop_i(NEGATIVE_INDEX)\n");
+	assert(list->pop_i(list, -50000) == NULL);
+	list->repr(list, repr_str);
+	ft_printf("\n");
+
+	ft_printf("Test pop/peek on empty does not change len\n");
+	assert(list->len == 2);
+	list->pop(list);
+	list->pop(list);
+	assert(list->len == 0);
+	list->pop(list);
+	list->pop_i(list, 0);
+	list->peek(list);
+	list->peek_i(list, 0);
+	assert(list->len == 0);
+	ft_printf("\n");
+
+	ft_printf("Test len tracks push and pop correctly\n");
+	list->push(list, gc_strdup("a", gc));
+	assert(list->len == 1);
+	list->push(list, gc_strdup("b", gc));
+	assert(list->len == 2);
+	list->push(list, gc_strdup("c", gc));
+	assert(list->len == 3);
+	list->pop(list);
+	assert(list->len == 2);
+	list->pop_i(list, 0);
+	assert(list->len == 1);
+	list->peek(list);
+	assert(list->len == 1);
+	list->peek_i(list, 0);
+	assert(list->len == 1);
+	list->pop(list);
+	assert(list->len == 0);
+	ft_printf("\n");
+}
+
+void	test_btree(t_gc *gc)
+{
+	t_btree	*root;
+	t_btree	*tmp1;
+	t_btree	*tmp2;
+
+	ft_printf("==========btree test==========\n");
+	ft_printf("Test 1: 1 + 2 * 3 / 5\n");
+	root = init_btree(gc_strdup("+", gc), gc);
+	tmp1 = init_btree(gc_strdup("*", gc), gc);
+	tmp2 = init_btree(gc_strdup("/", gc), gc);
+	root->left = init_btree(gc_strdup("1", gc), gc);
+	root->right = tmp1;
+	tmp1->left = init_btree(gc_strdup("2", gc), gc);
+	tmp1->right = tmp2;
+	tmp2->left = init_btree(gc_strdup("3", gc), gc);
+	tmp2->right = init_btree(gc_strdup("5", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 2: single node\n");
+	root = init_btree(gc_strdup("42", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 3: 1 + 2\n");
+	root = init_btree(gc_strdup("+", gc), gc);
+	root->left = init_btree(gc_strdup("1", gc), gc);
+	root->right = init_btree(gc_strdup("2", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 4: ((1 + 2) - 3) * 4\n");
+	root = init_btree(gc_strdup("*", gc), gc);
+	tmp1 = init_btree(gc_strdup("-", gc), gc);
+	tmp2 = init_btree(gc_strdup("+", gc), gc);
+	root->left = tmp1;
+	root->right = init_btree(gc_strdup("4", gc), gc);
+	tmp1->left = tmp2;
+	tmp1->right = init_btree(gc_strdup("3", gc), gc);
+	tmp2->left = init_btree(gc_strdup("1", gc), gc);
+	tmp2->right = init_btree(gc_strdup("2", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 5: 1 || (2 && (3 | 4))\n");
+	root = init_btree(gc_strdup("||", gc), gc);
+	tmp1 = init_btree(gc_strdup("&&", gc), gc);
+	tmp2 = init_btree(gc_strdup("|", gc), gc);
+	root->left = init_btree(gc_strdup("1", gc), gc);
+	root->right = tmp1;
+	tmp1->left = init_btree(gc_strdup("2", gc), gc);
+	tmp1->right = tmp2;
+	tmp2->left = init_btree(gc_strdup("3", gc), gc);
+	tmp2->right = init_btree(gc_strdup("4", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 6: full balanced tree\n");
+	root = init_btree(gc_strdup("&&", gc), gc);
+	tmp1 = init_btree(gc_strdup("||", gc), gc);
+	tmp2 = init_btree(gc_strdup("|", gc), gc);
+	root->left = tmp1;
+	root->right = tmp2;
+	tmp1->left = init_btree(gc_strdup("a", gc), gc);
+	tmp1->right = init_btree(gc_strdup("b", gc), gc);
+	tmp2->left = init_btree(gc_strdup("c", gc), gc);
+	tmp2->right = init_btree(gc_strdup("d", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+	ft_printf("Test 7: left-only chain\n");
+	root = init_btree(gc_strdup("+", gc), gc);
+	tmp1 = init_btree(gc_strdup("-", gc), gc);
+	root->left = tmp1;
+	tmp1->left = init_btree(gc_strdup("7", gc), gc);
+	root->repr(root, repr_str);
+	ft_printf("\n");
+}
+
+static void	test_reduce_helper(t_darray *list, char *init, char *expected)
+{
+	char	*result;
+
+	result = (char *)list->reduce(list,
+			(void *(*)(void *, void *, t_gc *))gc_strjoin, init);
+	assert(strcmp(result, expected) == 0);
+	ft_printf("result: \"%s\"\n\n", result);
+}
+
+void	test_darray_functional(t_gc *gc)
+{
+	t_darray	*list;
+
+	ft_printf("==========darray functional test==========\n");
+	list = init_darray(gc);
+
+	ft_printf("Test reduce with gc_strjoin on empty darray\n");
+	test_reduce_helper(list, gc_strdup("", gc), "");
+
+	ft_printf("Test reduce with [\"Hello\", \" \", \"World\"]\n");
+	list->push(list, gc_strdup("Hello", gc));
+	list->push(list, gc_strdup(" ", gc));
+	list->push(list, gc_strdup("World", gc));
+	test_reduce_helper(list, gc_strdup("", gc), "Hello World");
+	ft_printf("Test reduce with gc_strjoin and initial value \"Say: \"\n");
+	test_reduce_helper(list, gc_strdup("Say: ", gc), "Say: Hello World");
+}
+
+int	main(void)
+{
+	t_gc	*gc;
+	gc = init_gc();
+	test_darray(gc);
+	test_btree(gc);
+	test_darray_functional(gc);
+	gc->clean(gc);
+	return (0);
+}
