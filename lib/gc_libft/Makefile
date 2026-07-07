@@ -6,7 +6,8 @@ AR = ar rcs
 RM = rm -f
 
 INCLUDE = -I ../../include
-SRC = gc_basic.c \
+SRC = dllist.c \
+	  gc_basic.c \
 	  gc_calloc.c \
 	  gc_get_next_line.c \
 	  gc_itoa.c \
