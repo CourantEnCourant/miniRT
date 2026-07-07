@@ -21,7 +21,7 @@ char	*gc_strtrim(char const *s1, char const *set, t_gc *gc)
 	trimmed = ft_strtrim(s1, set);
 	if (!trimmed)
 	{
-		gc->clean(gc);
+		dest_gc(gc);
 		exit(EXIT_FAILURE);
 	}
 	gc->add(gc, trimmed);

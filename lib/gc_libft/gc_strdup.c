@@ -21,7 +21,7 @@ char	*gc_strdup(char *s, t_gc *gc)
 	s_dup = ft_strdup(s);
 	if (!s_dup)
 	{
-		gc->clean(gc);
+		dest_gc(gc);
 		exit(EXIT_FAILURE);
 	}
 	gc->add(gc, s_dup);

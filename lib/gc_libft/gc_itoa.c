@@ -21,7 +21,7 @@ char	*gc_itoa(int n, t_gc *gc)
 	str = ft_itoa(n);
 	if (!str)
 	{
-		gc->clean(gc);
+		dest_gc(gc);
 		exit(EXIT_FAILURE);
 	}
 	gc->add(gc, str);

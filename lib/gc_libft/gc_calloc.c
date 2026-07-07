@@ -21,7 +21,7 @@ void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc)
 	arr = ft_calloc(nmemb, size);
 	if (!arr)
 	{
-		gc->clean(gc);
+		dest_gc(gc);
 		exit(EXIT_FAILURE);
 	}
 	gc->add(gc, arr);
