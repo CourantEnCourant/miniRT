@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include "datastructures.h"
+#include "gc_libft.h"
 #include "libft.h"
 
 void	*peek_i(t_darray *self, size_t i)
@@ -20,7 +21,7 @@ void	*peek_i(t_darray *self, size_t i)
 	if (i >= self->len)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: max len is %d, peeked at %d\n", self->len, i);
+			"IndexError: max len is %d, peeked at %d\n", self->len, i);
 		return (NULL);
 	}
 	return (self->arr[i]);
@@ -31,13 +32,13 @@ void	*peek(t_darray *self)
 	if (self->len == 0)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: peeked from empty darray\n");
+			"IndexError: peeked from empty darray\n");
 		return (NULL);
 	}
-	return (peek_i(self, self->len - 1));
+	return (self->arr[self->len - 1]);
 }
 
-void	set(t_darray *self, size_t i, void *item)
+void	set(t_darray *self, size_t i, void *item, void (*dest)(void *, t_gc *))
 {
 	if (i + 1 > self->len)
 	{
@@ -45,5 +46,7 @@ void	set(t_darray *self, size_t i, void *item)
 			"IndexError: darray len %d while set at %d\n", self->len, i);
 		return ;
 	}
+	if (dest && item != self->arr[i])
+		dest(self->arr[i], self->gc);
 	self->arr[i] = item;
 }

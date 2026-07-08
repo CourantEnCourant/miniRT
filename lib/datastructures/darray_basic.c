@@ -22,14 +22,16 @@ void		push(t_darray *self, void *item);
 void		*pop_i(t_darray *self, size_t i);
 void		*pop(t_darray *self);
 void		sort(t_darray *self, bool (*f)(void *s1, void *s2));
-void		set(t_darray *self, size_t i, void *item);
+void		set(t_darray *self, size_t i, void *item,
+				void (*dest)(void *, t_gc *));
 bool		any(t_darray *s, bool (*f)(void *elem, void *target), void *target);
 void		*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
 size_t		find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
-void		for_each(t_darray *self, void *(*f)(void *arg, t_gc *gc));
+void		for_each(t_darray *self, void *(*f)(void *arg, t_gc *gc),
+				void (*dest)(void *, t_gc *));
 t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2);
-void		*reduce(t_darray *s,
-				void *(*f)(void *i1, void *i2, t_gc *gc), void *a);
+void		*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc),
+				void *a, void (*dest)(void *, t_gc *));
 
 static t_darray	*copy(t_darray *self)
 {

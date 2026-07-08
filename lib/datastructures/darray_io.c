@@ -23,7 +23,7 @@ void	insert(t_darray *s, size_t i, void *item)
 	if (i > s->len)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: max len is %d, insert at %d\n", s->len, i);
+			"IndexError: max len is %d, insert at %d\n", s->len, i);
 		return ;
 	}
 	if (s->len >= s->capacity)
@@ -31,6 +31,7 @@ void	insert(t_darray *s, size_t i, void *item)
 		s->capacity *= 2;
 		arr_ext = gc_calloc(s->capacity + 1, sizeof(void *), s->gc);
 		ft_memmove(arr_ext, s->arr, s->len * sizeof(void *));
+		gc_free(s->arr, s->gc);
 		s->arr = arr_ext;
 	}
 	ft_memmove(&s->arr[i + 1], &s->arr[i], (s->len - i) * sizeof(void *));
@@ -50,13 +51,13 @@ void	*pop_i(t_darray *s, size_t i)
 	if (s->len == 0)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: popped from empty darray\n");
+			"IndexError: popped from empty darray\n");
 		return (NULL);
 	}
 	if (i > s->len - 1)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: max index %d, popped at %d\n", s->len - 1, i);
+			"IndexError: max index %d, popped at %d\n", s->len - 1, i);
 		return (NULL);
 	}
 	item = s->arr[i];
@@ -70,7 +71,7 @@ void	*pop(t_darray *self)
 	if (self->len == 0)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: popped from empty darray\n");
+			"IndexError: popped from empty darray\n");
 		return (NULL);
 	}
 	return (self->pop_i(self, self->len - 1));
@@ -90,11 +91,11 @@ void	sort(t_darray *self, bool (*f)(void *s1, void *s2))
 		j = 0;
 		while (j < self->len - i - 1)
 		{
-			if (f(self->peek_i(self, j), self->peek_i(self, j + 1)))
+			if (!f(self->arr[j], self->arr[j + 1]))
 			{
-				tmp = self->peek_i(self, j);
-				self->set(self, j, self->peek_i(self, j + 1));
-				self->set(self, j + 1, tmp);
+				tmp = self->arr[j];
+				self->arr[j] = self->arr[j + 1];
+				self->arr[j + 1] = tmp;
 				is_sorted = false;
 			}
 			j++;

@@ -14,14 +14,20 @@
 #include "datastructures.h"
 #include "gc_libft.h"
 
-void	for_each(t_darray *self, void *(*f)(void *arg, t_gc *gc))
+void	for_each(t_darray *self,
+		void *(*f)(void *, t_gc *),
+		void (*dest)(void *, t_gc *))
 {
 	size_t	i;
+	void	*tmp;
 
 	i = 0;
 	while (i < self->len)
 	{
-		self->arr[i] = f(self->arr[i], self->gc);
+		tmp = self->arr[i];
+		self->arr[i] = f(tmp, self->gc);
+		if (dest && self->arr[i] != tmp)
+			dest(tmp, self->gc);
 		i++;
 	}
 }

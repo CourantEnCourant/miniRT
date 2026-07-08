@@ -59,14 +59,21 @@ t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
 	return (filtered);
 }
 
-void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a)
+void	*reduce(t_darray *s,
+		void *(*f)(void *, void *, t_gc *),
+		void *a,
+		void (*dest)(void *, t_gc *))
 {
 	size_t	i;
+	void	*tmp;
 
 	i = 0;
 	while (i < s->len)
 	{
-		a = f(a, s->arr[i], s->gc);
+		tmp = f(a, s->arr[i], s->gc);
+		if (dest && tmp != a)
+			dest(a, s->gc);
+		a = tmp;
 		i++;
 	}
 	return (a);
