@@ -50,3 +50,24 @@ void	set(t_darray *self, size_t i, void *item, void (*dest)(void *, t_gc *))
 		dest(self->arr[i], self->gc);
 	self->arr[i] = item;
 }
+
+void	repr(t_darray *self, void (*repr_item)(void *value))
+{
+	size_t	i;
+
+	write(1, "[", 1);
+	i = 0;
+	if (!self->len)
+	{
+		write(1, "]\n", 2);
+		return ;
+	}
+	while (i < self->len - 1)
+	{
+		repr_item(self->arr[i]);
+		write(1, ", ", 2);
+		i++;
+	}
+	repr_item(self->arr[i]);
+	write(1, "]\n", 2);
+}

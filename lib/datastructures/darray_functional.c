@@ -48,7 +48,7 @@ t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
 	t_darray	*filtered;
 	size_t		i;
 
-	filtered = init_darray(s->gc);
+	filtered = new_darray(s->gc);
 	i = 0;
 	while (i < s->len)
 	{

@@ -26,7 +26,6 @@ struct	s_darray
 	size_t		capacity;
 	t_gc		*gc;
 	void		(*repr)(t_darray *self, void (*repr_item)(void *value));
-	void		**(*to_arr)(t_darray *self);
 	void		*(*peek_i)(t_darray *self, size_t i);
 	void		*(*peek)(t_darray *self);
 	void		(*insert)(t_darray *self, size_t i, void *item);
@@ -48,10 +47,11 @@ struct	s_darray
 			void *(*)(void *, void *, t_gc *),
 			void *,
 			void (*dest)(void *, t_gc *));
-	t_darray	*(*copy)(t_darray *self);
 };
-t_darray	*init_darray(t_gc *gc);
-t_darray	*init_from_arr(void **arr, t_gc *gc);
+t_darray	*new_darray(t_gc *gc);
+t_darray	*new_darray_from_arr(void **arr, t_gc *gc);
+t_darray	*copy(t_darray *original, void *(*copy)(void *, t_gc *));
+void		dest_darray(t_darray *darray, void (*dest)(void *, t_gc *));
 
 typedef struct s_btree	t_btree;
 struct	s_btree
