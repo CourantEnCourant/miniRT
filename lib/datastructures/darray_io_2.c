@@ -16,7 +16,7 @@
 #include "gc_libft.h"
 #include "libft.h"
 
-void	*peek_i(t_darray *self, size_t i)
+const void	*peek_i(const t_darray *self, size_t i)
 {
 	if (i >= self->len)
 	{
@@ -27,7 +27,7 @@ void	*peek_i(t_darray *self, size_t i)
 	return (self->arr[i]);
 }
 
-void	*peek(t_darray *self)
+const void	*peek(const t_darray *self)
 {
 	if (self->len == 0)
 	{
@@ -38,7 +38,10 @@ void	*peek(t_darray *self)
 	return (self->arr[self->len - 1]);
 }
 
-void	set(t_darray *self, size_t i, void *item, void (*dest)(void *, t_gc *))
+void	set(t_darray *self,
+		size_t i,
+		const void *item,
+		void (*dest)(void *, t_gc *))
 {
 	if (i + 1 > self->len)
 	{
@@ -48,10 +51,10 @@ void	set(t_darray *self, size_t i, void *item, void (*dest)(void *, t_gc *))
 	}
 	if (dest && item != self->arr[i])
 		dest(self->arr[i], self->gc);
-	self->arr[i] = item;
+	self->arr[i] = (void *)item;
 }
 
-void	repr(t_darray *self, void (*repr_item)(void *value))
+void	repr(const t_darray *self, void (*repr_item)(const void *value))
 {
 	size_t	i;
 

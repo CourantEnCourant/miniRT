@@ -25,32 +25,43 @@ struct	s_darray
 	size_t		len;
 	size_t		capacity;
 	t_gc		*gc;
-	void		(*repr)(t_darray *self, void (*repr_item)(void *value));
-	void		*(*peek_i)(t_darray *self, size_t i);
-	void		*(*peek)(t_darray *self);
-	void		(*insert)(t_darray *self, size_t i, void *item);
-	void		(*push)(t_darray *self, void *item);
-	void		*(*pop_i)(t_darray *self, size_t i);
-	void		*(*pop)(t_darray *self);
-	void		(*sort)(t_darray *self, bool (*)(void *, void *));
-	void		(*set)(t_darray *self,
-			size_t i,
-			void *item,
-			void (*dest)(void *, t_gc *));
-	bool		(*any)(t_darray *, bool (*)(void *, void *), void *);
-	void		*(*find)(t_darray *, bool (*)(void *, void *), void *);
-	size_t		(*find_i)(t_darray *, bool (*)(void *, void *), void *);
+	bool		(*any)(const t_darray *,
+		bool (*)(const void *, const void *),
+		const void *);
+	t_darray	*(*filter)(const t_darray *,
+			bool (*)(const void *, const void *),
+			void *(*copy)(const void *org, t_gc *gc),
+			const void *);
+	const void	*(*find)(const t_darray *,
+			bool (*)(const void *, const void *),
+			const void *);
+	size_t		(*find_i)(const t_darray *,
+		bool (*f)(const void *, const void *),
+		const void *);
 	void		(*for_each)(t_darray *, void *(*f)(void *, t_gc *),
 			void (*dest)(void *, t_gc *));
-	t_darray	*(*filter)(t_darray *, bool (*)(void *, void *), void *);
-	void		*(*reduce)(t_darray *,
-			void *(*)(void *, void *, t_gc *),
+	void		(*insert)(t_darray *self, size_t i, const void *item);
+	const void	*(*peek)(const t_darray *self);
+	const void	*(*peek_i)(const t_darray *self, size_t i);
+	void		*(*pop_i)(t_darray *self, size_t i);
+	void		*(*pop)(t_darray *self);
+	void		(*push)(t_darray *self, const void *item);
+	void		*(*reduce)(const t_darray *,
+			void *(*f)(const void *, const void *, t_gc *),
 			void *,
+			void (*dest)(void *, t_gc *));
+	void		(*repr)(const t_darray *self,
+			void (*repr_item)(const void *));
+	void		(*sort)(t_darray *self, bool (*)(const void *, const void *));
+	void		(*set)(t_darray *self,
+			size_t i,
+			const void *item,
 			void (*dest)(void *, t_gc *));
 };
 t_darray	*new_darray(t_gc *gc);
-t_darray	*new_darray_from_arr(void **arr, t_gc *gc);
-t_darray	*copy(t_darray *original, void *(*copy)(void *, t_gc *));
+t_darray	*new_darray_from_arr(const void **arr, t_gc *gc);
+t_darray	*copy(const t_darray *original,
+				void *(*copy)(const void *, t_gc *));
 void		dest_darray(t_darray *darray, void (*dest)(void *, t_gc *));
 
 typedef struct s_btree	t_btree;

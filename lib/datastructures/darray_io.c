@@ -16,7 +16,7 @@
 #include "gc_libft.h"
 #include "libft.h"
 
-void	insert(t_darray *s, size_t i, void *item)
+void	insert(t_darray *s, size_t i, const void *item)
 {
 	void	**arr_ext;
 
@@ -35,11 +35,11 @@ void	insert(t_darray *s, size_t i, void *item)
 		s->arr = arr_ext;
 	}
 	ft_memmove(&s->arr[i + 1], &s->arr[i], (s->len - i) * sizeof(void *));
-	s->arr[i] = item;
+	s->arr[i] = (void *)item;
 	s->len++;
 }
 
-void	push(t_darray *self, void *item)
+void	push(t_darray *self, const void *item)
 {
 	self->insert(self, self->len, item);
 }
@@ -77,7 +77,7 @@ void	*pop(t_darray *self)
 	return (self->pop_i(self, self->len - 1));
 }
 
-void	sort(t_darray *self, bool (*f)(void *s1, void *s2))
+void	sort(t_darray *self, bool (*f)(const void *s1, const void *s2))
 {
 	size_t	i;
 	size_t	j;

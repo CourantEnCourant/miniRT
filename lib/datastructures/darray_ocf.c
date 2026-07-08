@@ -15,26 +15,38 @@
 #include "datastructures.h"
 #include "gc_libft.h"
 
-bool		any(t_darray *s, bool (*f)(void *, void *), void *e);
-t_darray	*filter(t_darray *s, bool (*f)(void *, void *), void *e);
-void		*find(t_darray *s, bool (*f)(void *, void *), void *e);
-size_t		find_i(t_darray *s, bool (*f)(void *, void *), void *e);
+bool		any(const t_darray *s,
+				bool (*f)(const void *, const void *),
+				const void *e);
+t_darray	*filter(const t_darray *s,
+				bool (*f)(const void *, const void *),
+				void *(*copy)(const void *org, t_gc *gc),
+				const void *e);
+const void	*find(const t_darray *s,
+				bool (*f)(const void *, const void *),
+				const void *e);
+size_t		find_i(const t_darray *s,
+				bool (*f)(const void *, const void *),
+				const void *e);
 void		for_each(t_darray *s,
 				void *(*f)(void *, t_gc *gc),
 				void (*dest)(void *, t_gc *gc));
-void		insert(t_darray *s, size_t i, void *e);
-void		*peek(t_darray *s);
-void		*peek_i(t_darray *s, size_t i);
+void		insert(t_darray *s, size_t i, const void *e);
+const void	*peek(const t_darray *s);
+const void	*peek_i(const t_darray *s, size_t i);
 void		*pop(t_darray *s);
 void		*pop_i(t_darray *s, size_t i);
-void		push(t_darray *s, void *e);
-void		*reduce(t_darray *s,
-				void *(*f)(void *, void *, t_gc *),
+void		push(t_darray *s, const void *e);
+void		*reduce(const t_darray *s,
+				void *(*f)(const void *, const void *, t_gc *),
 				void *acc,
 				void (*dest)(void *, t_gc *));
-void		repr(t_darray *s, void (*repr_item)(void *));
-void		set(t_darray *s, size_t i, void *e, void (*dest)(void *, t_gc *));
-void		sort(t_darray *s, bool (*f)(void *, void *));
+void		repr(const t_darray *s, void (*repr_item)(const void *));
+void		set(t_darray *s,
+				size_t i,
+				const void *e,
+				void (*dest)(void *, t_gc *));
+void		sort(t_darray *s, bool (*f)(const void *, const void *));
 
 t_darray	*new_darray(t_gc *gc)
 {
@@ -45,25 +57,25 @@ t_darray	*new_darray(t_gc *gc)
 	darray->len = 0;
 	darray->capacity = DARRAY_LEN;
 	darray->gc = gc;
-	darray->repr = repr;
-	darray->peek_i = peek_i;
-	darray->peek = peek;
-	darray->insert = insert;
-	darray->push = push;
-	darray->pop_i = pop_i;
-	darray->pop = pop;
-	darray->sort = sort;
-	darray->set = set;
 	darray->any = any;
+	darray->filter = filter;
 	darray->find = find;
 	darray->find_i = find_i;
 	darray->for_each = for_each;
-	darray->filter = filter;
+	darray->insert = insert;
+	darray->peek = peek;
+	darray->peek_i = peek_i;
+	darray->pop = pop;
+	darray->pop_i = pop_i;
+	darray->push = push;
 	darray->reduce = reduce;
+	darray->repr = repr;
+	darray->set = set;
+	darray->sort = sort;
 	return (darray);
 }
 
-t_darray	*new_darray_from_arr(void **arr, t_gc *gc)
+t_darray	*new_darray_from_arr(const void **arr, t_gc *gc)
 {
 	t_darray	*darray;
 	size_t		i;
@@ -75,7 +87,7 @@ t_darray	*new_darray_from_arr(void **arr, t_gc *gc)
 	return (darray);
 }
 
-t_darray	*copy(t_darray *original, void *(*copy)(void *, t_gc *))
+t_darray	*copy(const t_darray *original, void *(*copy)(const void *, t_gc *))
 {
 	t_darray	*new;
 	size_t		i;
@@ -87,7 +99,8 @@ t_darray	*copy(t_darray *original, void *(*copy)(void *, t_gc *))
 		if (copy)
 			new->push(new, copy(original->arr[i], new->gc));
 		else
-			new->push(new, original->arr[i++]);
+			new->push(new, original->arr[i]);
+		i++;
 	}
 	return (new);
 }
