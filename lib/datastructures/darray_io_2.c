@@ -13,31 +13,35 @@
 #include <stddef.h>
 #include <unistd.h>
 #include "datastructures.h"
+#include "gc_libft.h"
 #include "libft.h"
 
-void	*peek_i(t_darray *self, size_t i)
+const void	*peek_i(const t_darray *self, size_t i)
 {
 	if (i >= self->len)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: max len is %d, peeked at %d\n", self->len, i);
+			"IndexError: max len is %d, peeked at %d\n", self->len, i);
 		return (NULL);
 	}
 	return (self->arr[i]);
 }
 
-void	*peek(t_darray *self)
+const void	*peek(const t_darray *self)
 {
 	if (self->len == 0)
 	{
 		ft_dprintf(STDERR_FILENO,
-				"IndexError: peeked from empty darray\n");
+			"IndexError: peeked from empty darray\n");
 		return (NULL);
 	}
-	return (peek_i(self, self->len - 1));
+	return (self->arr[self->len - 1]);
 }
 
-void	set(t_darray *self, size_t i, void *item)
+void	set(t_darray *self,
+		size_t i,
+		const void *item,
+		void (*dest)(void *, t_gc *))
 {
 	if (i + 1 > self->len)
 	{
@@ -45,5 +49,28 @@ void	set(t_darray *self, size_t i, void *item)
 			"IndexError: darray len %d while set at %d\n", self->len, i);
 		return ;
 	}
-	self->arr[i] = item;
+	if (dest && item != self->arr[i])
+		dest(self->arr[i], self->gc);
+	self->arr[i] = (void *)item;
+}
+
+void	repr(const t_darray *self, void (*repr_item)(const void *value))
+{
+	size_t	i;
+
+	write(1, "[", 1);
+	i = 0;
+	if (!self->len)
+	{
+		write(1, "]\n", 2);
+		return ;
+	}
+	while (i < self->len - 1)
+	{
+		repr_item(self->arr[i]);
+		write(1, ", ", 2);
+		i++;
+	}
+	repr_item(self->arr[i]);
+	write(1, "]\n", 2);
 }

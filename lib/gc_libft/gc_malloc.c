@@ -20,7 +20,7 @@ void	*gc_malloc(size_t size, t_gc *gc)
 	arr = malloc(size);
 	if (!arr)
 	{
-		gc->clean(gc);
+		dest_gc(gc);
 		exit(EXIT_FAILURE);
 	}
 	gc->add(gc, arr);

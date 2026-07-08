@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   darray_functional_2.c                                :+:      :+:    :+: */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/02 01:21:10 by weizhang          #+#    #+#             */
-/*   Updated: 2026/05/09 21:40:59 by weizhang         ###   ########.fr       */
+/*   Created: 2026/07/06 19:12:52 by weizhang          #+#    #+#             */
+/*   Updated: 2026/07/06 19:46:48 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
-#include "datastructures.h"
-#include "gc_libft.h"
+#include <stdlib.h>
+#include "libft.h"
 
-void	for_each(t_darray *self,
-		void *(*f)(void *, t_gc *),
-		void (*dest)(void *, t_gc *))
+static size_t	ft_min(size_t num1, size_t num2)
 {
-	size_t	i;
-	void	*tmp;
+	if (num1 < num2)
+		return (num1);
+	return (num2);
+}
 
-	i = 0;
-	while (i < self->len)
-	{
-		tmp = self->arr[i];
-		self->arr[i] = f(tmp, self->gc);
-		if (dest && self->arr[i] != tmp)
-			dest(tmp, self->gc);
-		i++;
-	}
+void	*ft_realloc(void *ptr, size_t old_size, size_t size)
+{
+	void	*new_ptr;
+
+	new_ptr = malloc(size);
+	if (!new_ptr)
+		return (NULL);
+	if (!ptr)
+		return (new_ptr);
+	ft_memcpy(new_ptr, ptr, ft_min(old_size, size));
+	free(ptr);
+	return (new_ptr);
 }

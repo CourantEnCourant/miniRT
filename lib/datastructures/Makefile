@@ -9,11 +9,11 @@ RM = rm -f
 INCLUDE = -I ../../include
 
 SRC = btree.c \
-	  darray_basic.c \
 	  darray_functional.c \
 	  darray_functional_2.c \
 	  darray_io.c \
-	  darray_io_2.c
+	  darray_io_2.c \
+	  darray_ocf.c
 
 OBJ = $(SRC:.c=.o)
 

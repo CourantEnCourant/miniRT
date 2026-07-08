@@ -16,25 +16,31 @@
 
 static void	add(t_gc *self, void *item)
 {
-	t_list	*node;
+	t_dllist	*node;
 
-	node = ft_lstnew(item);
+	node = new_dllist(item);
 	if (!node)
 	{
 		free(item);
-		self->clean(self);
+		dest_gc(self);
 		exit(EXIT_FAILURE);
 	}
-	ft_lstadd_front(&self->start, node);
+	dllist_add_front(&self->start, node);
 }
 
-static void	clean(t_gc *self)
+static void	del(t_gc *self, void *item, void (*del_item)(void *))
 {
-	ft_lstclear(&self->start, free);
-	free(self);
+	t_dllist	*item_node;
+
+	item_node = find_dllist(self->start, item);
+	if (!item_node)
+		return ;
+	if (item_node == self->start)
+		self->start = item_node->next;
+	del_dllist(item_node, del_item);
 }
 
-t_gc	*init_gc(void)
+t_gc	*new_gc(void)
 {
 	t_gc	*gc;
 
@@ -42,7 +48,13 @@ t_gc	*init_gc(void)
 	if (!gc)
 		exit(EXIT_FAILURE);
 	gc->start = NULL;
-	gc->clean = clean;
 	gc->add = add;
+	gc->del = del;
 	return (gc);
+}
+
+void	dest_gc(t_gc *gc)
+{
+	clear_dllist(gc->start, free);
+	free(gc);
 }

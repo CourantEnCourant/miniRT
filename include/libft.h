@@ -73,5 +73,6 @@ int					ft_dprintf(int fd, const char *s, ...);
 int					ft_printf(const char *s, ...);
 int					ft_vdprintf(int fd, const char *s, va_list ap);
 char				*get_next_line(int fd);
+void				*ft_realloc(void *ptr, size_t old_size, size_t size);
 
 #endif

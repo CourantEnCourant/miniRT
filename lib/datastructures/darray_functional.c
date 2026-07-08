@@ -10,11 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include <stddef.h>
 #include "datastructures.h"
 #include "gc_libft.h"
 
-size_t	find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+size_t	find_i(const t_darray *s,
+		bool (*f)(const void *e1, const void *e2),
+		const void *e2)
 {
 	size_t	i;
 
@@ -28,7 +31,9 @@ size_t	find_i(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
 	return (s->len);
 }
 
-void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+const void	*find(const t_darray *s,
+		bool (*f)(const void *e1, const void *e2),
+		const void *e2)
 {
 	size_t	i;
 
@@ -38,35 +43,52 @@ void	*find(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
 	return (s->peek_i(s, i));
 }
 
-bool	any(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+bool	any(const t_darray *s,
+		bool (*f)(const void *e1, const void *e2),
+		const void *e2)
 {
 	return (find_i(s, f, e2) != s->len);
 }
 
-t_darray	*filter(t_darray *s, bool (*f)(void *e1, void *e2), void *e2)
+t_darray	*filter(const t_darray *s,
+		bool (*f)(const void *e1, const void *e2),
+		void *(*copy)(const void *org, t_gc *gc),
+		const void *e2)
 {
 	t_darray	*filtered;
 	size_t		i;
 
-	filtered = init_darray(s->gc);
+	filtered = new_darray(s->gc);
 	i = 0;
 	while (i < s->len)
 	{
-		if (f(s->peek_i(s, i), e2))
-			filtered->push(filtered, s->peek_i(s, i));
+		if (f(s->arr[i], e2))
+		{
+			if (copy)
+				filtered->push(filtered, copy(s->arr[i], s->gc));
+			else
+				filtered->push(filtered, s->arr[i]);
+		}
 		i++;
 	}
 	return (filtered);
 }
 
-void	*reduce(t_darray *s, void *(*f)(void *i1, void *i2, t_gc *gc), void *a)
+void	*reduce(const t_darray *s,
+		void *(*f)(const void *, const void *, t_gc *),
+		void *a,
+		void (*dest)(void *, t_gc *))
 {
 	size_t	i;
+	void	*tmp;
 
 	i = 0;
 	while (i < s->len)
 	{
-		a = f(a, s->arr[i], s->gc);
+		tmp = f(a, s->arr[i], s->gc);
+		if (dest && tmp != a)
+			dest(a, s->gc);
+		a = tmp;
 		i++;
 	}
 	return (a);
