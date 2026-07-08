@@ -1,0 +1,31 @@
+name: norm
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  norminette:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Install tools
+        run: dnf install -y git python3-pip
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install norminette
+        run: pip install norminette
+      - name: Run norminette
+        run: norminette include lib
+
+  compilation:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Install tools
+        run: dnf install -y git gcc make
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build
+        run: make
