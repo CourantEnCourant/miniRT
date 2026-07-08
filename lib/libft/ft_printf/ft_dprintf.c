@@ -13,6 +13,8 @@
 #include <stdarg.h>
 #include "libft.h"
 
+int	ft_vdprintf(int fd, const char *s, va_list ap);
+
 int	ft_dprintf(int fd, const char *s, ...)
 {
 	va_list	ap;
