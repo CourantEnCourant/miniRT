@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
+#include "gc.h"
 #include "gc_libft.h"
+#include "libft.h"
 
 char	*gc_strtrim(char const *s1, char const *set, t_gc *gc)
 {

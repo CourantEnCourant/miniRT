@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
+#include "gc.h"
 #include "gc_libft.h"
+#include "libft.h"
 
 char	*gc_itoa(int n, t_gc *gc)
 {

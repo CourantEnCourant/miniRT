@@ -11,8 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "gc_libft.h"
-#include "libft.h"
+#include "gc.h"
 
 static void	add(t_gc *self, void *item)
 {

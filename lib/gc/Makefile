@@ -1,4 +1,4 @@
-NAME = gc_libft.a
+NAME = gc.a
 
 CC = cc
 CFLAGS = -Wextra -Werror -Wall -g3
@@ -6,13 +6,11 @@ AR = ar rcs
 RM = rm -f
 
 INCLUDE = -I ../../include
-SRC = gc_get_next_line.c \
-	  gc_itoa.c \
-	  gc_split.c \
-	  gc_strdup.c \
-	  gc_strjoin.c \
-	  gc_strtrim.c \
-	  gc_substr.c
+SRC = dllist.c \
+	  gc_basic.c \
+	  gc_calloc.c \
+	  gc_free.c \
+	  gc_malloc.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -27,7 +25,7 @@ $(NAME): $(OBJ)
 
 clean:
 	@$(RM) $(OBJ)
-	@echo "Removed all .o files in gc_libft"
+	@echo "Removed all .o files in gc"
 
 fclean: clean
 	@$(RM) $(NAME)

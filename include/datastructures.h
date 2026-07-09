@@ -15,8 +15,8 @@
 
 # define DARRAY_LEN 42
 
-# include "gc_libft.h"
 # include <stdbool.h>
+# include "gc.h"
 
 typedef struct s_darray	t_darray;
 struct	s_darray

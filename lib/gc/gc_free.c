@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "gc_libft.h"
+#include "gc.h"
 
 void	gc_free(void *ptr, t_gc *gc)
 {

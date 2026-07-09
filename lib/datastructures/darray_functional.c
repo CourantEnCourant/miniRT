@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include "datastructures.h"
-#include "gc_libft.h"
+#include "gc.h"
 
 size_t	find_i(const t_darray *s,
 		bool (*f)(const void *e1, const void *e2),

@@ -12,6 +12,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include "gc.h"
 #include "gc_libft.h"
 #include "libft.h"
 
