@@ -109,9 +109,12 @@ void	dest_darray(t_darray *darray, void (*dest)(void *, t_gc *))
 {
 	size_t	i;
 
-	i = 0;
-	while (i < darray->len)
-		dest(darray->arr[i++], darray->gc);
+	if (dest)
+	{
+		i = 0;
+		while (i < darray->len)
+			dest(darray->arr[i++], darray->gc);
+	}
 	gc_free(darray->arr, darray->gc);
 	gc_free(darray, darray->gc);
 }
