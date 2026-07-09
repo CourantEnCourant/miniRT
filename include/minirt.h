@@ -44,4 +44,15 @@ struct s_light
 	bool	(*is_valid)(const t_light *self);
 };
 
+typedef struct s_conf
+{
+	t_am		am;
+	t_camera	camera;
+	t_light		light;
+	t_gc		*gc;
+	t_darray	*shapes;
+}	t_conf;
+bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc);
+void	dest_conf(t_conf *self);
+
 #endif

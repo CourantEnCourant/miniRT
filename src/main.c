@@ -10,11 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "gc.h"
+#include "libft.h"
+#include "minirt.h"
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
-	(void)argc;
-	(void)argv;
-    printf("Hello world\n");
+	int		fd;
+	t_gc	*gc;
+	t_conf	conf;
+
+	if (argc != 2)
+		return (ft_dprintf(STDERR_FILENO,
+				"Program expects one .rt file as argument\n"), 1);
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		return (ft_dprintf(STDERR_FILENO, "Infile error\n"), 1);
+	gc = new_gc();
+	init_conf_from_file(&conf, fd, gc);
+	dest_conf(&conf);
+	dest_gc(gc);
+	close(fd);
 }
