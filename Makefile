@@ -6,7 +6,8 @@ AR = ar rcs
 RM = rm -rf
 
 INCLUDE = -I ./include
-SRC = ./src/main.c
+SRC = ./src/types/conf.c \
+	  ./src/main.c
 
 OBJ = $(SRC:.c=.o)
 
