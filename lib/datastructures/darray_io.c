@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include "datastructures.h"
-#include "gc_libft.h"
+#include "gc.h"
 #include "libft.h"
 
 void	insert(t_darray *s, size_t i, const void *item)

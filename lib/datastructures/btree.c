@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "datastructures.h"
+#include "gc.h"
 #include "gc_libft.h"
 #include "libft.h"
-#include <unistd.h>
 
 static void	repr_cld(t_btree *s, char *pre, bool left, void (*repr_v)(void *v))
 {

@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include "datastructures.h"
-#include "gc_libft.h"
+#include "gc.h"
 #include "libft.h"
 
 const void	*peek_i(const t_darray *self, size_t i)
