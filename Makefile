@@ -8,6 +8,7 @@ RM = rm -rf
 INCLUDE = -I ./include
 SRC = ./src/types/ambient_light.c \
 	  ./src/types/camera.c \
+	  ./src/types/conf.c \
 	  ./src/types/light.c \
 	  ./src/main.c
 
