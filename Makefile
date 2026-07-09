@@ -15,7 +15,8 @@ TEST_OBJ = $(TEST_SRC:.c=.o)
 
 LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
 			   ./lib/gc_libft/gc_libft.a \
-			   ./lib/libft/libft.a
+			   ./lib/libft/libft.a \
+			   ./lib/vector/vector.a
 
 all: $(NAME)
 
