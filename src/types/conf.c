@@ -12,6 +12,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "datastructures.h"
@@ -129,6 +130,43 @@ static bool	add_cyl(t_darray *shapes, t_darray *param)
 	return (true);
 }
 
+static void	repr_conf(const t_conf *self)
+{
+	// This function is a temporary debug solution and will be refactored
+	// later to be norminette-compliant
+	size_t	i;
+	t_shape	*shape;
+
+	if (!self->am.is_valid(&self->am))
+		printf("Invalid Ambiant light\n");
+	else
+		printf("Ambiant light: ratio %.2f, rgb %u,%u,%u\n", self->am.ratio,
+			self->am.rgb.r, self->am.rgb.g, self->am.rgb.b);
+	if (!self->camera.is_valid(&self->camera))
+		printf("Invalid camera\n");
+	else
+		printf("Camera: coord %.2f,%.2f,%.2f, normal %.2f,%.2f,%.2f, "
+			"fov %.2f\n", self->camera.coord.arr[X], self->camera.coord.arr[Y],
+			self->camera.coord.arr[Z], self->camera.normal.arr[X],
+			self->camera.normal.arr[Y], self->camera.normal.arr[Z],
+			self->camera.fov);
+	if (!self->light.is_valid(&self->light))
+		printf("Invalid light\n");
+	else
+		printf("Light: coord %.2f,%.2f,%.2f, brightness %.2f, rgb "
+			"%u,%u,%u\n", self->light.coord.arr[X], self->light.coord.arr[Y],
+			self->light.coord.arr[Z], self->light.brightness,
+			self->light.rgb.r, self->light.rgb.g, self->light.rgb.b);
+	printf("Loaded %zu shapes:\n", self->shapes->len);
+	i = 0;
+	while (i < self->shapes->len)
+	{
+		shape = self->shapes->arr[i];
+		printf("Shape %zu: %s\n", i, shape->get_type(shape));
+		i++;
+	}
+}
+
 static void init_conf(t_conf *self, t_gc *gc)
 {
 	self->gc = gc;
@@ -136,6 +174,7 @@ static void init_conf(t_conf *self, t_gc *gc)
 	self->am.is_valid = am_is_valid;
 	self->camera.is_valid = camera_is_valid;
 	self->light.is_valid = light_is_valid;
+	self->repr = repr_conf;
 }
 
 bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
