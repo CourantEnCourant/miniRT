@@ -36,6 +36,7 @@ struct s_shape
 	enum e_type	type;
 	t_vec3		coord;
 	t_rgb		rgb;
+	const char	*(*get_type)(const t_shape *self);
 };
 void	init_shape(t_shape *self, enum e_type type, t_vec3 coord, t_rgb rgb);
 

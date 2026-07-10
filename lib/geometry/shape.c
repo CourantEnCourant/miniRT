@@ -13,9 +13,22 @@
 #include "geometry.h"
 #include "vector.h"
 
+static const char	*get_type(const t_shape *self)
+{
+	if (self->type == SPHERE)
+		return ("sphere");
+	if (self->type == PLANE)
+		return ("plane");
+	if (self->type == CYL)
+		return ("cylinder");
+	else
+		return ("unrecognized");
+}
+
 void	init_shape(t_shape *self, enum e_type type, t_vec3 coord, t_rgb rgb)
 {
 	self->type = type;
 	self->coord = coord;
 	self->rgb = rgb;
+	self->get_type = get_type;
 }
