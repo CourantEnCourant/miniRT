@@ -32,6 +32,7 @@ int	main(int argc, char *argv[])
 		return (ft_dprintf(STDERR_FILENO, "Infile error\n"), 1);
 	gc = new_gc();
 	init_conf_from_file(&conf, fd, gc);
+	conf.repr(&conf);
 	dest_conf(&conf);
 	dest_gc(gc);
 	close(fd);
