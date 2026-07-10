@@ -19,11 +19,11 @@ TEST_SRC = $(filter-out ./src/main.c, $(SRC))
 TEST_OBJ = $(TEST_SRC:.c=.o)
 
 LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
+			   ./lib/gc/gc.a \
 			   ./lib/gc_libft/gc_libft.a \
 			   ./lib/geometry/geometry.a \
 			   ./lib/libft/libft.a \
-			   ./lib/vector/vector.a \
-			   ./lib/gc/gc.a
+			   ./lib/vector/vector.a
 
 all: $(NAME)
 
