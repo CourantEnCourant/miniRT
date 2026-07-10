@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gc_calloc.c                                        :+:      :+:    :+:   */
+/*   gc_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: weizhang <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 16:03:09 by weizhang          #+#    #+#             */
-/*   Updated: 2026/02/03 13:25:52 by weiqi            ###   ########.fr       */
+/*   Created: 2026/07/07 07:20:42 by weizhang          #+#    #+#             */
+/*   Updated: 2026/07/07 07:22:19 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "gc_libft.h"
-#include "libft.h"
+#include "gc.h"
 
-void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc)
+void	gc_free(void *ptr, t_gc *gc)
 {
-	void	*arr;
-
-	arr = ft_calloc(nmemb, size);
-	if (!arr)
-	{
-		dest_gc(gc);
-		exit(EXIT_FAILURE);
-	}
-	gc->add(gc, arr);
-	return (arr);
+	gc->del(gc, ptr, free);
 }

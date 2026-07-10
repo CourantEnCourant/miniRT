@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gc_free.c                                          :+:      :+:    :+:   */
+/*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/07 07:20:42 by weizhang          #+#    #+#             */
-/*   Updated: 2026/07/07 07:22:19 by weizhang         ###   ########.fr       */
+/*   Created: 2026/07/09 10:07:35 by weizhang          #+#    #+#             */
+/*   Updated: 2026/07/09 10:08:41 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "gc_libft.h"
+#include "geometry.h"
+#include "vector.h"
 
-void	gc_free(void *ptr, t_gc *gc)
+void	init_sphere(t_sphere *self, t_vec3 coord, t_rgb rgb, double radius)
 {
-	gc->del(gc, ptr, free);
+	init_shape(&self->base, SPHERE, coord, rgb);
+	self->radius = radius;
 }

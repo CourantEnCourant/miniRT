@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/16 22:36:47 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/16 22:37:28 by weizhang         ###   ########.fr       */
+/*   Created: 2026/07/09 10:07:35 by weizhang          #+#    #+#             */
+/*   Updated: 2026/07/09 10:09:45 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdarg.h>
-#include "libft.h"
+#include "geometry.h"
+#include "vector.h"
 
-int	ft_vdprintf(int fd, const char *s, va_list ap);
-
-int	ft_printf(const char *s, ...)
+void	init_plane(t_plane *self, t_vec3 coord, t_rgb rgb, t_vec3 normal)
 {
-	va_list	ap;
-	int		ret;
-
-	va_start(ap, s);
-	ret = ft_vdprintf(STDOUT_FILENO, s, ap);
-	va_end(ap);
-	return (ret);
+	init_shape(&self->base, PLANE, coord, rgb);
+	self->normal = normal;
 }

@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   vector.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/16 22:36:47 by weizhang          #+#    #+#             */
-/*   Updated: 2026/04/16 22:37:28 by weizhang         ###   ########.fr       */
+/*   Created: 2026/07/09 08:57:04 by weizhang          #+#    #+#             */
+/*   Updated: 2026/07/10 01:48:00 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdarg.h>
-#include "libft.h"
+#ifndef VECTOR_H
+# define VECTOR_H
 
-int	ft_vdprintf(int fd, const char *s, va_list ap);
-
-int	ft_printf(const char *s, ...)
+enum e_component
 {
-	va_list	ap;
-	int		ret;
+	X,
+	Y,
+	Z,
+};
 
-	va_start(ap, s);
-	ret = ft_vdprintf(STDOUT_FILENO, s, ap);
-	va_end(ap);
-	return (ret);
-}
+typedef struct s_vec3
+{
+	double	arr[3];
+}	t_vec3;
+
+t_vec3	cross_product(t_vec3 v1, t_vec3 v2);
+double	dot_product(t_vec3 v1, t_vec3 v2);
+t_vec3	vec3_add(t_vec3 v1, t_vec3 v2);
+t_vec3	vec3_scal_mult(t_vec3 v1, double scale);
+
+#endif

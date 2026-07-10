@@ -12,7 +12,7 @@
 
 #include <stddef.h>
 #include "datastructures.h"
-#include "gc_libft.h"
+#include "gc.h"
 
 void	for_each(t_darray *self,
 		void *(*f)(void *, t_gc *),

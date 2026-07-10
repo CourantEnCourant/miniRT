@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include "datastructures.h"
-#include "gc_libft.h"
+#include "gc.h"
 
 bool		any(const t_darray *s,
 				bool (*f)(const void *, const void *),
@@ -109,9 +109,12 @@ void	dest_darray(t_darray *darray, void (*dest)(void *, t_gc *))
 {
 	size_t	i;
 
-	i = 0;
-	while (i < darray->len)
-		dest(darray->arr[i++], darray->gc);
+	if (dest)
+	{
+		i = 0;
+		while (i < darray->len)
+			dest(darray->arr[i++], darray->gc);
+	}
 	gc_free(darray->arr, darray->gc);
 	gc_free(darray, darray->gc);
 }

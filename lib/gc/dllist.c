@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "gc_libft.h"
+#include "gc.h"
 
 t_dllist	*new_dllist(void *content)
 {

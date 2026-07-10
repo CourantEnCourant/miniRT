@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gc_itoa.c                                          :+:      :+:    :+:   */
+/*   gc_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anying <anying@student.42.fr>              +#+  +:+       +#+        */
+/*   By: weiqizhang <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/25 18:39:55 by anying            #+#    #+#             */
-/*   Updated: 2026/03/26 15:31:17 by anying           ###   ########.fr       */
+/*   Created: 2026/02/02 19:03:21 by weiqizhang        #+#    #+#             */
+/*   Updated: 2026/02/03 13:10:31 by weiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "gc.h"
-#include "gc_libft.h"
-#include "libft.h"
 
-char	*gc_itoa(int n, t_gc *gc)
+void	*gc_malloc(size_t size, t_gc *gc)
 {
-	char			*str;
+	void	*arr;
 
-	str = ft_itoa(n);
-	if (!str)
+	arr = malloc(size);
+	if (!arr)
 	{
 		dest_gc(gc);
 		exit(EXIT_FAILURE);
 	}
-	gc->add(gc, str);
-	return (str);
+	gc->add(gc, arr);
+	return (arr);
 }
