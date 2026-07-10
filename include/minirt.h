@@ -38,7 +38,8 @@ typedef struct s_light
 	t_rgb	rgb;
 }	t_light;
 
-typedef struct s_conf
+typedef struct s_conf	t_conf;
+struct s_conf
 {
 	t_am		am;
 	bool		valid_am;
@@ -48,7 +49,8 @@ typedef struct s_conf
 	bool		valid_light;
 	t_gc		*gc;
 	t_darray	*shapes;
-}	t_conf;
+	void		(*repr)(const t_conf *self);
+};
 bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc);
 void	dest_conf(t_conf *self);
 
