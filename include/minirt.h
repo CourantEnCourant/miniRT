@@ -41,8 +41,11 @@ typedef struct s_light
 typedef struct s_conf
 {
 	t_am		am;
+	bool		valid_am;
 	t_camera	camera;
+	bool		valid_camera;
 	t_light		light;
+	bool		valid_light;
 	t_gc		*gc;
 	t_darray	*shapes;
 }	t_conf;

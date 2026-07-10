@@ -34,6 +34,7 @@ static bool	init_am(t_conf *self, t_darray *param)
 		return (dest_darray(rgb, gc_free), false);
 	self->am.rgb = (t_rgb){ft_atoi(rgb->arr[0]), ft_atoi(rgb->arr[1]),
 		ft_atoi(rgb->arr[2])};
+	self->valid_am = true;
 	return (dest_darray(rgb, gc_free), true);
 }
 
@@ -55,6 +56,7 @@ static bool	init_camera(t_conf *self, t_darray *param)
 		return (dest_darray(tmp, gc_free), false);
 	self->camera.normal = (t_vec3){{atof(tmp->arr[0]), atof(tmp->arr[1]),
 		atof(tmp->arr[2])}};
+	self->valid_camera = true;
 	return (dest_darray(tmp, gc_free), true);
 }
 
@@ -76,6 +78,7 @@ static bool	init_light(t_conf *self, t_darray *param)
 		return (dest_darray(tmp, gc_free), false);
 	self->light.rgb = (t_rgb){ft_atoi(tmp->arr[0]), ft_atoi(tmp->arr[1]),
 		ft_atoi(tmp->arr[2])};
+	self->valid_light = true;
 	return (dest_darray(tmp, gc_free), true);
 }
 
@@ -127,6 +130,9 @@ static void init_conf(t_conf *self, t_gc *gc)
 {
 	self->gc = gc;
 	self->shapes = new_darray(gc);
+	self->valid_am = false;
+	self->valid_camera = false;
+	self->valid_light = false;
 }
 
 bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
