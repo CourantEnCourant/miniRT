@@ -16,13 +16,15 @@
 #include "libft.h"
 #include "minirt.h"
 
+bool	endswith(const char *str, const char *end);
+
 int	main(int argc, char *argv[])
 {
 	int		fd;
 	t_gc	*gc;
 	t_conf	conf;
 
-	if (argc != 2)
+	if (argc != 2 || !endswith(argv[1], ".rt"))
 		return (ft_dprintf(STDERR_FILENO,
 				"Program expects one .rt file as argument\n"), 1);
 	fd = open(argv[1], O_RDONLY);

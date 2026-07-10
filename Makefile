@@ -7,7 +7,8 @@ RM = rm -rf
 
 INCLUDE = -I ./include
 SRC = ./src/types/conf.c \
-	  ./src/main.c
+	  ./src/main.c \
+	  ./src/str_helper.c
 
 OBJ = $(SRC:.c=.o)
 
