@@ -6,7 +6,10 @@ AR = ar rcs
 RM = rm -rf
 
 INCLUDE = -I ./include
-SRC = ./src/main.c
+SRC = ./src/types/ambient_light.c \
+	  ./src/types/camera.c \
+	  ./src/types/light.c \
+	  ./src/main.c
 
 OBJ = $(SRC:.c=.o)
 
