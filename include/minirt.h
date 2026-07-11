@@ -18,12 +18,12 @@
 # include "geometry.h"
 # include "vector.h"
 
-typedef struct s_am	t_am;
+typedef struct s_am		t_am;
 struct s_am
 {
 	double	ratio;
 	t_rgb	rgb;
-	bool	(*is_valid)(const t_am *self);
+	bool	(*is_valid)(const t_am * self);
 };
 
 typedef struct s_camera	t_camera;
@@ -32,7 +32,7 @@ struct s_camera
 	t_vec3	coord;
 	t_vec3	normal;
 	double	fov;
-	bool	(*is_valid)(const t_camera *self);
+	bool	(*is_valid)(const t_camera * self);
 };
 
 typedef struct s_light	t_light;
@@ -41,7 +41,7 @@ struct s_light
 	t_vec3	coord;
 	double	brightness;
 	t_rgb	rgb;
-	bool	(*is_valid)(const t_light *self);
+	bool	(*is_valid)(const t_light * self);
 };
 
 typedef struct s_conf	t_conf;
