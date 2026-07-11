@@ -18,9 +18,9 @@
 typedef struct s_rgb		t_rgb;
 struct s_rgb
 {
-	unsigned int	r;
-	unsigned int	g;
-	unsigned int	b;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
 };
 
 enum e_type
