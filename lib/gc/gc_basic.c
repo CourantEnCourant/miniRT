@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <unistd.h>
 #include "gc.h"
+#include "libft.h"
 
 static void	add(t_gc *self, void *item)
 {
@@ -33,7 +35,12 @@ static void	del(t_gc *self, void *item, void (*del_item)(void *))
 
 	item_node = find_dllist(self->start, item);
 	if (!item_node)
+	{
+		ft_dprintf(STDERR_FILENO, "GCError: Addr not found. \
+				Potential double-free, none-heap addr, \
+				or none gc-allocated resourses\n");
 		return ;
+	}
 	if (item_node == self->start)
 		self->start = item_node->next;
 	del_dllist(item_node, del_item);
@@ -54,6 +61,11 @@ t_gc	*new_gc(void)
 
 void	dest_gc(t_gc *gc)
 {
-	clear_dllist(gc->start, free);
+	if (gc->start)
+	{
+		ft_dprintf(STDERR_FILENO, "GCError: GC not empty upon destructor. \
+				Potential leak\n");
+		clear_dllist(gc->start, free);
+	}
 	free(gc);
 }
