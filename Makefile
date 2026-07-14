@@ -5,7 +5,19 @@ CFLAGS = -Wextra -Werror -Wall -g3
 AR = ar rcs
 RM = rm -rf
 
-INCLUDE = -I ./include
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+	MLX_SRC = ./lib/minilibx_opengl_20191021
+	MLX_FLAGS = -framework OpenGL -framework AppKit
+else
+	MLX_SRC = ./lib/minilibx-linux
+	MLX_FLAGS = -Llib/minilibx -lmlx -lXext -lX11 -lm -lz
+endif
+
+MLX_DIR = ./lib/minilibx
+MLX = $(MLX_DIR)/libmlx.a
+
+INCLUDE = -I ./include -I ./lib/minilibx
 SRC = ./src/types/ambient_light.c \
 	  ./src/types/camera.c \
 	  ./src/types/conf.c \
@@ -27,11 +39,15 @@ LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
 
 all: $(NAME)
 
+$(MLX):
+	@cp -R $(MLX_SRC) $(MLX_DIR)
+	@make -C $(MLX_DIR)
+
 $(LIB_ARCHIVES):
 	@make -C $(dir $@)
 
-$(NAME): $(LIB_ARCHIVES) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ARCHIVES) -o $(NAME)
+$(NAME): $(MLX) $(LIB_ARCHIVES) $(OBJ)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ARCHIVES) $(MLX) $(MLX_FLAGS) -o $(NAME)
 	@echo "Created $(NAME)"
 
 %.o: %.c
@@ -40,6 +56,7 @@ $(NAME): $(LIB_ARCHIVES) $(OBJ)
 clean:
 	@for dir in $(dir $(LIB_ARCHIVES)); do make -C $$dir fclean; done
 	@$(RM) $(OBJ)
+	@$(RM) $(MLX_DIR)
 	@echo "Removed *.o in $(NAME)"
 
 fclean: clean
