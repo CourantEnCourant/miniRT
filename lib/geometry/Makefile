@@ -8,6 +8,7 @@ RM = 		rm -f
 INCLUDE = 	-I ../../include
 SRC = 		cyl.c \
 			plane.c \
+			rgb.c \
 			shape.c \
 			sphere.c
 
