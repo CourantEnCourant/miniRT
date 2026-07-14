@@ -20,9 +20,10 @@ bool	endswith(const char *str, const char *end);
 
 int	main(int argc, char *argv[])
 {
-	int		fd;
-	t_gc	*gc;
-	t_conf	conf;
+	int			fd;
+	t_gc		*gc;
+	t_conf		conf;
+	t_renderer	renderer;
 
 	if (argc != 2 || !endswith(argv[1], ".rt"))
 		return (ft_dprintf(STDERR_FILENO,
@@ -33,6 +34,9 @@ int	main(int argc, char *argv[])
 	gc = new_gc();
 	init_conf_from_file(&conf, fd, gc);
 	conf.repr(&conf);
+	init_renderer(&renderer, gc);
+	renderer.render(&renderer);
+	dest_renderer(&renderer);
 	dest_conf(&conf);
 	dest_gc(gc);
 	close(fd);

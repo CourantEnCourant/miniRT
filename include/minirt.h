@@ -6,12 +6,15 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 08:57:04 by weizhang          #+#    #+#             */
-/*   Updated: 2026/07/11 23:26:29 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/07/13 22:24:26 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
+
+# define WIN_W 800
+# define WIN_H 600
 
 # include "datastructures.h"
 # include "gc_libft.h"
@@ -56,5 +59,21 @@ struct s_conf
 };
 bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc);
 void	dest_conf(t_conf *self);
+
+typedef struct s_rend	t_renderer;
+struct s_rend
+{
+	void	*mlx;
+	void	*mlx_win;
+	void	*img;
+	void	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	t_gc	*gc;
+	void	(*render)(const t_renderer *self);
+};
+void	init_renderer(t_renderer *self, t_gc *gc);
+void	dest_renderer(t_renderer *self);
 
 #endif
