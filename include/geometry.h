@@ -22,6 +22,7 @@ struct s_rgb
 	unsigned char	g;
 	unsigned char	b;
 };
+unsigned int	rgb_to_int(t_rgb rgb);
 
 enum e_type
 {
