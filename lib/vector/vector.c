@@ -22,7 +22,7 @@ t_vec3	cross_product(t_vec3 v1, t_vec3 v2)
 double	dot_product(t_vec3 v1, t_vec3 v2)
 {
 	return (v1.arr[X] * v2.arr[X]
-		+ v2.arr[Y] * v2.arr[Y]
+		+ v1.arr[Y] * v2.arr[Y]
 		+ v1.arr[Z] * v2.arr[Z]);
 }
 
