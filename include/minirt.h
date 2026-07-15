@@ -47,6 +47,15 @@ struct s_light
 	bool	(*is_valid)(const t_light * self);
 };
 
+typedef struct s_ray	t_ray;
+struct s_ray
+{
+	t_vec3	orig;
+	t_vec3	dir;
+};
+void	init_ray(t_ray *self, t_vec3 orig, t_vec3 dir);
+t_vec3	ray_at(const t_ray *ray, double t);
+
 typedef struct s_conf	t_conf;
 struct s_conf
 {
