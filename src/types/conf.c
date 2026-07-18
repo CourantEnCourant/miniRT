@@ -188,13 +188,14 @@ bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
 	flag = true;
 	while (line)
 	{
-		if (line[0] == '\n')
+		param = gc_split(line, ' ', gc);
+		if (param->len == 0)
 		{
+			dest_darray(param, gc_free);
 			gc_free(line, gc);
 			line = gc_get_next_line(fd, gc);
 			continue ;
 		}
-		param = gc_split(line, ' ', gc);
 		if (ft_strcmp(param->arr[0], "A") == 0)
 			flag = init_am(&self->am, param);
 		else if (ft_strcmp(param->arr[0], "C") == 0)
@@ -207,6 +208,8 @@ bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
 			flag = add_plane(self->shapes, param);
 		else if (ft_strcmp(param->arr[0], "cy") == 0)
 			flag = add_cyl(self->shapes, param);
+		else if (ft_strcmp(param->arr[0], "\n") == 0)
+			;
 		else
 			flag = false;
 		dest_darray(param, gc_free);
