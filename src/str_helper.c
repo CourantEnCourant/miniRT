@@ -14,7 +14,7 @@
 #include <stddef.h>
 #include "libft.h"
 
-bool	endswith(const char *str, const char *end)
+bool	endswith(const char str[], const char end[])
 {
 	size_t	str_len;
 	size_t	end_len;
