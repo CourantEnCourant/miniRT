@@ -48,9 +48,9 @@ static bool	parse_coord(t_vec3 *coord, char str[], t_gc *gc)
 	tmp = gc_split(str, ',', gc);
 	if (tmp->len != 3)
 		return (dest_darray(tmp, gc_free), false);
-	coord->arr[X] = atof(tmp->arr[0]);
-	coord->arr[Y] = atof(tmp->arr[1]);
-	coord->arr[Z] = atof(tmp->arr[2]);
+	coord->arr[X] = ft_atof(tmp->arr[0]);
+	coord->arr[Y] = ft_atof(tmp->arr[1]);
+	coord->arr[Z] = ft_atof(tmp->arr[2]);
 	dest_darray(tmp, gc_free);
 	return (true);
 }
@@ -64,7 +64,7 @@ static bool	init_am(t_am *am, t_darray *param)
 {
 	if (param->len != 3)
 		return (false);
-	am->ratio = atof(param->arr[1]);
+	am->ratio = ft_atof(param->arr[1]);
 	if (!parse_rgb(&am->rgb, param->arr[2], param->gc))
 		return (false);
 	return (am->is_valid(am));
@@ -78,7 +78,7 @@ static bool	init_camera(t_camera *cam, t_darray *param)
 		return (false);
 	if (!parse_normal(&cam->normal, param->arr[2] ,param->gc))
 		return (false);
-	cam->fov = atof(param->arr[3]);
+	cam->fov = ft_atof(param->arr[3]);
 	return (cam->is_valid(cam));
 }
 
@@ -88,7 +88,7 @@ static bool	init_light(t_light *light, t_darray *param)
 		return (false);
 	if (!parse_coord(&light->coord, param->arr[1] ,param->gc))
 		return (false);
-	light->brightness = atof(param->arr[2]);
+	light->brightness = ft_atof(param->arr[2]);
 	if (!parse_rgb(&light->rgb, param->arr[3], param->gc))
 		return (false);
 	return (light->is_valid(light));
@@ -105,7 +105,7 @@ static bool	add_sphere(t_darray *shapes, t_darray *param)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1] ,param->gc))
 		return (false);
-	radius = atof(param->arr[2]) / 2.0;
+	radius = ft_atof(param->arr[2]) / 2.0;
 	if (radius <= 0)
 		return (false);
 	if (!parse_rgb(&rgb, param->arr[3], param->gc))
