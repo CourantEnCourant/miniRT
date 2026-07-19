@@ -12,31 +12,63 @@
 
 #include "libft.h"
 
+static int	parse_sign(const char **str)
+{
+	int	sign;
+
+	sign = 1;
+	if (**str == '+' || **str == '-')
+	{
+		if (**str == '-')
+			sign = -1;
+		(*str)++;
+	}
+	return (sign);
+}
+
+static double	parse_exponent(const char **str)
+{
+	int		exp_sign;
+	int		exp_val;
+	double	multiplier;
+
+	if (**str != 'e' && **str != 'E')
+		return (1.0);
+	(*str)++;
+	exp_val = 0;
+	multiplier = 1.0;
+	exp_sign = parse_sign(str);
+	while (ft_isdigit(**str))
+		exp_val = exp_val * 10 + (*(*str)++ - '0');
+	while (exp_val-- > 0)
+	{
+		if (exp_sign == 1)
+			multiplier *= 10.0;
+		else
+			multiplier /= 10.0;
+	}
+	return (multiplier);
+}
+
 double	ft_atof(const char *str)
 {
-	double	res;
-	double	factor;
-	double	sign;
+	long long	res;
+	long long	factor;
+	int			sign;
 
-	res = 0.0;
-	sign = 1.0;
-	factor = 1.0;
-	while ((*str >= '\t' && *str <= '\r') || *str == ' ')
+	res = 0;
+	factor = 1;
+	while (ft_isspace(*str))
 		str++;
-	if (*str == '+' || *str == '-')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
-	while (*str >= '0' && *str <= '9')
-		res = res * 10.0 + (*str++ - '0');
+	sign = parse_sign(&str);
+	while (ft_isdigit(*str))
+		res = res * 10 + (*str++ - '0');
 	if (*str == '.')
 		str++;
-	while (*str >= '0' && *str <= '9')
+	while (ft_isdigit(*str))
 	{
-		factor /= 10.0;
-		res = res + (*str++ - '0') * factor;
+		res = res * 10 + (*str++ - '0');
+		factor *= 10;
 	}
-	return (res * sign);
+	return (((double)res / factor * sign) * parse_exponent(&str));
 }
