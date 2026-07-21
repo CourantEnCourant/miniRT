@@ -80,7 +80,7 @@ struct s_rend
 	int		line_length;
 	int		endian;
 	t_gc	*gc;
-	void	(*render)(const t_renderer *self);
+	void	(*render)(const t_renderer *self, const t_conf *conf);
 };
 void	init_renderer(t_renderer *self, t_gc *gc);
 void	dest_renderer(t_renderer *self);
