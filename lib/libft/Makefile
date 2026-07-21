@@ -16,6 +16,7 @@ SRC = ft_printf/ft_dprintf.c \
 	  ft_printf/parse_unsigned_hex.c \
 	  ft_printf/parse_unsigned_int.c \
 	  ft_printf/parser.c \
+	  ft_atof.c \
 	  ft_atoi.c \
 	  ft_bzero.c \
 	  ft_calloc.c \
