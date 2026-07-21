@@ -14,5 +14,7 @@
 
 unsigned int	rgb_to_int(t_rgb rgb)
 {
-	return (rgb.r << 16 | rgb.g << 8 | rgb.b);
+	return ((unsigned int)rgb.arr[R] << 16
+		| (unsigned int)rgb.arr[G] << 8
+		| (unsigned int)rgb.arr[B]);
 }
