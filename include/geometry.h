@@ -24,6 +24,7 @@ enum e_rgb
 
 typedef t_vec3				t_rgb;
 unsigned int	rgb_to_int(t_rgb rgb);
+unsigned int	normalized_rgb_to_int(t_rgb rgb);
 
 enum e_type
 {

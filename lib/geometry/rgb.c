@@ -11,10 +11,16 @@
 /* ************************************************************************** */
 
 #include "geometry.h"
+#include "vector.h"
 
 unsigned int	rgb_to_int(t_rgb rgb)
 {
 	return ((unsigned int)rgb.arr[R] << 16
 		| (unsigned int)rgb.arr[G] << 8
 		| (unsigned int)rgb.arr[B]);
+}
+
+unsigned int	normalized_rgb_to_int(t_rgb rgb)
+{
+	return (rgb_to_int(vec3_scal_mult(rgb, 255.999)));
 }
