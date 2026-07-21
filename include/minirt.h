@@ -6,7 +6,7 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 08:57:04 by weizhang          #+#    #+#             */
-/*   Updated: 2026/07/13 22:24:26 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/07/21 21:24:19 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ struct s_camera
 {
 	t_vec3	coord;
 	t_vec3	normal;
-	double	fov;
+	double	hfov_rad;
 	bool	(*is_valid)(const t_camera * self);
 };
 

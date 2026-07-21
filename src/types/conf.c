@@ -6,7 +6,7 @@
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/09 11:06:09 by weizhang          #+#    #+#             */
-/*   Updated: 2026/07/09 11:20:48 by weizhang         ###   ########.fr       */
+/*   Updated: 2026/07/21 21:26:09 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 bool	am_is_valid(const t_am *self);
 bool	camera_is_valid(const t_camera *self);
+double	degr_to_rad(double degrees);
 bool	light_is_valid(const t_light *self);
 
 static bool	parse_rgb(t_rgb *rgb, char str[], t_gc *gc)
@@ -78,7 +79,7 @@ static bool	init_camera(t_camera *cam, t_darray *param)
 		return (false);
 	if (!parse_normal(&cam->normal, param->arr[2] ,param->gc))
 		return (false);
-	cam->fov = atof(param->arr[3]);
+	cam->hfov_rad = degr_to_rad(atof(param->arr[3]));
 	return (cam->is_valid(cam));
 }
 
@@ -128,7 +129,7 @@ static bool	add_plane(t_darray *shapes, t_darray *param)
 	if (!parse_coord(&coord, param->arr[1], param->gc))
 		return (false);
 	if (!parse_coord(&normal, param->arr[2], param->gc))
-		return (false);	
+		return (false);
 	if (!parse_rgb(&rgb, param->arr[3], param->gc))
 		return (false);
 	plane = gc_malloc(sizeof(t_plane), shapes->gc);
@@ -183,10 +184,10 @@ static void	repr_conf(const t_conf *self)
 		printf("Invalid camera\n");
 	else
 		printf("Camera: coord %.2f,%.2f,%.2f, normal %.2f,%.2f,%.2f, "
-			"fov %.2f\n", self->camera.coord.arr[X], self->camera.coord.arr[Y],
+			"hfov_radian %.2f\n", self->camera.coord.arr[X], self->camera.coord.arr[Y],
 			self->camera.coord.arr[Z], self->camera.normal.arr[X],
 			self->camera.normal.arr[Y], self->camera.normal.arr[Z],
-			self->camera.fov);
+			self->camera.hfov_rad);
 	if (!self->light.is_valid(&self->light))
 		printf("Invalid light\n");
 	else
