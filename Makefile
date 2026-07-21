@@ -24,6 +24,7 @@ SRC = ./src/types/ambient_light.c \
 	  ./src/types/light.c \
 	  ./src/types/renderer.c \
 	  ./src/main.c \
+	  ./src/math_helper.c \
 	  ./src/str_helper.c
 
 OBJ = $(SRC:.c=.o)
