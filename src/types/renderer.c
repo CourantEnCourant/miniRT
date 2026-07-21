@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include "gc.h"
@@ -32,18 +33,17 @@ static t_rgb	ray_color(const t_ray *r)
 	return (color);
 }
 
-static void	render_frame(const t_renderer *self)
+static void	render_frame(const t_renderer *self, const t_conf *conf)
 {
 	// Ray tracing in one weekend
     double focal_length = 1.0;
-    double viewport_height = 2.0;
-    double viewport_width = viewport_height * (double)WIN_W / WIN_H;
-    t_vec3 camera_center = {{0, 0, 0}};
+    double viewport_width = 2 * focal_length * tan(conf->camera.hfov_rad / 2);
+    double viewport_height = (double)WIN_H / WIN_W * viewport_width;
 	t_vec3 viewport_u = {{viewport_width, 0, 0}};
 	t_vec3 viewport_v = {{0, -viewport_height, 0}};
 	t_vec3 pixel_delta_u = vec3_scal_div(viewport_u, WIN_W);
 	t_vec3 pixel_delta_v = vec3_scal_div(viewport_v, WIN_H);
-	t_vec3 viewport_upper_left = vec3_sub(camera_center, (t_vec3){{0, 0, focal_length}});
+	t_vec3 viewport_upper_left = vec3_sub(conf->camera.coord, (t_vec3){{0, 0, focal_length}});
 	viewport_upper_left = vec3_sub(viewport_upper_left, vec3_scal_div(viewport_u, 2));
 	viewport_upper_left = vec3_sub(viewport_upper_left, vec3_scal_div(viewport_v, 2));
 	t_vec3 pixel00_loc = vec3_add(viewport_upper_left, vec3_scal_mult(vec3_add(pixel_delta_u, pixel_delta_v), 0.5));
@@ -63,7 +63,7 @@ static void	render_frame(const t_renderer *self)
 		while (x < WIN_W)
 		{
 			t_vec3 pixel_center = vec3_add(pixel00_loc, vec3_add(vec3_scal_mult(pixel_delta_u, x), vec3_scal_mult(pixel_delta_v, y)));
-			t_vec3 ray_direction = vec3_sub(pixel_center, camera_center);
+			t_vec3 ray_direction = vec3_sub(pixel_center, conf->camera.coord);
 			t_ray r = {pixel_center, ray_direction};
 			put_pixel(px, ray_color(&r));
 			px += bpp;
@@ -74,9 +74,9 @@ static void	render_frame(const t_renderer *self)
 	}
 }
 
-static void	render(const t_renderer *self)
+static void	render(const t_renderer *self, const t_conf *conf)
 {
-	render_frame(self);
+	render_frame(self, conf);
 	mlx_put_image_to_window(self->mlx, self->mlx_win, self->img, 0, 0);
 	mlx_loop(self->mlx);
 }

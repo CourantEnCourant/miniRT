@@ -35,7 +35,7 @@ int	main(int argc, char *argv[])
 	init_conf_from_file(&conf, fd, gc);
 	conf.repr(&conf);
 	init_renderer(&renderer, gc);
-	renderer.render(&renderer);
+	renderer.render(&renderer, &conf);
 	dest_renderer(&renderer);
 	dest_conf(&conf);
 	dest_gc(gc);
