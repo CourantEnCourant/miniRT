@@ -103,7 +103,7 @@ static bool	add_sphere(t_darray *shapes, t_darray *param)
 
 	if (param->len != 4)
 		return (false);
-	if (!parse_coord(&coord, param->arr[1] ,param->gc))
+	if (!parse_coord(&coord, param->arr[1], param->gc))
 		return (false);
 	radius = atof(param->arr[2]) / 2.0;
 	if (radius <= 0)
@@ -118,15 +118,52 @@ static bool	add_sphere(t_darray *shapes, t_darray *param)
 
 static bool	add_plane(t_darray *shapes, t_darray *param)
 {
-	(void)shapes;
-	(void)param;
+	t_plane		*plane;
+	t_vec3		coord;
+	t_vec3		normal;
+	t_rgb		rgb;
+
+	if (param->len != 4)
+		return (false);
+	if (!parse_coord(&coord, param->arr[1], param->gc))
+		return (false);
+	if (!parse_coord(&normal, param->arr[2], param->gc))
+		return (false);	
+	if (!parse_rgb(&rgb, param->arr[3], param->gc))
+		return (false);
+	plane = gc_malloc(sizeof(t_plane), shapes->gc);
+	init_plane(plane, coord, rgb, normal);
+	shapes->push(shapes, plane);
 	return (true);
 }
 
 static bool	add_cyl(t_darray *shapes, t_darray *param)
 {
-	(void)shapes;
-	(void)param;
+	t_cyl		*cyl;
+	t_vec3		coord;
+	t_vec3		normal;
+	double		radius;
+	double		height;
+	t_rgb		rgb;
+
+	if (param->len != 6)
+		return (false);
+	if (!parse_coord(&coord, param->arr[1], param->gc))
+		return (false);
+	if (!parse_coord(&normal, param->arr[2], param->gc))
+		return (false);
+	radius = atof(param->arr[3]) / 2.0;
+	if (radius <= 0)
+		return (false);
+	height = atof(param->arr[4]);
+	if (height <= 0)
+		return (false);
+	if (!parse_rgb(&rgb, param->arr[5], param->gc))
+		return (false);
+	cyl = gc_malloc(sizeof(t_cyl), shapes->gc);
+	init_cyl1(cyl, coord, rgb, normal);
+	init_cyl2(cyl, radius, height);
+	shapes->push(shapes, cyl);
 	return (true);
 }
 
