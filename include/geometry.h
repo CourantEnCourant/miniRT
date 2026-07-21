@@ -15,13 +15,14 @@
 
 # include "vector.h"
 
-typedef struct s_rgb		t_rgb;
-struct s_rgb
+enum e_rgb
 {
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
+	R,
+	G,
+	B,
 };
+
+typedef t_vec3				t_rgb;
 unsigned int	rgb_to_int(t_rgb rgb);
 
 enum e_type

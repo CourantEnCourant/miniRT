@@ -34,9 +34,9 @@ static bool	parse_rgb(t_rgb *rgb, char str[], t_gc *gc)
 	tmp = gc_split(str, ',', gc);
 	if (tmp->len != 3)
 		return (dest_darray(tmp, gc_free), false);
-	rgb->r = ft_atoi(tmp->arr[0]);
-	rgb->g = ft_atoi(tmp->arr[1]);
-	rgb->b = ft_atoi(tmp->arr[2]);
+	rgb->arr[R] = ft_atoi(tmp->arr[0]);
+	rgb->arr[G] = ft_atoi(tmp->arr[1]);
+	rgb->arr[B] = ft_atoi(tmp->arr[2]);
 	dest_darray(tmp, gc_free);
 	return (true);
 }
@@ -177,8 +177,8 @@ static void	repr_conf(const t_conf *self)
 	if (!self->am.is_valid(&self->am))
 		printf("Invalid Ambiant light\n");
 	else
-		printf("Ambiant light: ratio %.2f, rgb %u,%u,%u\n", self->am.ratio,
-			self->am.rgb.r, self->am.rgb.g, self->am.rgb.b);
+		printf("Ambiant light: ratio %.2f, rgb %.0f,%.0f,%.0f\n", self->am.ratio,
+			self->am.rgb.arr[R], self->am.rgb.arr[G], self->am.rgb.arr[B]);
 	if (!self->camera.is_valid(&self->camera))
 		printf("Invalid camera\n");
 	else
@@ -191,9 +191,10 @@ static void	repr_conf(const t_conf *self)
 		printf("Invalid light\n");
 	else
 		printf("Light: coord %.2f,%.2f,%.2f, brightness %.2f, rgb "
-			"%u,%u,%u\n", self->light.coord.arr[X], self->light.coord.arr[Y],
-			self->light.coord.arr[Z], self->light.brightness,
-			self->light.rgb.r, self->light.rgb.g, self->light.rgb.b);
+			"%.0f,%.0f,%.0f\n", self->light.coord.arr[X],
+			self->light.coord.arr[Y], self->light.coord.arr[Z],
+			self->light.brightness, self->light.rgb.arr[R],
+			self->light.rgb.arr[G], self->light.rgb.arr[B]);
 	printf("Loaded %zu shapes:\n", self->shapes->len);
 	i = 0;
 	while (i < self->shapes->len)
