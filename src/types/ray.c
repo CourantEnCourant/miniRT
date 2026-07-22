@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include "geometry.h"
 #include "minirt.h"
 #include "vector.h"
@@ -25,17 +26,20 @@ t_vec3	ray_at(const t_ray *ray, double t)
 	return (vec3_add(ray->orig, vec3_scal_mult(ray->dir, t)));
 }
 
-bool	hit_sphere(const t_ray *ray, const t_sphere *sphere)
+double	hit_sphere(const t_ray *ray, const t_sphere *sphere)
 {
 	t_vec3	ray_to_sp;
 	double	a;
 	double	b;
 	double	c;
+	double	disc;
 
 	ray_to_sp = vec3_sub(sphere->base.coord, ray->orig);
 	a = dot_product(ray->dir, ray->dir);
 	b = -2.0 * dot_product(ray->dir, ray_to_sp);
 	c = dot_product(ray_to_sp, ray_to_sp) - sphere->radius * sphere->radius;
-	return (b * b - 4 * a * c >= 0);
+	disc = b * b - 4 * a * c;
+	if (disc < 0)
+		return (-1.0);
+	return ((-b - sqrt(disc)) / (2.0 * a));
 }
-

@@ -26,8 +26,15 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 
 static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
 {
-	if (hit_sphere(r, sphere))
-		return ((t_rgb){{1, 0, 0}});
+	double	t;
+
+	t = hit_sphere(r, sphere);
+	if (t > 0.0)
+	{
+		t_vec3 N = vec3_normalize(vec3_sub(ray_at(r, t), sphere->base.coord));
+		t_rgb ret = {{N.arr[X] + 1, N.arr[Y] + 1, N.arr[Z] + 1}};
+		return (vec3_scal_mult(ret, 0.5));
+	}
 	t_vec3 unit_direction = vec3_normalize(r->dir);
 	double a = 0.5 * (unit_direction.arr[Y] + 1.0);
 	t_rgb color = vec3_scal_mult((t_rgb){{1, 1, 1}}, 1 - a);
