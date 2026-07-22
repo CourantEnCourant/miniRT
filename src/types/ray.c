@@ -30,16 +30,16 @@ double	hit_sphere(const t_ray *ray, const t_sphere *sphere)
 {
 	t_vec3	ray_to_sp;
 	double	a;
-	double	b;
+	double	h;
 	double	c;
 	double	disc;
 
 	ray_to_sp = vec3_sub(sphere->base.coord, ray->orig);
 	a = dot_product(ray->dir, ray->dir);
-	b = -2.0 * dot_product(ray->dir, ray_to_sp);
+	h = dot_product(ray->dir, ray_to_sp);
 	c = dot_product(ray_to_sp, ray_to_sp) - sphere->radius * sphere->radius;
-	disc = b * b - 4 * a * c;
+	disc = h * h - a * c;
 	if (disc < 0)
 		return (-1.0);
-	return ((-b - sqrt(disc)) / (2.0 * a));
+	return ((h - sqrt(disc)) / a);
 }
