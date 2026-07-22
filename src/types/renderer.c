@@ -86,8 +86,8 @@ static void	render(const t_renderer *self, const t_conf *conf)
 void	init_renderer(t_renderer *self, t_gc *gc)
 {
 	self->mlx = mlx_init();
-	self->mlx_win = mlx_new_window(self->mlx, 800, 600, "window");
-	self->img = mlx_new_image(self->mlx, 800, 600);
+	self->mlx_win = mlx_new_window(self->mlx, WIN_W, WIN_H, "window");
+	self->img = mlx_new_image(self->mlx, WIN_W, WIN_H);
 	self->addr = mlx_get_data_addr(self->img, &self->bits_per_pixel,
 			&self->line_length, &self->endian);
 	self->gc = gc;
