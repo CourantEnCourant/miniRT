@@ -6,7 +6,8 @@ AR = ar rcs
 RM = rm -f
 
 INCLUDE = -I ../../include
-SRC = vector.c
+SRC = vector.c \
+	  vector2.c
 
 OBJ = $(SRC:.c=.o)
 
