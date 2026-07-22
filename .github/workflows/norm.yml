@@ -24,7 +24,7 @@ jobs:
     container: fedora:latest
     steps:
       - name: Install tools
-        run: dnf install -y git gcc make
+        run: dnf install -y git gcc make libX11-devel libXext-devel zlib-devel libbsd-devel
       - name: Checkout
         uses: actions/checkout@v6
       - name: Build
