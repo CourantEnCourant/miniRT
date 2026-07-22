@@ -55,7 +55,7 @@ struct s_ray
 };
 void	init_ray(t_ray *self, t_vec3 orig, t_vec3 dir);
 t_vec3	ray_at(const t_ray *ray, double t);
-bool	hit_sphere(const t_ray *ray, const t_sphere *sphere);
+double	hit_sphere(const t_ray *ray, const t_sphere *sphere);
 
 typedef struct s_conf	t_conf;
 struct s_conf
