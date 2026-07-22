@@ -24,8 +24,10 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 	*(unsigned int *)dst = normalized_rgb_to_int(rgb);
 }
 
-static t_rgb	ray_color(const t_ray *r)
+static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
 {
+	if (hit_sphere(r, sphere))
+		return ((t_rgb){{1, 0, 0}});
 	t_vec3 unit_direction = vec3_normalize(r->dir);
 	double a = 0.5 * (unit_direction.arr[Y] + 1.0);
 	t_rgb color = vec3_scal_mult((t_rgb){{1, 1, 1}}, 1 - a);
@@ -64,8 +66,8 @@ static void	render_frame(const t_renderer *self, const t_conf *conf)
 		{
 			t_vec3 pixel_center = vec3_add(pixel00_loc, vec3_add(vec3_scal_mult(pixel_delta_u, x), vec3_scal_mult(pixel_delta_v, y)));
 			t_vec3 ray_direction = vec3_sub(pixel_center, conf->camera.coord);
-			t_ray r = {pixel_center, ray_direction};
-			put_pixel(px, ray_color(&r));
+			t_ray r = {conf->camera.coord, ray_direction};
+			put_pixel(px, ray_color(&r, conf->shapes->arr[0]));
 			px += bpp;
 			x++;
 		}
