@@ -22,6 +22,7 @@ SRC = ./src/types/ambient_light.c \
 	  ./src/types/camera.c \
 	  ./src/types/conf.c \
 	  ./src/types/light.c \
+	  ./src/types/ray.c \
 	  ./src/types/renderer.c \
 	  ./src/main.c \
 	  ./src/math_helper.c \
