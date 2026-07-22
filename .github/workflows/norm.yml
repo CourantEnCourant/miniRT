@@ -11,13 +11,13 @@ jobs:
     container: fedora:latest
     steps:
       - name: Install tools
-        run: dnf install -y git python3-pip
+        run: dnf install -y git python3-pip findutils
       - name: Checkout
         uses: actions/checkout@v6
       - name: Install norminette
         run: pip install norminette
       - name: Run norminette
-        run: norminette include lib
+        run: ./norm.sh
 
   compilation:
     runs-on: ubuntu-latest
