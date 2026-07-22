@@ -13,38 +13,37 @@
 #include <stddef.h>
 #include "libft.h"
 
-static long long	pow10(long long size)
+static long long	ft_pow10(long long exponent)
 {
 	long long	res;
 
 	res = 1;
-	while (size-- > 0)
+	while (exponent-- > 0)
 		res *= 10;
 	return (res);
 }
 
-static const char	*parse_space_sign(const char *str, int *sign)
+static void	parse_space_sign(const char **str, int *sign)
 {
-	while (ft_isspace(*str))
-		str++;
+	while (ft_isspace(**str))
+		(*str)++;
 	*sign = 1;
-	if (*str == '+' || *str == '-')
+	if (**str == '+' || **str == '-')
 	{
-		if (*str == '-')
+		if (**str == '-')
 			*sign = -1;
-		str++;
+		(*str)++;
 	}
-	return (str);
 }
 
 double	ft_atof(const char str[])
 {
 	int			sign;
-	long long	size;
 	long long	whole;
 	long long	fract;
+	long long	fract_size;
 
-	str = parse_space_sign(str, &sign);
+	parse_space_sign(&str, &sign);
 	whole = 0;
 	while (ft_isdigit(*str))
 	{
@@ -52,14 +51,14 @@ double	ft_atof(const char str[])
 		str++;
 	}
 	fract = 0;
-	size = 0;
+	fract_size = 0;
 	if (*str == '.')
 		str++;
 	while (ft_isdigit(*str))
 	{
 		fract = fract * 10 + (*str - '0');
-		size++;
+		fract_size++;
 		str++;
 	}
-	return (sign * (whole + (double)fract / pow10(size)));
+	return (sign * (whole + (double)fract / ft_pow10(fract_size)));
 }
