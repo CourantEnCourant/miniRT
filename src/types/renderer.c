@@ -32,14 +32,14 @@ static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
 	if (t > 0.0)
 	{
 		t_tuple normal = tuple_normalize(tuple_sub(ray_at(r, t), sphere->base.coord));
-		t_rgb ret = vector(normal.arr[X] + 1, normal.arr[Y] + 1, normal.arr[Z] + 1);
-		return (tuple_scal_mult(ret, 0.5));
+		t_rgb ret = color(normal.arr[X] + 1, normal.arr[Y] + 1, normal.arr[Z] + 1);
+		return (color_scal_mult(ret, 0.5));
 	}
 	t_tuple unit_direction = tuple_normalize(r->dir);
 	double a = 0.5 * (unit_direction.arr[Y] + 1.0);
-	t_rgb color = tuple_scal_mult(vector(1, 1, 1), 1 - a);
-	color = tuple_add(color, tuple_scal_mult(vector(0.5, 0.7, 1.0), a));
-	return (color);
+	t_rgb ret = color_scal_mult(color(1, 1, 1), 1 - a);
+	ret = color_add(ret, color_scal_mult(color(0.5, 0.7, 1.0), a));
+	return (ret);
 }
 
 static void	render_frame(const t_renderer *self, const t_conf *conf)
