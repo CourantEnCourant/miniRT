@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rgb2.c                                             :+:      :+:    :+:   */
+/*   tuple3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: weizhang <weiqi.zhang_arthur@yahoo.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/14 19:28:42 by weizhang          #+#    #+#             */
-/*   Updated: 2026/07/14 19:30:08 by weizhang         ###   ########.fr       */
+/*   Created: 2026/07/23 22:42:05 by weizhang          #+#    #+#             */
+/*   Updated: 2026/07/23 22:42:13 by weizhang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "geometry.h"
 #include "tuple.h"
 
-unsigned int	normalized_rgb_to_int(t_rgb rgb)
+t_tuple	tuple_hadamar(t_tuple t1, t_tuple t2)
 {
-	return (rgb_to_int(tuple_scal_mult(rgb, 255.999)));
-}
-
-unsigned int	rgb_to_int(t_rgb rgb)
-{
-	return ((unsigned int)rgb.arr[R] << 16
-		| (unsigned int)rgb.arr[G] << 8
-		| (unsigned int)rgb.arr[B]);
+	return ((t_tuple){{t1.arr[X] * t2.arr[X],
+			t1.arr[Y] * t2.arr[Y],
+			t1.arr[Z] * t2.arr[Z],
+			t1.arr[W] * t2.arr[W]}});
 }
