@@ -15,11 +15,20 @@
 
 # define WIN_W 800
 # define WIN_H 600
+# ifdef __APPLE__
+#  define KEY_ESC 53
+# else
+#  define KEY_ESC 65307
+# endif
+# define EVENT_DESTROY 17
+# define MASK_DESTROY 0
 
 # include "datastructures.h"
 # include "gc_libft.h"
 # include "geometry.h"
 # include "tuple.h"
+
+typedef int	(*t_fn)(void);
 
 typedef struct s_am		t_am;
 struct s_am
