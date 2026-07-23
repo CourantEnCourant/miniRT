@@ -23,6 +23,11 @@ t_rgb	color_add(t_rgb c1, t_rgb c2)
 	return (tuple_add(c1, c2));
 }
 
+t_rgb	color_mult(t_rgb c1, t_rgb c2)
+{
+	return (tuple_hadamar(c1, c2));
+}
+
 t_rgb	color_sub(t_rgb c1, t_rgb c2)
 {
 	return (tuple_sub(c1, c2));
@@ -31,9 +36,4 @@ t_rgb	color_sub(t_rgb c1, t_rgb c2)
 t_rgb	color_scal_mult(t_rgb c, double scale)
 {
 	return (tuple_scal_mult(c, scale));
-}
-
-unsigned int	normalized_rgb_to_int(t_rgb rgb)
-{
-	return (rgb_to_int(tuple_scal_mult(rgb, 255.999)));
 }

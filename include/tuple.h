@@ -34,6 +34,7 @@ typedef struct s_tuple
 t_tuple	cross_product(t_tuple t1, t_tuple t2);
 t_tuple	tuple_add(t_tuple t1, t_tuple t2);
 double	tuple_dot(t_tuple t1, t_tuple t2);
+t_tuple	tuple_hadamar(t_tuple t1, t_tuple t2);
 double	tuple_mod(t_tuple t);
 t_tuple	tuple_normalize(t_tuple t);
 t_tuple	point(double x, double y, double z);

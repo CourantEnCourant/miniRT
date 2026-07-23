@@ -7,7 +7,8 @@ RM = rm -f
 
 INCLUDE = -I ../../include
 SRC = tuple.c \
-	  tuple2.c
+	  tuple2.c \
+	  tuple3.c
 
 OBJ = $(SRC:.c=.o)
 
