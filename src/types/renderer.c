@@ -12,6 +12,7 @@
 
 #include <math.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "gc.h"
 #include "geometry.h"
@@ -119,6 +120,20 @@ static void	render(const t_renderer *self, const t_conf *conf)
 	mlx_loop(self->mlx);
 }
 
+static int	close_window(t_renderer *renderer)
+{
+	dest_renderer(renderer);
+	dest_gc(renderer->gc);
+	exit(0);
+}
+
+static int	key_hook(int keycode, void *param)
+{
+	if (keycode == KEY_ESC)
+		close_window(param);
+	return (0);
+}
+
 void	init_renderer(t_renderer *self, t_gc *gc)
 {
 	self->mlx = mlx_init();
@@ -128,6 +143,9 @@ void	init_renderer(t_renderer *self, t_gc *gc)
 			&self->line_length, &self->endian);
 	self->gc = gc;
 	self->render = render;
+	mlx_key_hook(self->mlx_win, key_hook, self);
+	mlx_hook(self->mlx_win, EVENT_DESTROY, MASK_DESTROY,
+		(t_fn)(intptr_t)close_window, self);
 }
 
 void	dest_renderer(t_renderer *self)
