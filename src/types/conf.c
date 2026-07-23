@@ -21,7 +21,7 @@
 #include "geometry.h"
 #include "libft.h"
 #include "minirt.h"
-#include "vector.h"
+#include "tuple.h"
 
 bool	am_is_valid(const t_am *self);
 bool	camera_is_valid(const t_camera *self);
@@ -35,30 +35,39 @@ static bool	parse_rgb(t_rgb *rgb, char str[], t_gc *gc)
 	tmp = gc_split(str, ',', gc);
 	if (tmp->len != 3)
 		return (dest_darray(tmp, gc_free), false);
-	rgb->arr[R] = ft_atoi(tmp->arr[0]);
-	rgb->arr[G] = ft_atoi(tmp->arr[1]);
-	rgb->arr[B] = ft_atoi(tmp->arr[2]);
+	*rgb = vector(ft_atoi(tmp->arr[0]),
+			ft_atoi(tmp->arr[1]),
+			ft_atoi(tmp->arr[2]));
 	dest_darray(tmp, gc_free);
 	return (true);
 }
 
-static bool	parse_coord(t_vec3 *coord, char str[], t_gc *gc)
+static bool	parse_coord(t_tuple *coord, char str[], t_gc *gc)
 {
 	t_darray	*tmp;
 
 	tmp = gc_split(str, ',', gc);
 	if (tmp->len != 3)
 		return (dest_darray(tmp, gc_free), false);
-	coord->arr[X] = atof(tmp->arr[0]);
-	coord->arr[Y] = atof(tmp->arr[1]);
-	coord->arr[Z] = atof(tmp->arr[2]);
+	*coord = point(atof(tmp->arr[0]),
+			atof(tmp->arr[1]),
+			atof(tmp->arr[2]));
 	dest_darray(tmp, gc_free);
 	return (true);
 }
 
-static bool	parse_normal(t_vec3 *normal, char str[], t_gc *gc)
+static bool	parse_normal(t_tuple *normal, char str[], t_gc *gc)
 {
-	return (parse_coord(normal, str, gc));
+	t_darray	*tmp;
+
+	tmp = gc_split(str, ',', gc);
+	if (tmp->len != 3)
+		return (dest_darray(tmp, gc_free), false);
+	*normal = vector(atof(tmp->arr[0]),
+			atof(tmp->arr[1]),
+			atof(tmp->arr[2]));
+	dest_darray(tmp, gc_free);
+	return (true);
 }
 
 static bool	init_am(t_am *am, t_darray *param)
@@ -98,7 +107,7 @@ static bool	init_light(t_light *light, t_darray *param)
 static bool	add_sphere(t_darray *shapes, t_darray *param)
 {
 	t_sphere	*sphere;
-	t_vec3		coord;
+	t_tuple		coord;
 	double		radius;
 	t_rgb		rgb;
 
@@ -120,8 +129,8 @@ static bool	add_sphere(t_darray *shapes, t_darray *param)
 static bool	add_plane(t_darray *shapes, t_darray *param)
 {
 	t_plane		*plane;
-	t_vec3		coord;
-	t_vec3		normal;
+	t_tuple		coord;
+	t_tuple		normal;
 	t_rgb		rgb;
 
 	if (param->len != 4)
@@ -141,8 +150,8 @@ static bool	add_plane(t_darray *shapes, t_darray *param)
 static bool	add_cyl(t_darray *shapes, t_darray *param)
 {
 	t_cyl		*cyl;
-	t_vec3		coord;
-	t_vec3		normal;
+	t_tuple		coord;
+	t_tuple		normal;
 	double		radius;
 	double		height;
 	t_rgb		rgb;

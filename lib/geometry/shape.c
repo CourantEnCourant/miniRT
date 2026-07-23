@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "geometry.h"
-#include "vector.h"
+#include "tuple.h"
 
 static const char	*get_type(const t_shape *self)
 {
@@ -25,7 +25,7 @@ static const char	*get_type(const t_shape *self)
 		return ("unrecognized");
 }
 
-void	init_shape(t_shape *self, enum e_type type, t_vec3 coord, t_rgb rgb)
+void	init_shape(t_shape *self, enum e_type type, t_tuple coord, t_rgb rgb)
 {
 	self->type = type;
 	self->coord = coord;

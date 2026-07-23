@@ -19,7 +19,7 @@
 # include "datastructures.h"
 # include "gc_libft.h"
 # include "geometry.h"
-# include "vector.h"
+# include "tuple.h"
 
 typedef struct s_am		t_am;
 struct s_am
@@ -32,8 +32,8 @@ struct s_am
 typedef struct s_camera	t_camera;
 struct s_camera
 {
-	t_vec3	coord;
-	t_vec3	normal;
+	t_tuple	coord;
+	t_tuple	normal;
 	double	hfov_rad;
 	bool	(*is_valid)(const t_camera * self);
 };
@@ -41,7 +41,7 @@ struct s_camera
 typedef struct s_light	t_light;
 struct s_light
 {
-	t_vec3	coord;
+	t_tuple	coord;
 	double	brightness;
 	t_rgb	rgb;
 	bool	(*is_valid)(const t_light * self);
@@ -50,11 +50,11 @@ struct s_light
 typedef struct s_ray	t_ray;
 struct s_ray
 {
-	t_vec3	orig;
-	t_vec3	dir;
+	t_tuple	orig;
+	t_tuple	dir;
 };
-void	init_ray(t_ray *self, t_vec3 orig, t_vec3 dir);
-t_vec3	ray_at(const t_ray *ray, double t);
+void	init_ray(t_ray *self, t_tuple orig, t_tuple dir);
+t_tuple	ray_at(const t_ray *ray, double t);
 double	hit_sphere(const t_ray *ray, const t_sphere *sphere);
 
 typedef struct s_conf	t_conf;

@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "geometry.h"
-#include "vector.h"
+#include "tuple.h"
 
-void	init_sphere(t_sphere *self, t_vec3 coord, t_rgb rgb, double radius)
+void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 {
 	init_shape(&self->base, SPHERE, coord, rgb);
 	self->radius = radius;

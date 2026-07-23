@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "geometry.h"
-#include "vector.h"
+#include "tuple.h"
 
-void	init_plane(t_plane *self, t_vec3 coord, t_rgb rgb, t_vec3 normal)
+void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 {
 	init_shape(&self->base, PLANE, coord, rgb);
 	self->normal = normal;

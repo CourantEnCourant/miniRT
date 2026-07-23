@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "geometry.h"
-#include "vector.h"
+#include "tuple.h"
 
 unsigned int	rgb_to_int(t_rgb rgb)
 {
@@ -22,5 +22,5 @@ unsigned int	rgb_to_int(t_rgb rgb)
 
 unsigned int	normalized_rgb_to_int(t_rgb rgb)
 {
-	return (rgb_to_int(vec3_scal_mult(rgb, 255.999)));
+	return (rgb_to_int(tuple_scal_mult(rgb, 255.999)));
 }
