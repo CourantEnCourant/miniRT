@@ -9,6 +9,7 @@ INCLUDE = 	-I ../../include
 SRC = 		cyl.c \
 			plane.c \
 			rgb.c \
+			rgb2.c \
 			shape.c \
 			sphere.c
 

@@ -35,7 +35,7 @@ static bool	parse_rgb(t_rgb *rgb, char str[], t_gc *gc)
 	tmp = gc_split(str, ',', gc);
 	if (tmp->len != 3)
 		return (dest_darray(tmp, gc_free), false);
-	*rgb = vector(ft_atoi(tmp->arr[0]),
+	*rgb = color(ft_atoi(tmp->arr[0]),
 			ft_atoi(tmp->arr[1]),
 			ft_atoi(tmp->arr[2]));
 	dest_darray(tmp, gc_free);

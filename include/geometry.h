@@ -23,8 +23,12 @@ enum e_rgb
 };
 
 typedef t_tuple				t_rgb;
-unsigned int	rgb_to_int(t_rgb rgb);
+t_rgb			color(double r, double g, double b);
+t_rgb			color_add(t_rgb c1, t_rgb c2);
+t_rgb			color_sub(t_rgb c1, t_rgb c2);
+t_rgb			color_scal_mult(t_rgb c, double scale);
 unsigned int	normalized_rgb_to_int(t_rgb rgb);
+unsigned int	rgb_to_int(t_rgb rgb);
 
 enum e_type
 {
