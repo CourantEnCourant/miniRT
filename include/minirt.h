@@ -21,6 +21,8 @@
 # include "geometry.h"
 # include "vector.h"
 
+typedef int	(*t_fn)(void);
+
 typedef struct s_am		t_am;
 struct s_am
 {
