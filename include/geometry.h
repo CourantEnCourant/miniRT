@@ -13,7 +13,7 @@
 #ifndef GEOMETRY_H
 # define GEOMETRY_H
 
-# include "vector.h"
+# include "tuple.h"
 
 enum e_rgb
 {
@@ -22,7 +22,7 @@ enum e_rgb
 	B,
 };
 
-typedef t_vec3				t_rgb;
+typedef t_tuple				t_rgb;
 unsigned int	rgb_to_int(t_rgb rgb);
 unsigned int	normalized_rgb_to_int(t_rgb rgb);
 
@@ -37,11 +37,11 @@ typedef struct s_shape		t_shape;
 struct s_shape
 {
 	enum e_type	type;
-	t_vec3		coord;
+	t_tuple		coord;
 	t_rgb		rgb;
 	const char	*(*get_type)(const t_shape *self);
 };
-void			init_shape(t_shape *s, enum e_type t, t_vec3 coord, t_rgb rgb);
+void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
 
 typedef struct s_sphere		t_sphere;
 struct s_sphere
@@ -49,25 +49,27 @@ struct s_sphere
 	t_shape	base;
 	double	radius;
 };
-void			init_sphere(t_sphere *s, t_vec3 coord, t_rgb rgb, double rad);
+void			init_sphere(t_sphere *s, t_tuple coord, t_rgb rgb, double rad);
 
 typedef struct s_plane		t_plane;
 struct s_plane
 {
 	t_shape	base;
-	t_vec3	normal;
+	t_tuple	normal;
 };
-void			init_plane(t_plane *s, t_vec3 coord, t_rgb rgb, t_vec3 normal);
+void			init_plane(t_plane *s, t_tuple coord, t_rgb rgb,
+					t_tuple normal);
 
 typedef struct s_cylinder	t_cyl;
 struct s_cylinder
 {
 	t_shape	base;
-	t_vec3	normal;
+	t_tuple	normal;
 	double	radius;
 	double	height;
 };
-void			init_cyl1(t_cyl *self, t_vec3 coord, t_rgb rgb, t_vec3 normal);
+void			init_cyl1(t_cyl *self, t_tuple coord, t_rgb rgb,
+					t_tuple normal);
 void			init_cyl2(t_cyl *self, double radius, double height);
 
 #endif

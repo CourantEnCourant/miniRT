@@ -13,7 +13,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include "minirt.h"
-#include "vector.h"
+#include "tuple.h"
 
 bool	camera_is_valid(const t_camera *self)
 {

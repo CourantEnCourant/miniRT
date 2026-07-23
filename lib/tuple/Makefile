@@ -1,4 +1,4 @@
-NAME = vector.a
+NAME = tuple.a
 
 CC = cc
 CFLAGS = -Wextra -Werror -Wall -g3
@@ -6,8 +6,8 @@ AR = ar rcs
 RM = rm -f
 
 INCLUDE = -I ../../include
-SRC = vector.c \
-	  vector2.c
+SRC = tuple.c \
+	  tuple2.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -22,7 +22,7 @@ $(NAME): $(OBJ)
 
 clean:
 	@$(RM) $(OBJ)
-	@echo "Removed all .o files in vector"
+	@echo "Removed all .o files in tuple"
 
 fclean: clean
 	@$(RM) $(NAME)

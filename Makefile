@@ -38,7 +38,7 @@ LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
 			   ./lib/gc_libft/gc_libft.a \
 			   ./lib/geometry/geometry.a \
 			   ./lib/libft/libft.a \
-			   ./lib/vector/vector.a
+			   ./lib/tuple/tuple.a
 
 all: $(NAME)
 
