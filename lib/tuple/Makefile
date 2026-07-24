@@ -6,7 +6,12 @@ AR = ar rcs
 RM = rm -f
 
 INCLUDE = -I ../../include
-SRC = tuple.c \
+SRC = helpers.c \
+	  matinst.c \
+	  matinst2.c \
+	  matops.c \
+	  matops2.c \
+	  tuple.c \
 	  tuple2.c \
 	  tuple3.c
 
