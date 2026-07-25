@@ -79,6 +79,7 @@ t_mat	mat_inv(t_mat A)
 		ret.size = 0;
 		return (ret);
 	}
+	ret.size = A.size;
 	i = 0;
 	while (i < A.size)
 	{
@@ -90,9 +91,7 @@ t_mat	mat_inv(t_mat A)
 		}
 		i++;
 	}
-	ret = mat_scal_mult(mat_t(ret), 1 / det);
-	ret.size = A.size;
-	return (ret);
+	return (mat_scal_mult(mat_t(ret), 1 / det));
 }
 
 double	mat_minor(t_mat A, size_t row, size_t col)
