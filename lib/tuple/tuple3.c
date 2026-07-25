@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
 #include "tuple.h"
 
 t_tuple	tuple_hadamar(t_tuple t1, t_tuple t2)
@@ -18,4 +19,18 @@ t_tuple	tuple_hadamar(t_tuple t1, t_tuple t2)
 			t1.arr[Y] * t2.arr[Y],
 			t1.arr[Z] * t2.arr[Z],
 			t1.arr[W] * t2.arr[W]}});
+}
+
+bool	tuple_eq(t_tuple t1, t_tuple t2)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (!deq(t1.arr[i], t2.arr[i]))
+			return (false);
+		i++;
+	}
+	return (true);
 }

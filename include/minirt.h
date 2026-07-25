@@ -53,8 +53,9 @@ struct s_ray
 	t_tuple	orig;
 	t_tuple	dir;
 };
-void	init_ray(t_ray *self, t_tuple orig, t_tuple dir);
+t_ray	init_ray(t_tuple orig, t_tuple dir);
 t_tuple	ray_at(const t_ray *ray, double t);
+bool	ray_eq(t_ray r1, t_ray r2);
 
 typedef struct s_intersection
 {
@@ -69,6 +70,7 @@ typedef struct s_xs
 }	t_xs;
 t_xs			intersect(const t_ray *ray, const t_sphere *sphere);
 t_intersection	hit(const t_xs *xs);
+t_ray			transform(t_ray ray, t_mat matrix);
 
 typedef struct s_conf	t_conf;
 struct s_conf
