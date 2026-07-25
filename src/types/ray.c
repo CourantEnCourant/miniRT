@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <math.h>
+#include <stddef.h>
 #include "geometry.h"
 #include "minirt.h"
 #include "tuple.h"
@@ -51,4 +52,21 @@ t_xs	intersect(const t_ray *ray, const t_sphere *sphere)
 		ret.count = 2;
 	}
 	return (ret);
+}
+
+t_intersection	hit(const t_xs *xs)
+{
+	t_intersection	none;
+	unsigned int	i;
+
+	i = 0;
+	while (i < xs->count)
+	{
+		if (xs->xs[i].t >= 0)
+			return (xs->xs[i]);
+		i++;
+	}
+	none.t = -1;
+	none.shape = NULL;
+	return (none);
 }
