@@ -33,6 +33,9 @@ OBJ = $(SRC:.c=.o)
 TEST_SRC = $(filter-out ./src/main.c, $(SRC))
 TEST_OBJ = $(TEST_SRC:.c=.o)
 
+RT_LIB = minirt.a
+MERGE_DIR = ./.merge
+
 LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
 			   ./lib/gc/gc.a \
 			   ./lib/gc_libft/gc_libft.a \
@@ -53,6 +56,19 @@ $(NAME): $(MLX) $(LIB_ARCHIVES) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIB_ARCHIVES) $(MLX) $(MLX_FLAGS) -o $(NAME)
 	@echo "Created $(NAME)"
 
+test: $(RT_LIB)
+
+$(RT_LIB): $(LIB_ARCHIVES) $(TEST_OBJ)
+	@$(RM) $(MERGE_DIR) $(RT_LIB)
+	@for archive in $(LIB_ARCHIVES); do \
+		dir=$(MERGE_DIR)/`basename \`dirname $$archive\``; \
+		mkdir -p $$dir; \
+		(cd $$dir && ar x $(CURDIR)/$$archive); \
+	done
+	@$(AR) $(RT_LIB) $(TEST_OBJ) `find $(MERGE_DIR) -name '*.o'`
+	@$(RM) $(MERGE_DIR)
+	@echo "Created $(RT_LIB)"
+
 %.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
@@ -64,6 +80,7 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME)
+	@$(RM) $(RT_LIB)
 	@echo "Removed $(NAME) and test"
 
 bonus: $(NAME)

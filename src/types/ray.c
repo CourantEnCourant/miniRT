@@ -16,10 +16,27 @@
 #include "minirt.h"
 #include "tuple.h"
 
-void	init_ray(t_ray *self, t_tuple point, t_tuple vec)
+t_ray	init_ray(t_tuple point, t_tuple vec)
 {
-	self->orig = point;
-	self->dir = vec;
+	t_ray	ret;
+
+	ret.orig = point;
+	ret.dir = vec;
+	return (ret);
+}
+
+bool	ray_eq(t_ray r1, t_ray r2)
+{
+	if (tuple_eq(r1.orig, r2.orig) && tuple_eq(r1.dir, r2.dir))
+		return (true);
+	return (false);
+}
+
+t_ray	transform(t_ray ray, t_mat matrix)
+{
+	ray.orig = mat_mul_tuple(matrix, ray.orig);
+	ray.dir = mat_mul_tuple(matrix, ray.dir);
+	return (ray);
 }
 
 t_tuple	ray_at(const t_ray *ray, double t)
