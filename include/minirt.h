@@ -56,10 +56,16 @@ struct s_ray
 void	init_ray(t_ray *self, t_tuple orig, t_tuple dir);
 t_tuple	ray_at(const t_ray *ray, double t);
 
+typedef struct s_intersection
+{
+	double	t;
+	t_shape	*shape;
+}	t_intersection;
+
 typedef struct s_xs
 {
 	unsigned int	count;
-	double			xs[2];
+	t_intersection	xs[2];
 }	t_xs;
 t_xs	intersect(const t_ray *ray, const t_sphere *sphere);
 

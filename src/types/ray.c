@@ -44,8 +44,10 @@ t_xs	intersect(const t_ray *ray, const t_sphere *sphere)
 		ret.count = 0;
 	else
 	{
-		ret.xs[0] = (-b - sqrt(disc)) / (2 * a);
-		ret.xs[1] = (-b + sqrt(disc)) / (2 * a);
+		ret.xs[0].t = (-b - sqrt(disc)) / (2 * a);
+		ret.xs[0].shape = (t_shape *)sphere;
+		ret.xs[1].t = (-b + sqrt(disc)) / (2 * a);
+		ret.xs[1].shape = (t_shape *)sphere;
 		ret.count = 2;
 	}
 	return (ret);
