@@ -39,12 +39,12 @@ t_ray	transform(t_ray ray, t_mat matrix)
 	return (ray);
 }
 
-t_tuple	ray_at(const t_ray *ray, double t)
+t_tuple	ray_at(t_ray ray, double t)
 {
-	return (tuple_add(ray->orig, tuple_scal_mult(ray->dir, t)));
+	return (tuple_add(ray.orig, tuple_scal_mult(ray.dir, t)));
 }
 
-t_xs	intersect(const t_ray *ray, const t_sphere *sphere)
+t_xs	intersect(t_ray ray, const t_sphere *sphere)
 {
 	t_xs	ret;
 	t_tuple	sp_to_ray;
@@ -53,10 +53,11 @@ t_xs	intersect(const t_ray *ray, const t_sphere *sphere)
 	double	c;
 	double	disc;
 
-	sp_to_ray = tuple_sub(ray->orig, sphere->base.coord);
-	a = tuple_dot(ray->dir, ray->dir);
-	b = 2 * tuple_dot(ray->dir, sp_to_ray);
-	c = tuple_dot(sp_to_ray, sp_to_ray) - sphere->radius * sphere->radius;
+	ray = transform(ray, mat_inv(sphere->base.transform));
+	sp_to_ray = tuple_sub(ray.orig, point(0, 0, 0));
+	a = tuple_dot(ray.dir, ray.dir);
+	b = 2 * tuple_dot(ray.dir, sp_to_ray);
+	c = tuple_dot(sp_to_ray, sp_to_ray) - 1;
 	disc = b * b - 4 * a * c;
 	if (disc < 0)
 		ret.count = 0;

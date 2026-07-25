@@ -23,11 +23,12 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 	*(unsigned int *)dst = normalized_rgb_to_int(rgb);
 }
 
-static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
+static t_rgb	ray_color(t_ray r, t_sphere *sphere)
 {
 	t_xs	xs;
 	double	t;
 
+	sphere->base.transform = mat_scal(1, 0.5, 1);
 	xs = intersect(r, sphere);
 	t = -1.0;
 	if (xs.count > 0)
@@ -67,7 +68,7 @@ static void	render_frame(const t_renderer *self, const t_conf *conf)
 		{
 			r.dir = tuple_normalize(tuple_sub(point(ps * (x - WIN_W / 2.0),
 							ps * (WIN_H / 2.0 - y), 10), r.orig));
-			put_pixel(px, ray_color(&r, conf->shapes->arr[0]));
+			put_pixel(px, ray_color(r, conf->shapes->arr[0]));
 			px += bpp;
 			x++;
 		}

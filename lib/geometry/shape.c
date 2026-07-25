@@ -31,4 +31,5 @@ void	init_shape(t_shape *self, enum e_type type, t_tuple coord, t_rgb rgb)
 	self->coord = coord;
 	self->rgb = rgb;
 	self->get_type = get_type;
+	self->transform = mat_id();
 }
