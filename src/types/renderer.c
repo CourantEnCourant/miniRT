@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include "gc.h"
@@ -35,7 +34,7 @@ static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
 	{
 		if (xs.xs[0].t > 0.0)
 			t = xs.xs[0].t;
-		else if (xs.xs[1].t > 0.0)
+		else if (xs.count > 1 && xs.xs[1].t > 0.0)
 			t = xs.xs[1].t;
 	}
 	if (t > 0.0)
@@ -44,35 +43,21 @@ static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
 		t_rgb ret = color(normal.arr[X] + 1, normal.arr[Y] + 1, normal.arr[Z] + 1);
 		return (color_scal_mult(ret, 0.5));
 	}
-	t_tuple unit_direction = tuple_normalize(r->dir);
-	double a = 0.5 * (unit_direction.arr[Y] + 1.0);
-	t_rgb ret = color_scal_mult(color(1, 1, 1), 1 - a);
-	ret = color_add(ret, color_scal_mult(color(0.5, 0.7, 1.0), a));
-	return (ret);
+	return (color(0, 0, 0));
 }
 
 static void	render_frame(const t_renderer *self, const t_conf *conf)
 {
-	// Ray tracing in one weekend
-    double focal_length = 1.0;
-    double viewport_width = 2 * focal_length * tan(conf->camera.hfov_rad / 2);
-    double viewport_height = (double)WIN_H / WIN_W * viewport_width;
-	t_tuple viewport_u = vector(viewport_width, 0, 0);
-	t_tuple viewport_v = vector(0, -viewport_height, 0);
-	t_tuple pixel_delta_u = tuple_scal_div(viewport_u, WIN_W);
-	t_tuple pixel_delta_v = tuple_scal_div(viewport_v, WIN_H);
-	t_tuple viewport_upper_left = tuple_sub(conf->camera.coord, vector(0, 0, focal_length));
-	viewport_upper_left = tuple_sub(viewport_upper_left, tuple_scal_div(viewport_u, 2));
-	viewport_upper_left = tuple_sub(viewport_upper_left, tuple_scal_div(viewport_v, 2));
-	t_tuple pixel00_loc = tuple_add(viewport_upper_left, tuple_scal_mult(tuple_add(pixel_delta_u, pixel_delta_v), 0.5));
-
-	const int	bpp = self->bits_per_pixel / 8;
-	char		*row;
-	char		*px;
-	size_t		x;
-	size_t		y;
+	const int		bpp = self->bits_per_pixel / 8;
+	const double	ps = 7.0 / WIN_H;
+	t_ray			r;
+	char			*row;
+	char			*px;
+	size_t			x;
+	size_t			y;
 
 	row = self->addr;
+	r.orig = point(0, 0, -5);
 	y = 0;
 	while (y < WIN_H)
 	{
@@ -80,9 +65,8 @@ static void	render_frame(const t_renderer *self, const t_conf *conf)
 		x = 0;
 		while (x < WIN_W)
 		{
-			t_tuple pixel_center = tuple_add(pixel00_loc, tuple_add(tuple_scal_mult(pixel_delta_u, x), tuple_scal_mult(pixel_delta_v, y)));
-			t_tuple ray_direction = tuple_sub(pixel_center, conf->camera.coord);
-			t_ray r = {conf->camera.coord, ray_direction};
+			r.dir = tuple_normalize(tuple_sub(point(ps * (x - WIN_W / 2.0),
+							ps * (WIN_H / 2.0 - y), 10), r.orig));
 			put_pixel(px, ray_color(&r, conf->shapes->arr[0]));
 			px += bpp;
 			x++;
