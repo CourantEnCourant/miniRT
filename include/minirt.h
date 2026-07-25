@@ -67,7 +67,8 @@ typedef struct s_xs
 	unsigned int	count;
 	t_intersection	xs[2];
 }	t_xs;
-t_xs	intersect(const t_ray *ray, const t_sphere *sphere);
+t_xs			intersect(const t_ray *ray, const t_sphere *sphere);
+t_intersection	hit(const t_xs *xs);
 
 typedef struct s_conf	t_conf;
 struct s_conf
