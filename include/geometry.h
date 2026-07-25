@@ -56,6 +56,8 @@ struct s_sphere
 	double	radius;
 };
 void			init_sphere(t_sphere *s, t_tuple coord, t_rgb rgb, double rad);
+t_tuple			normal_at(const t_sphere *self, t_tuple p);
+t_tuple			reflect(t_tuple in, t_tuple normal);
 
 typedef struct s_plane		t_plane;
 struct s_plane
