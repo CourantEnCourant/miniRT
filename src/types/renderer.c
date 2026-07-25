@@ -33,10 +33,10 @@ static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
 	t = -1.0;
 	if (xs.count > 0)
 	{
-		if (xs.xs[0] > 0.0)
-			t = xs.xs[0];
-		else if (xs.xs[1] > 0.0)
-			t = xs.xs[1];
+		if (xs.xs[0].t > 0.0)
+			t = xs.xs[0].t;
+		else if (xs.xs[1].t > 0.0)
+			t = xs.xs[1].t;
 	}
 	if (t > 0.0)
 	{
