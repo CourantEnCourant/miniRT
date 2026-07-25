@@ -26,9 +26,18 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 
 static t_rgb	ray_color(const t_ray *r, const t_sphere *sphere)
 {
+	t_xs	xs;
 	double	t;
 
-	t = hit_sphere(r, sphere);
+	xs = intersect(r, sphere);
+	t = -1.0;
+	if (xs.count > 0)
+	{
+		if (xs.xs[0] > 0.0)
+			t = xs.xs[0];
+		else if (xs.xs[1] > 0.0)
+			t = xs.xs[1];
+	}
 	if (t > 0.0)
 	{
 		t_tuple normal = tuple_normalize(tuple_sub(ray_at(r, t), sphere->base.coord));
