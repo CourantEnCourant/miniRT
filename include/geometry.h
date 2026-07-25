@@ -38,6 +38,16 @@ enum e_type
 	CYL,
 };
 
+typedef	struct	s_material
+{
+	t_rgb	color;
+	double	ambient;
+	double	diffuse;
+	double	specular;
+	double	shininess;
+}	t_material;
+t_material	default_material(void);
+
 typedef struct s_shape		t_shape;
 struct s_shape
 {
@@ -45,6 +55,7 @@ struct s_shape
 	t_tuple		coord;
 	t_rgb		rgb;
 	t_mat		transform;
+	t_material	material;
 	const char	*(*get_type)(const t_shape *self);
 };
 void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
