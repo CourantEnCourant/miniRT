@@ -15,10 +15,10 @@
 #include "minirt.h"
 #include "tuple.h"
 
-void	init_ray(t_ray *self, t_tuple orig, t_tuple dir)
+void	init_ray(t_ray *self, t_tuple point, t_tuple vec)
 {
-	self->orig = orig;
-	self->dir = dir;
+	self->orig = point;
+	self->dir = vec;
 }
 
 t_tuple	ray_at(const t_ray *ray, double t)
@@ -26,20 +26,27 @@ t_tuple	ray_at(const t_ray *ray, double t)
 	return (tuple_add(ray->orig, tuple_scal_mult(ray->dir, t)));
 }
 
-double	hit_sphere(const t_ray *ray, const t_sphere *sphere)
+t_xs	intersect(const t_ray *ray, const t_sphere *sphere)
 {
-	t_tuple	ray_to_sp;
+	t_xs	ret;
+	t_tuple	sp_to_ray;
 	double	a;
-	double	h;
+	double	b;
 	double	c;
 	double	disc;
 
-	ray_to_sp = tuple_sub(sphere->base.coord, ray->orig);
+	sp_to_ray = tuple_sub(ray->orig, sphere->base.coord);
 	a = tuple_dot(ray->dir, ray->dir);
-	h = tuple_dot(ray->dir, ray_to_sp);
-	c = tuple_dot(ray_to_sp, ray_to_sp) - sphere->radius * sphere->radius;
-	disc = h * h - a * c;
+	b = 2 * tuple_dot(ray->dir, sp_to_ray);
+	c = tuple_dot(sp_to_ray, sp_to_ray) - sphere->radius * sphere->radius;
+	disc = b * b - 4 * a * c;
 	if (disc < 0)
-		return (-1.0);
-	return ((h - sqrt(disc)) / a);
+		ret.count = 0;
+	else
+	{
+		ret.xs[0] = (-b - sqrt(disc)) / (2 * a);
+		ret.xs[1] = (-b + sqrt(disc)) / (2 * a);
+		ret.count = 2;
+	}
+	return (ret);
 }
