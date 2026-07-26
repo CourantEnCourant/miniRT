@@ -16,7 +16,7 @@ t_material	default_material(void)
 {
 	t_material	ret;
 
-	ret.color = color(1, 1, 1);
+	ret.color = color(1, 0.2, 1);
 	ret.ambient = 0.1;
 	ret.diffuse = 0.9;
 	ret.specular = 0.9;
