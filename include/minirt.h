@@ -117,10 +117,11 @@ struct s_rend
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	t_conf	*conf;
 	t_gc	*gc;
 	void	(*render)(const t_renderer *self, const t_conf *conf);
 };
-void	init_renderer(t_renderer *self, t_gc *gc);
+void	init_renderer(t_renderer *self, t_conf *conf, t_gc *gc);
 void	dest_renderer(t_renderer *self);
 
 #endif

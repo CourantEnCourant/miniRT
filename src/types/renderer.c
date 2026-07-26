@@ -131,6 +131,7 @@ static void	render(const t_renderer *self, const t_conf *conf)
 
 static int	close_window(t_renderer *renderer)
 {
+	dest_conf(renderer->conf);
 	dest_renderer(renderer);
 	dest_gc(renderer->gc);
 	exit(0);
@@ -143,13 +144,14 @@ static int	key_hook(int keycode, void *param)
 	return (0);
 }
 
-void	init_renderer(t_renderer *self, t_gc *gc)
+void	init_renderer(t_renderer *self, t_conf *conf, t_gc *gc)
 {
 	self->mlx = mlx_init();
 	self->mlx_win = mlx_new_window(self->mlx, WIN_W, WIN_H, "window");
 	self->img = mlx_new_image(self->mlx, WIN_W, WIN_H);
 	self->addr = mlx_get_data_addr(self->img, &self->bits_per_pixel,
 			&self->line_length, &self->endian);
+	self->conf = conf;
 	self->gc = gc;
 	self->render = render;
 	mlx_key_hook(self->mlx_win, key_hook, self);
