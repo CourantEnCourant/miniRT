@@ -22,7 +22,7 @@
 
 static inline void	put_pixel(char *dst, t_rgb rgb)
 {
-	*(unsigned int *)dst = normalized_rgb_to_int(rgb);
+	*(unsigned int *)dst = rgb_to_int(rgb);
 }
 
 static t_rgb	lighting(t_material material, t_light light, t_tuple p, t_tuple eyev, t_tuple normalv)
