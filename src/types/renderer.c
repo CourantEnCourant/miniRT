@@ -10,16 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# define KEY_ESC 65307
-
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "gc.h"
 #include "geometry.h"
 #include "mlx.h"
 #include "minirt.h"
 #include "vector.h"
-#include <stdint.h>
+
 
 static inline void	put_pixel(char *dst, t_rgb rgb)
 {
@@ -94,11 +93,8 @@ static int	close_window(void *param)
 	exit(0);
 }
 
-static int	key_hook(int keycode, void *param)
+static int	key_hook(int keycode, void *self)
 {
-	t_renderer	*self;
-
-	self = param;
 	if (keycode == KEY_ESC)
 		close_window(self);
 	return (0);
@@ -114,7 +110,8 @@ void	init_renderer(t_renderer *self, t_gc *gc)
 	self->gc = gc;
 	self->render = render;
 	mlx_key_hook(self->mlx_win, key_hook, self);
-	mlx_hook(self->mlx_win, 17, 0, (t_fn)(intptr_t)close_window, self);
+	mlx_hook(self->mlx_win, EVENT_DESTROY, MASK_DESTROY, 
+		(t_fn)(intptr_t)close_window, self);
 }
 
 void	dest_renderer(t_renderer *self)

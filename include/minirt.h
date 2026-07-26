@@ -15,6 +15,9 @@
 
 # define WIN_W 800
 # define WIN_H 600
+# define KEY_ESC 65307
+# define EVENT_DESTROY 17
+# define MASK_DESTROY 0
 
 # include "datastructures.h"
 # include "gc_libft.h"
