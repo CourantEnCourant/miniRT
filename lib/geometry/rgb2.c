@@ -22,17 +22,13 @@ static double	clamp(double v)
 	return (v);
 }
 
-unsigned int	normalized_rgb_to_int(t_rgb rgb)
-{
-	t_rgb	clamped;
-
-	clamped = color(clamp(rgb.arr[R]), clamp(rgb.arr[G]), clamp(rgb.arr[B]));
-	return (rgb_to_int(tuple_scal_mult(clamped, 255.0)));
-}
-
 unsigned int	rgb_to_int(t_rgb rgb)
 {
-	return ((unsigned int)rgb.arr[R] << 16
-		| (unsigned int)rgb.arr[G] << 8
-		| (unsigned int)rgb.arr[B]);
+	t_rgb	scaled;
+
+	scaled = tuple_scal_mult(color(clamp(rgb.arr[R]), clamp(rgb.arr[G]),
+				clamp(rgb.arr[B])), 255.0);
+	return ((unsigned int)scaled.arr[R] << 16
+		| (unsigned int)scaled.arr[G] << 8
+		| (unsigned int)scaled.arr[B]);
 }
