@@ -32,5 +32,5 @@ t_tuple	normal_at(const t_sphere *sp, t_tuple p)
 
 t_tuple	reflect(t_tuple in, t_tuple normal)
 {
-	return (tuple_scal_mult(tuple_sub(in, normal), 2 * tuple_dot(in, normal)));
+	return (tuple_sub(in, tuple_scal_mult(normal, 2 * tuple_dot(in, normal))));
 }

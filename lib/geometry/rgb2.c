@@ -13,9 +13,21 @@
 #include "geometry.h"
 #include "tuple.h"
 
+static double	clamp(double v)
+{
+	if (v < 0.0)
+		return (0.0);
+	if (v > 1.0)
+		return (1.0);
+	return (v);
+}
+
 unsigned int	normalized_rgb_to_int(t_rgb rgb)
 {
-	return (rgb_to_int(tuple_scal_mult(rgb, 255.999)));
+	t_rgb	clamped;
+
+	clamped = color(clamp(rgb.arr[R]), clamp(rgb.arr[G]), clamp(rgb.arr[B]));
+	return (rgb_to_int(tuple_scal_mult(clamped, 255.0)));
 }
 
 unsigned int	rgb_to_int(t_rgb rgb)

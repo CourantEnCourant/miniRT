@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include "gc.h"
@@ -23,12 +24,42 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 	*(unsigned int *)dst = normalized_rgb_to_int(rgb);
 }
 
+static t_rgb	lighting(t_material material, t_light light, t_tuple p, t_tuple eyev, t_tuple normalv)
+{
+	t_rgb	ambient;
+	t_rgb	diffuse;
+	t_rgb	specular;
+
+	t_rgb effective_color = color_mult(material.color, light.rgb);
+	t_tuple lightv = tuple_normalize(tuple_sub(light.coord, p));
+	ambient = color_scal_mult(effective_color, material.ambient);
+	double light_dot_normal = tuple_dot(lightv, normalv);
+	if (light_dot_normal < 0)
+	{
+		diffuse = color(0, 0, 0);
+		specular = color(0, 0, 0);
+	}
+	else
+	{
+		diffuse = color_scal_mult(effective_color, material.diffuse * light_dot_normal);
+		t_tuple reflectv = reflect(tuple_scal_mult(lightv, -1), normalv);
+		double reflect_dot_eye = tuple_dot(reflectv, eyev);
+		if (reflect_dot_eye <= 0)
+			specular = color(0, 0, 0);
+		else
+		{
+			double factor = pow(reflect_dot_eye, material.shininess);
+			specular = tuple_scal_mult(light.rgb, material.specular * factor);
+		}
+	}
+	return (color_add(color_add(ambient, diffuse), specular));
+}
+
 static t_rgb	ray_color(t_ray r, t_sphere *sphere)
 {
 	t_xs	xs;
 	double	t;
 
-	sphere->base.transform = mat_scal(1, 0.5, 1);
 	xs = intersect(r, sphere);
 	t = -1.0;
 	if (xs.count > 0)
@@ -40,9 +71,13 @@ static t_rgb	ray_color(t_ray r, t_sphere *sphere)
 	}
 	if (t > 0.0)
 	{
+		t_light light;
+		light.coord = point(-10, 10, -10);
+		light.rgb = color(1, 1, 1);
+		t_tuple p = ray_at(r, t);
 		t_tuple normal = tuple_normalize(tuple_sub(ray_at(r, t), sphere->base.coord));
-		t_rgb ret = color(normal.arr[X] + 1, normal.arr[Y] + 1, normal.arr[Z] + 1);
-		return (color_scal_mult(ret, 0.5));
+		t_tuple eye = tuple_scal_mult(r.dir, -1);
+		return (lighting(sphere->base.material, light, p, eye, normal));
 	}
 	return (color(0, 0, 0));
 }
