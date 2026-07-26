@@ -18,7 +18,14 @@ MLX_DIR = ./lib/minilibx
 MLX = $(MLX_DIR)/libmlx.a
 
 INCLUDE = -I ./include -I ./lib/minilibx
-SRC = ./src/types/ambient_light.c \
+SRC = ./src/geometry/cyl.c \
+	  ./src/geometry/material.c \
+	  ./src/geometry/plane.c \
+	  ./src/geometry/rgb.c \
+	  ./src/geometry/rgb2.c \
+	  ./src/geometry/shape.c \
+	  ./src/geometry/sphere.c \
+	  ./src/types/ambient_light.c \
 	  ./src/types/camera.c \
 	  ./src/types/conf.c \
 	  ./src/types/light.c \
@@ -39,7 +46,6 @@ MERGE_DIR = ./.merge
 LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
 			   ./lib/gc/gc.a \
 			   ./lib/gc_libft/gc_libft.a \
-			   ./lib/geometry/geometry.a \
 			   ./lib/libft/libft.a \
 			   ./lib/tuple/tuple.a
 
