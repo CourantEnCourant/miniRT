@@ -17,6 +17,7 @@ void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 {
 	init_shape(&self->base, SPHERE, coord, rgb);
 	self->radius = radius;
+	self->base.transform = mat_scal(radius, radius, radius);
 }
 
 t_tuple	normal_at(const t_sphere *sp, t_tuple p)
