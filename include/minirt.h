@@ -54,8 +54,8 @@ struct s_light
 	t_tuple	coord;
 	double	brightness;
 	t_rgb	rgb;
-	bool	(*is_valid)(const t_light * self);
 };
+t_light	*new_light(t_tuple coord, double brightness, t_rgb rgb, t_gc *gc);
 
 typedef struct s_ray	t_ray;
 struct s_ray
@@ -89,7 +89,7 @@ struct s_conf
 {
 	t_am		am;
 	t_camera	camera;
-	t_light		light;
+	t_darray	*lights;
 	t_gc		*gc;
 	t_darray	*shapes;
 	void		(*repr)(const t_conf *self);
