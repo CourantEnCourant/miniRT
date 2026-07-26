@@ -11,9 +11,18 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
+#include "gc.h"
+#include "geometry.h"
 #include "minirt.h"
+#include "tuple.h"
 
-bool	light_is_valid(const t_light *self)
+t_light	*new_light(t_tuple coord, double brightness, t_rgb rgb, t_gc *gc)
 {
-	return (0.0 <= self->brightness && self->brightness <= 1.0);
+	t_light *ret;
+
+	ret = gc_malloc(sizeof(t_light), gc);
+	ret->coord = coord;
+	ret->brightness = brightness;
+	ret->rgb = rgb;
+	return (ret);
 }

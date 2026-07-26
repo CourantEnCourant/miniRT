@@ -26,7 +26,6 @@
 bool	am_is_valid(const t_am *self);
 bool	camera_is_valid(const t_camera *self);
 double	degr_to_rad(double degrees);
-bool	light_is_valid(const t_light *self);
 
 static bool	parse_rgb(t_rgb *rgb, char str[], t_gc *gc)
 {
@@ -92,16 +91,23 @@ static bool	init_camera(t_camera *cam, t_darray *param)
 	return (cam->is_valid(cam));
 }
 
-static bool	init_light(t_light *light, t_darray *param)
+static bool	add_light(t_darray *lights, t_darray *param)
 {
+	t_tuple	coord;
+	double	brightness;
+	t_rgb	rgb;
+
 	if (param->len != 4)
 		return (false);
-	if (!parse_coord(&light->coord, param->arr[1] ,param->gc))
+	if (!parse_coord(&coord, param->arr[1] ,param->gc))
 		return (false);
-	light->brightness = atof(param->arr[2]);
-	if (!parse_rgb(&light->rgb, param->arr[3], param->gc))
+	brightness = atof(param->arr[2]);
+	if (brightness < 0 || brightness > 1)
 		return (false);
-	return (light->is_valid(light));
+	if (!parse_rgb(&rgb, param->arr[3], param->gc))
+		return (false);
+	lights->push(lights, new_light(coord, brightness, rgb, lights->gc));
+	return (true);
 }
 
 static bool	add_sphere(t_darray *shapes, t_darray *param)
@@ -183,6 +189,7 @@ static void	repr_conf(const t_conf *self)
 	// later to be norminette-compliant
 	size_t	i;
 	t_shape	*shape;
+	t_light	*light;
 
 	if (!self->am.is_valid(&self->am))
 		printf("Invalid Ambiant light\n");
@@ -197,14 +204,18 @@ static void	repr_conf(const t_conf *self)
 			self->camera.coord.arr[Z], self->camera.normal.arr[X],
 			self->camera.normal.arr[Y], self->camera.normal.arr[Z],
 			self->camera.hfov_rad);
-	if (!self->light.is_valid(&self->light))
-		printf("Invalid light\n");
-	else
-		printf("Light: coord %.2f,%.2f,%.2f, brightness %.2f, rgb "
-			"%.0f,%.0f,%.0f\n", self->light.coord.arr[X],
-			self->light.coord.arr[Y], self->light.coord.arr[Z],
-			self->light.brightness, self->light.rgb.arr[R],
-			self->light.rgb.arr[G], self->light.rgb.arr[B]);
+	printf("Loaded %zu lights:\n", self->lights->len);
+	i = 0;
+	while (i < self->lights->len)
+	{
+		light = self->lights->arr[i];
+		printf("Light %zu: coord %.2f,%.2f,%.2f, brightness %.2f, rgb "
+			"%.0f,%.0f,%.0f\n", i, light->coord.arr[X],
+			light->coord.arr[Y], light->coord.arr[Z],
+			light->brightness, light->rgb.arr[R],
+			light->rgb.arr[G], light->rgb.arr[B]);
+		i++;
+	}
 	printf("Loaded %zu shapes:\n", self->shapes->len);
 	i = 0;
 	while (i < self->shapes->len)
@@ -221,7 +232,7 @@ static void init_conf(t_conf *self, t_gc *gc)
 	self->shapes = new_darray(gc);
 	self->am.is_valid = am_is_valid;
 	self->camera.is_valid = camera_is_valid;
-	self->light.is_valid = light_is_valid;
+	self->lights = new_darray(gc);
 	self->repr = repr_conf;
 }
 
@@ -249,7 +260,7 @@ bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
 		else if (ft_strcmp(param->arr[0], "C") == 0)
 			flag = init_camera(&self->camera, param);
 		else if (ft_strcmp(param->arr[0], "L") == 0)
-			flag = init_light(&self->light, param);
+			flag = add_light(self->lights, param);
 		else if (ft_strcmp(param->arr[0], "sp") == 0)
 			flag = add_sphere(self->shapes, param);
 		else if (ft_strcmp(param->arr[0], "pl") == 0)
@@ -276,5 +287,6 @@ bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
 
 void	dest_conf(t_conf *self)
 {
+	dest_darray(self->lights, gc_free);
 	dest_darray(self->shapes, gc_free);
 }

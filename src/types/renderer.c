@@ -25,15 +25,13 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 	*(unsigned int *)dst = rgb_to_int(rgb);
 }
 
-static t_rgb	lighting(t_material material, t_light light, t_tuple p, t_tuple eyev, t_tuple normalv)
+static t_rgb	lighting(t_material material, const t_light *light, t_tuple p, t_tuple eyev, t_tuple normalv)
 {
-	t_rgb	ambient;
 	t_rgb	diffuse;
 	t_rgb	specular;
 
-	t_rgb effective_color = color_mult(material.rgb, light.rgb);
-	t_tuple lightv = tuple_normalize(tuple_sub(light.coord, p));
-	ambient = color_scal_mult(effective_color, material.ambient);
+	t_rgb effective_color = color_mult(material.rgb, light->rgb);
+	t_tuple lightv = tuple_normalize(tuple_sub(light->coord, p));
 	double light_dot_normal = tuple_dot(lightv, normalv);
 	if (light_dot_normal < 0)
 	{
@@ -50,10 +48,10 @@ static t_rgb	lighting(t_material material, t_light light, t_tuple p, t_tuple eye
 		else
 		{
 			double factor = pow(reflect_dot_eye, material.shininess);
-			specular = tuple_scal_mult(light.rgb, material.specular * factor);
+			specular = tuple_scal_mult(light->rgb, material.specular * factor);
 		}
 	}
-	return (color_add(color_add(ambient, diffuse), specular));
+	return (color_add(diffuse, specular));
 }
 
 t_comps	prepare_computations(t_intersection inter, t_ray r)
@@ -77,7 +75,23 @@ t_comps	prepare_computations(t_intersection inter, t_ray r)
 
 t_rgb	shade_hit(const t_conf *conf, t_comps comps)
 {
-	return (lighting(comps.shape->material, conf->light, comps.p, comps.eyev, comps.normalv));
+	t_rgb		ret;
+	t_rgb		ambient;
+	t_material	material;
+	size_t		i;
+
+	material = comps.shape->material;
+	t_rgb am_color = color_mult(material.rgb, conf->am.rgb);
+	ambient = color_scal_mult(am_color, material.ambient);
+	ret = color(0, 0, 0);
+	i = 0;
+	while (i < conf->lights->len)
+	{
+		ret = color_add(ret, lighting(material, conf->lights->arr[i], comps.p, comps.eyev, comps.normalv));
+		i++;
+	}
+	ret = color_add(ret, ambient);
+	return (ret);
 }
 
 static t_rgb	ray_color(t_ray r, const t_conf *conf)
