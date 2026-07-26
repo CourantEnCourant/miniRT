@@ -15,6 +15,7 @@
 
 # define WIN_W 800
 # define WIN_H 600
+# define XS_SIZE 100
 # ifdef __APPLE__
 #  define KEY_ESC 53
 # else
@@ -72,14 +73,16 @@ typedef struct s_intersection
 	t_shape	*shape;
 }	t_intersection;
 
-typedef struct s_xs
+typedef struct s_comps
 {
-	unsigned int	count;
-	t_intersection	xs[2];
-}	t_xs;
-t_xs			intersect(t_ray ray, const t_sphere *sphere);
-t_intersection	hit(const t_xs *xs);
-t_ray			transform(t_ray ray, t_mat matrix);
+	double	t;
+	t_shape	*shape;
+	t_tuple	p;
+	t_tuple	eyev;
+	t_tuple	normalv;
+	bool	inside;
+}	t_comps;
+t_comps	prepare_computations(t_intersection inter, t_ray r);
 
 typedef struct s_conf	t_conf;
 struct s_conf
@@ -93,6 +96,16 @@ struct s_conf
 };
 bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc);
 void	dest_conf(t_conf *self);
+
+typedef struct s_xs
+{
+	unsigned int	count;
+	t_intersection	xs[XS_SIZE];
+}	t_xs;
+t_xs			intersect_world(t_ray ray, const t_conf *conf);
+t_intersection	hit(const t_xs *xs);
+t_ray			transform(t_ray ray, t_mat matrix);
+t_rgb			shade_hit(const t_conf *conf, t_comps comps);
 
 typedef struct s_rend	t_renderer;
 struct s_rend
