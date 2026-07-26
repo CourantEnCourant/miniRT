@@ -56,31 +56,40 @@ static t_rgb	lighting(t_material material, t_light light, t_tuple p, t_tuple eye
 	return (color_add(color_add(ambient, diffuse), specular));
 }
 
-static t_rgb	ray_color(t_ray r, t_sphere *sphere)
+t_comps	prepare_computations(t_intersection inter, t_ray r)
 {
-	t_xs	xs;
-	double	t;
+	t_comps	ret;
 
-	xs = intersect(r, sphere);
-	t = -1.0;
-	if (xs.count > 0)
+	ret.t = inter.t;
+	ret.shape = inter.shape;
+	ret.p = ray_at(r, ret.t);
+	ret.eyev = tuple_scal_mult(r.dir, -1);
+	ret.normalv = normal_at((t_sphere *)ret.shape, ret.p);
+	if (tuple_dot(ret.normalv, ret.eyev) < 0)
 	{
-		if (xs.xs[0].t > 0.0)
-			t = xs.xs[0].t;
-		else if (xs.count > 1 && xs.xs[1].t > 0.0)
-			t = xs.xs[1].t;
+		ret.inside = true;
+		ret.normalv = tuple_scal_mult(ret.normalv, -1);
 	}
-	if (t > 0.0)
-	{
-		t_light light;
-		light.coord = point(-10, 10, -10);
-		light.rgb = color(1, 1, 1);
-		t_tuple p = ray_at(r, t);
-		t_tuple normal = tuple_normalize(tuple_sub(ray_at(r, t), sphere->base.coord));
-		t_tuple eye = tuple_scal_mult(r.dir, -1);
-		return (lighting(sphere->base.material, light, p, eye, normal));
-	}
-	return (color(0, 0, 0));
+	else
+		ret.inside = false;
+	return (ret);
+}
+
+t_rgb	shade_hit(const t_conf *conf, t_comps comps)
+{
+	return (lighting(comps.shape->material, conf->light, comps.p, comps.eyev, comps.normalv));
+}
+
+static t_rgb	ray_color(t_ray r, const t_conf *conf)
+{
+	t_xs			xs;
+	t_intersection	inter;
+
+	xs = intersect_world(r, conf);
+	inter = hit(&xs);
+	if (!inter.shape)
+		return (color(0, 0, 0));
+	return (shade_hit(conf, prepare_computations(inter, r)));
 }
 
 static void	render_frame(const t_renderer *self, const t_conf *conf)
@@ -104,7 +113,7 @@ static void	render_frame(const t_renderer *self, const t_conf *conf)
 		{
 			r.dir = tuple_normalize(tuple_sub(point(ps * (x - WIN_W / 2.0),
 							ps * (WIN_H / 2.0 - y), 10), r.orig));
-			put_pixel(px, ray_color(r, conf->shapes->arr[0]));
+			put_pixel(px, ray_color(r, conf));
 			px += bpp;
 			x++;
 		}
