@@ -31,7 +31,7 @@ static t_rgb	lighting(t_material material, t_light light, t_tuple p, t_tuple eye
 	t_rgb	diffuse;
 	t_rgb	specular;
 
-	t_rgb effective_color = color_mult(material.color, light.rgb);
+	t_rgb effective_color = color_mult(material.rgb, light.rgb);
 	t_tuple lightv = tuple_normalize(tuple_sub(light.coord, p));
 	ambient = color_scal_mult(effective_color, material.ambient);
 	double light_dot_normal = tuple_dot(lightv, normalv);
