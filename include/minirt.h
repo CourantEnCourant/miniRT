@@ -96,6 +96,7 @@ struct s_conf
 };
 bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc);
 void	dest_conf(t_conf *self);
+t_mat	view_transform(t_tuple from, t_tuple to, t_tuple up);
 
 typedef struct s_xs
 {

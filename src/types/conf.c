@@ -290,3 +290,23 @@ void	dest_conf(t_conf *self)
 	dest_darray(self->lights, gc_free);
 	dest_darray(self->shapes, gc_free);
 }
+
+t_mat	view_transform(t_tuple from, t_tuple to, t_tuple up)
+{
+	t_tuple	forward;
+	t_tuple	upn;
+	t_tuple	left;
+	t_tuple	true_up;
+	t_mat	orientation;
+
+	forward = tuple_normalize(tuple_sub(to, from));
+	upn = tuple_normalize(up);
+	left = cross_product(forward, upn);
+	true_up = cross_product(left, forward);
+	orientation = (t_mat){{{left.arr[X], left.arr[Y], left.arr[Z], 0},
+	{true_up.arr[X], true_up.arr[Y], true_up.arr[Z], 0},
+	{-forward.arr[X], -forward.arr[Y], -forward.arr[Z], 0},
+	{0, 0, 0, 1}}, 4};
+	return (mat_mul(orientation,
+			mat_translate(-from.arr[X], -from.arr[Y], -from.arr[Z])));
+}
