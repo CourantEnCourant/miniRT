@@ -13,23 +13,10 @@
 #include "minirt.h"
 #include "tuple.h"
 
-static const char	*get_type(const t_shape *self)
-{
-	if (self->type == SPHERE)
-		return ("sphere");
-	if (self->type == PLANE)
-		return ("plane");
-	if (self->type == CYL)
-		return ("cylinder");
-	else
-		return ("unrecognized");
-}
-
 void	init_shape(t_shape *self, enum e_type type, t_tuple coord, t_rgb rgb)
 {
 	self->type = type;
 	self->coord = coord;
-	self->get_type = get_type;
 	self->transform = mat_id();
 	self->material = default_material();
 	self->material.rgb = rgb;
