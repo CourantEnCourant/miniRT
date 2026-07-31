@@ -115,3 +115,22 @@ t_intersection	hit(const t_xs *xs)
 	none.shape = NULL;
 	return (none);
 }
+
+t_ray	ray_for_pixel(const t_camera *camera, double px, double py)
+{
+	t_ray	ret;
+	double	xoffset;
+	double	yoffset;
+	double	world_x;
+	double	world_y;
+	t_tuple	pixel;
+
+	xoffset = (px + 0.5) * camera->pixel_size;
+	yoffset = (py + 0.5) * camera->pixel_size;
+	world_x = camera->half_width - xoffset;
+	world_y = camera->half_height - yoffset;
+	pixel = mat_mul_tuple(mat_inv(camera->transform), point(world_x, world_y, -1));
+	ret.orig = mat_mul_tuple(mat_inv(camera->transform), point(0, 0, 0));
+	ret.dir = tuple_normalize(tuple_sub(pixel, ret.orig));
+	return (ret);
+}

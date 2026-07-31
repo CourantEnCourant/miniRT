@@ -45,6 +45,10 @@ struct s_camera
 	t_tuple	coord;
 	t_tuple	normal;
 	double	hfov_rad;
+	double	half_width;
+	double	half_height;
+	double	pixel_size;
+	t_mat	transform;
 	bool	(*is_valid)(const t_camera * self);
 };
 
@@ -66,6 +70,7 @@ struct s_ray
 t_ray	init_ray(t_tuple orig, t_tuple dir);
 t_tuple	ray_at(t_ray ray, double t);
 bool	ray_eq(t_ray r1, t_ray r2);
+t_ray	ray_for_pixel(const t_camera *cam, double px, double py);
 
 typedef struct s_intersection
 {
