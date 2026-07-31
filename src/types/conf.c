@@ -19,7 +19,6 @@
 #include "datastructures.h"
 #include "gc.h"
 #include "gc_libft.h"
-#include "geometry.h"
 #include "libft.h"
 #include "minirt.h"
 #include "tuple.h"

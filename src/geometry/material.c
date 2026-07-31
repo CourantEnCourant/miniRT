@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "geometry.h"
+#include "minirt.h"
 
 t_material	default_material(void)
 {

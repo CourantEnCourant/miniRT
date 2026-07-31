@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "geometry.h"
+#include "minirt.h"
 #include "tuple.h"
 
 void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)

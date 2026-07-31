@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "geometry.h"
+#include "minirt.h"
 #include "tuple.h"
 
 static const char	*get_type(const t_shape *self)
