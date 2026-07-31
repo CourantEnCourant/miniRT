@@ -108,16 +108,13 @@ static t_rgb	ray_color(t_ray r, const t_conf *conf)
 
 static void	render_frame(const t_renderer *self, const t_conf *conf)
 {
-	const int		bpp = self->bits_per_pixel / 8;
-	const double	ps = 7.0 / WIN_H;
-	t_ray			r;
-	char			*row;
-	char			*px;
-	size_t			x;
-	size_t			y;
+	const int	bpp = self->bits_per_pixel / 8;
+	char		*row;
+	char		*px;
+	size_t		x;
+	size_t		y;
 
 	row = self->addr;
-	r.orig = point(0, 0, -5);
 	y = 0;
 	while (y < WIN_H)
 	{
@@ -125,9 +122,7 @@ static void	render_frame(const t_renderer *self, const t_conf *conf)
 		x = 0;
 		while (x < WIN_W)
 		{
-			r.dir = tuple_normalize(tuple_sub(point(ps * (x - WIN_W / 2.0),
-							ps * (WIN_H / 2.0 - y), 10), r.orig));
-			put_pixel(px, ray_color(r, conf));
+			put_pixel(px, ray_color(ray_for_pixel(&conf->camera, x, y), conf));
 			px += bpp;
 			x++;
 		}

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -81,13 +82,36 @@ static bool	init_am(t_am *am, t_darray *param)
 
 static bool	init_camera(t_camera *cam, t_darray *param)
 {
+	double	half_view;
+	double	aspect;
+	t_tuple	up;
+
 	if (param->len != 4)
 		return (false);
 	if (!parse_coord(&cam->coord, param->arr[1] ,param->gc))
 		return (false);
 	if (!parse_normal(&cam->normal, param->arr[2] ,param->gc))
 		return (false);
+	cam->normal = tuple_normalize(cam->normal);
 	cam->hfov_rad = degr_to_rad(atof(param->arr[3]));
+	half_view = tan(cam->hfov_rad / 2);
+	aspect = (double)WIN_W / WIN_H;
+	if (aspect >= 1)
+	{
+		cam->half_width = half_view;
+		cam->half_height = half_view / aspect;
+	}
+	else
+	{
+		cam->half_width = half_view * aspect;
+		cam->half_height = half_view;
+	}
+	cam->pixel_size = cam->half_width * 2 / WIN_W;
+	up = vector(0, 1, 0);
+	if (fabs(cam->normal.arr[Y]) > 1 - EPSILON)
+		up = vector(0, 0, 1);
+	cam->transform = view_transform(cam->coord,
+			tuple_add(cam->coord, cam->normal), up);
 	return (cam->is_valid(cam));
 }
 
