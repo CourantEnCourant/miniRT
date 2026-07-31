@@ -12,7 +12,6 @@
 
 #include <math.h>
 #include <stddef.h>
-#include "geometry.h"
 #include "minirt.h"
 #include "tuple.h"
 

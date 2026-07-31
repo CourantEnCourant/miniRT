@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "geometry.h"
+#include "minirt.h"
 #include "tuple.h"
 
 void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)

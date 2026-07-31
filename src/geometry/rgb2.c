@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "geometry.h"
+#include "minirt.h"
 #include "tuple.h"
 
 static double	clamp(double v)

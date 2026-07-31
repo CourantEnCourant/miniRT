@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "geometry.h"
+#include "minirt.h"
 #include "tuple.h"
 
 t_rgb	color(double r, double g, double b)

@@ -12,7 +12,6 @@
 
 #include <stdbool.h>
 #include "gc.h"
-#include "geometry.h"
 #include "minirt.h"
 #include "tuple.h"
 

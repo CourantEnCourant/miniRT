@@ -15,7 +15,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "gc.h"
-#include "geometry.h"
 #include "mlx.h"
 #include "minirt.h"
 #include "tuple.h"
