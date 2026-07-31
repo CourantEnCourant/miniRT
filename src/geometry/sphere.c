@@ -42,6 +42,18 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	xs->xs[xs->count++].shape = (t_shape *)self;
 }
 
+static t_tuple	normal_at(const t_shape *self, t_tuple p)
+{
+	t_tuple	normal;
+
+	p = mat_mul_tuple(mat_inv(self->transform), p);
+	normal = tuple_sub(p, point(0, 0, 0));
+	normal = mat_mul_tuple(mat_t(mat_inv(self->transform)), normal);
+	normal.arr[W] = 0;
+	return (tuple_normalize(normal));
+}
+
+
 void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 {
 	init_shape(&self->base, SPHERE, coord, rgb);
@@ -49,17 +61,7 @@ void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 	self->base.transform = mat_mul(mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]), mat_scal(radius, radius, radius));
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
-}
-
-t_tuple	normal_at(const t_sphere *sp, t_tuple p)
-{
-	t_tuple	normal;
-
-	p = mat_mul_tuple(mat_inv(sp->base.transform), p);
-	normal = tuple_sub(p, point(0, 0, 0));
-	normal = mat_mul_tuple(mat_t(mat_inv(sp->base.transform)), normal);
-	normal.arr[W] = 0;
-	return (tuple_normalize(normal));
+	self->base.normal_at = normal_at;
 }
 
 t_tuple	reflect(t_tuple in, t_tuple normal)

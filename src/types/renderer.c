@@ -61,7 +61,7 @@ t_comps	prepare_computations(t_intersection inter, t_ray r)
 	ret.shape = inter.shape;
 	ret.p = ray_at(r, ret.t);
 	ret.eyev = tuple_scal_mult(r.dir, -1);
-	ret.normalv = normal_at((t_sphere *)ret.shape, ret.p);
+	ret.normalv = ret.shape->normal_at(ret.shape, ret.p);
 	if (tuple_dot(ret.normalv, ret.eyev) < 0)
 	{
 		ret.inside = true;
