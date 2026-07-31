@@ -13,11 +13,18 @@
 #include "minirt.h"
 #include "tuple.h"
 
+static const char	*get_type(const t_shape *self)
+{
+	(void)self;
+	return ("sphere");
+}
+
 void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 {
 	init_shape(&self->base, SPHERE, coord, rgb);
 	self->radius = radius;
 	self->base.transform = mat_mul(mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]), mat_scal(radius, radius, radius));
+	self->base.get_type = get_type;
 }
 
 t_tuple	normal_at(const t_sphere *sp, t_tuple p)
