@@ -91,6 +91,7 @@ struct s_shape
 	t_mat		transform;
 	const char	*(*get_type)(const t_shape *self);
 	void		(*intersect)(const t_shape *self, t_xs *xs, t_ray ray);
+	t_tuple		(*normal_at)(const t_shape *self, t_tuple p);
 };
 void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
 
@@ -101,7 +102,6 @@ struct s_sphere
 	double	radius;
 };
 void			init_sphere(t_sphere *s, t_tuple coord, t_rgb rgb, double rad);
-t_tuple			normal_at(const t_sphere *self, t_tuple p);
 t_tuple			reflect(t_tuple in, t_tuple normal);
 
 typedef struct s_plane		t_plane;
