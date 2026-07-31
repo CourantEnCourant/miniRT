@@ -90,6 +90,7 @@ struct s_shape
 	t_material	material;
 	t_mat		transform;
 	const char	*(*get_type)(const t_shape *self);
+	void		(*intersect)(const t_shape *self, t_xs *xs, t_ray ray);
 };
 void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
 

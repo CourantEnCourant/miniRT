@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
 #include <stddef.h>
 #include "minirt.h"
 #include "tuple.h"
@@ -67,32 +66,15 @@ static void	sort_xs(t_xs *xs)
 t_xs	intersect_world(t_ray ray, const t_conf *conf)
 {
 	t_xs	ret;
-	t_ray	local;
-	t_tuple	sp_to_ray;
-	double	a;
-	double	b;
-	double	c;
-	double	disc;
 	size_t	i;
+	t_shape	*shape;
 
 	ret.count = 0;
 	i = 0;
-	while (i < conf->shapes->len && ret.count + 2 <= XS_SIZE)
+	while (i < conf->shapes->len)
 	{
-		local = transform(ray, mat_inv(((t_shape *)conf->shapes->arr[i])->transform));
-		sp_to_ray = tuple_sub(local.orig, point(0, 0, 0));
-		a = tuple_dot(local.dir, local.dir);
-		b = 2 * tuple_dot(local.dir, sp_to_ray);
-		c = tuple_dot(sp_to_ray, sp_to_ray) - 1;
-		disc = b * b - 4 * a * c;
-		if (disc >= 0)
-		{
-			ret.xs[ret.count].t = (-b - sqrt(disc)) / (2 * a);
-			ret.xs[ret.count++].shape = conf->shapes->arr[i];
-			ret.xs[ret.count].t = (-b + sqrt(disc)) / (2 * a);
-			ret.xs[ret.count++].shape = conf->shapes->arr[i];
-		}
-		i++;
+		shape = conf->shapes->arr[i++];
+		shape->intersect(shape, &ret, ray);
 	}
 	sort_xs(&ret);
 	return (ret);
