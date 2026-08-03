@@ -47,9 +47,12 @@ unsigned int	rgb_to_int(t_rgb rgb);
 
 enum e_type
 {
-	SPHERE,
-	PLANE,
+	CONE,
 	CYL,
+	HYPERBOLOID,
+	PARABOLOID,
+	PLANE,
+	SPHERE,
 };
 
 typedef	struct	s_material
@@ -95,6 +98,9 @@ struct s_shape
 };
 void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
 
+t_tuple	quadric_normal_at(t_tuple local, double y_min, double y_max,
+		bool has_bottom, double dfdy);
+
 typedef struct s_sphere		t_sphere;
 struct s_sphere
 {
@@ -124,6 +130,38 @@ struct s_cylinder
 void			init_cyl1(t_cyl *self, t_tuple coord, t_rgb rgb,
 					t_tuple normal);
 void			init_cyl2(t_cyl *self, double radius, double height);
+
+typedef struct s_paraboloid t_para;
+struct s_paraboloid
+{
+	t_shape base;
+	double  radius;
+	double  height;
+};
+void            init_para(t_para *self, t_tuple coord, t_rgb rgb,
+	double radius, double height);
+
+typedef struct s_cone	t_cone;
+struct s_cone
+{
+	t_shape	base;
+	double	radius;
+	double	height;
+};
+void			init_cone(t_cone *self, t_tuple coord, t_rgb rgb,
+			double radius, double height);
+
+typedef struct s_hyperboloid	t_hyper;
+struct s_hyperboloid
+{
+	t_shape	base;
+	double	w;
+	double	a;
+	double	height;
+};
+void			init_hyper(t_hyper *self, t_tuple coord, t_rgb rgb,
+			double w, double a, double height);
+
 
 typedef struct s_am		t_am;
 struct s_am

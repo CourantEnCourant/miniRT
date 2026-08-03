@@ -206,6 +206,88 @@ static bool	add_cyl(t_darray *shapes, t_darray *param)
 	return (true);
 }
 
+static bool	add_para(t_darray *shapes, t_darray *param)
+{
+	t_para		*para;
+	t_tuple		coord;
+	double		radius;
+	double		height;
+	t_rgb		rgb;
+
+	if (param->len != 5)
+		return (false);
+	if (!parse_coord(&coord, param->arr[1], param->gc))
+		return (false);
+	radius = atof(param->arr[2]) / 2.0;
+	if (radius <= 0)
+		return (false);
+	height = atof(param->arr[3]);
+	if (height <= 0)
+		return (false);
+	if (!parse_rgb(&rgb, param->arr[4], param->gc))
+		return (false);
+	para = gc_malloc(sizeof(t_para), shapes->gc);
+	init_para(para, coord, rgb, radius, height);
+	shapes->push(shapes, para);
+	return (true);
+}
+
+static bool	add_cone(t_darray *shapes, t_darray *param)
+{
+	t_cone		*cone;
+	t_tuple		coord;
+	double		radius;
+	double		height;
+	t_rgb		rgb;
+ 
+	if (param->len != 5)
+		return (false);
+	if (!parse_coord(&coord, param->arr[1], param->gc))
+		return (false);
+	radius = atof(param->arr[2]) / 2.0;
+	if (radius <= 0)
+		return (false);
+	height = atof(param->arr[3]);
+	if (height <= 0)
+		return (false);
+	if (!parse_rgb(&rgb, param->arr[4], param->gc))
+		return (false);
+	cone = gc_malloc(sizeof(t_cone), shapes->gc);
+	init_cone(cone, coord, rgb, radius, height);
+	shapes->push(shapes, cone);
+	return (true);
+}
+
+static bool	add_hyper(t_darray *shapes, t_darray *param)
+{
+	t_hyper		*hyper;
+	t_tuple		coord;
+	double		w;
+	double		a;
+	double		height;
+	t_rgb		rgb;
+ 
+	if (param->len != 6)
+		return (false);
+	if (!parse_coord(&coord, param->arr[1], param->gc))
+		return (false);
+	w = atof(param->arr[2]);
+	if (w < 0)
+		return (false);
+	a = atof(param->arr[3]);
+	if (a <= 0)
+		return (false);
+	height = atof(param->arr[4]);
+	if (height <= 0)
+		return (false);
+	if (!parse_rgb(&rgb, param->arr[5], param->gc))
+		return (false);
+	hyper = gc_malloc(sizeof(t_hyper), shapes->gc);
+	init_hyper(hyper, coord, rgb, w, a, height);
+	shapes->push(shapes, hyper);
+	return (true);
+}
+
 static void	repr_conf(const t_conf *self)
 {
 	// This function is a temporary debug solution and will be refactored
@@ -290,6 +372,12 @@ bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
 			flag = add_plane(self->shapes, param);
 		else if (ft_strcmp(param->arr[0], "cy") == 0)
 			flag = add_cyl(self->shapes, param);
+		else if (ft_strcmp(param->arr[0], "pb") == 0)
+			flag = add_para(self->shapes, param);
+		else if (ft_strcmp(param->arr[0], "cn") == 0)
+			flag = add_cone(self->shapes, param);
+		else if (ft_strcmp(param->arr[0], "hb") == 0)
+			flag = add_hyper(self->shapes, param);
 		else if (ft_strcmp(param->arr[0], "\n") == 0)
 			;
 		else
