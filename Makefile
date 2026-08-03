@@ -18,8 +18,12 @@ MLX_DIR = ./lib/minilibx
 MLX = $(MLX_DIR)/libmlx.a
 
 INCLUDE = -I ./include -I ./lib/minilibx
-SRC = ./src/geometry/cyl.c \
+SRC = ./src/geometry/cone.c \
+	  ./src/geometry/cyl.c \
+	  ./src/geometry/hyperboloid.c \
 	  ./src/geometry/material.c \
+	  ./src/geometry/normalize.c \
+	  ./src/geometry/paraboloid.c \
 	  ./src/geometry/plane.c \
 	  ./src/geometry/rgb.c \
 	  ./src/geometry/rgb2.c \
