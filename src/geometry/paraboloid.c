@@ -90,14 +90,12 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	cap_intersect(para, xs, ray);
 }
 
-static t_tuple	normal_at(const t_shape *self, t_tuple p)
+static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 {
 	const t_para	*para;
-	t_tuple local;
 
 	para = (const t_para *)self;
-	local = tuple_sub(p, self->coord);
-	return (quadric_normal_at(local, 0, para->height, false,
+	return (quadric_normal_at(p, 0, para->height, false,
 			para->radius * para->radius / para->height));
 }
 
@@ -107,7 +105,9 @@ void	init_para(t_para *self, t_tuple coord, t_rgb rgb, double radius,
 	init_shape(&self->base, PARABOLOID, coord, rgb);
 	self->radius = radius;
 	self->height = height;
+	self->base.transform = mat_translate(
+			coord.arr[X], coord.arr[Y], coord.arr[Z]);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
-	self->base.normal_at = normal_at;
+	self->base.local_normal_at = local_normal_at;
 }

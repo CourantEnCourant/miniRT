@@ -92,15 +92,13 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	cap_intersect(hyp, xs, ray, hyp->base.coord.arr[Y] - hyp->height / 2);
 }
 
-static t_tuple	normal_at(const t_shape *self, t_tuple p)
+static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 {
 	const t_hyper	*hyp;
-	t_tuple	local;
 
 	hyp = (const t_hyper *)self;
-	local = tuple_sub(p, self->coord);
-	return (quadric_normal_at(local, -hyp->height / 2, hyp->height / 2,
-		true, 2 * hyp->a * local.arr[Y]));
+	return (quadric_normal_at(p, -hyp->height / 2, hyp->height / 2,
+			true, 2 * hyp->a * p.arr[Y]));
 }
 
 void	init_hyper(t_hyper *self, t_tuple coord, t_rgb rgb, double w,
@@ -110,7 +108,9 @@ void	init_hyper(t_hyper *self, t_tuple coord, t_rgb rgb, double w,
 	self->w = w;
 	self->a = a;
 	self->height = height;
+	self->base.transform = mat_translate(
+			coord.arr[X], coord.arr[Y], coord.arr[Z]);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
-	self->base.normal_at = normal_at;
+	self->base.local_normal_at = local_normal_at;
 }
