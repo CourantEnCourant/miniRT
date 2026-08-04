@@ -94,9 +94,10 @@ struct s_shape
 	t_mat		transform;
 	const char	*(*get_type)(const t_shape *self);
 	void		(*intersect)(const t_shape *self, t_xs *xs, t_ray ray);
-	t_tuple		(*normal_at)(const t_shape *self, t_tuple p);
+	t_tuple		(*local_normal_at)(const t_shape *self, t_tuple p);
 };
 void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
+t_tuple			world_normal_at(const t_shape *self, t_tuple p);
 
 t_tuple	quadric_normal_at(t_tuple local, double y_min, double y_max,
 		bool has_bottom, double dfdy);

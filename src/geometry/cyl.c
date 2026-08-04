@@ -87,23 +87,23 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	cap_intersect(cyl, xs, ray, cyl->base.coord.arr[Y] - cyl->height / 2);
 }
 
-static t_tuple	normal_at(const t_shape *self, t_tuple p)
+static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 {
 	const t_cyl	*cyl;
-	t_tuple local;
 
 	cyl = (const t_cyl *)self;
-	local = tuple_sub(p, self->coord);
-	return (quadric_normal_at(local, -cyl->height / 2, cyl->height / 2, true, 0));
+	return (quadric_normal_at(p, -cyl->height / 2, cyl->height / 2, true, 0));
 }
 
 void	init_cyl1(t_cyl *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 {
 	init_shape(&self->base, CYL, coord, rgb);
 	self->normal = tuple_normalize(normal);
+	self->base.transform = mat_translate(
+			coord.arr[X], coord.arr[Y], coord.arr[Z]);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
-	self->base.normal_at = normal_at;
+	self->base.local_normal_at = local_normal_at;
 }
 
 void	init_cyl2(t_cyl *self, double radius, double height)
