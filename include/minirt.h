@@ -181,6 +181,7 @@ typedef struct s_comps
 	double	t;
 	t_shape	*shape;
 	t_tuple	p;
+	t_tuple	over_point;
 	t_tuple	eyev;
 	t_tuple	normalv;
 	bool	inside;

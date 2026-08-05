@@ -24,31 +24,47 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 	*(unsigned int *)dst = rgb_to_int(rgb);
 }
 
-static t_rgb	lighting(t_material material, const t_light *light, t_tuple p, t_tuple eyev, t_tuple normalv)
+static bool	is_shadowed(const t_conf *conf, t_tuple p, const t_light *light)
+{
+	t_tuple			v;
+	t_ray			r;
+	t_xs			xs;
+	t_intersection	h;
+	double			distance;
+
+	v = tuple_sub(light->coord, p);
+	distance = tuple_mod(v);
+	r.orig = p;
+	r.dir = tuple_normalize(v);
+	xs = intersect_world(r, conf);
+	h = hit(&xs);
+	return (h.shape && h.t < distance);
+}
+
+static t_rgb	lighting(const t_conf *conf, t_material material,
+	const t_light *light, t_comps comps)
 {
 	t_rgb	diffuse;
 	t_rgb	specular;
+	t_tuple	lightv;
+	double	light_dot_normal;
 
-	t_rgb effective_color = color_mult(material.rgb, light->rgb);
-	t_tuple lightv = tuple_normalize(tuple_sub(light->coord, p));
-	double light_dot_normal = tuple_dot(lightv, normalv);
+	lightv = tuple_normalize(tuple_sub(light->coord, comps.over_point));
+	light_dot_normal = tuple_dot(lightv, comps.normalv);
 	if (light_dot_normal < 0)
-	{
-		diffuse = color(0, 0, 0);
+		return (color(0, 0, 0));
+	if (is_shadowed(conf, comps.over_point, light))
+		return (color(0, 0, 0));
+	diffuse = color_scal_mult(color_mult(material.rgb, light->rgb),
+			material.diffuse * light->brightness * light_dot_normal);
+	t_tuple reflectv = reflect(tuple_scal_mult(lightv, -1), comps.normalv);
+	double reflect_dot_eye = tuple_dot(reflectv, comps.eyev);
+	if (reflect_dot_eye <= 0)
 		specular = color(0, 0, 0);
-	}
 	else
 	{
-		diffuse = color_scal_mult(effective_color, material.diffuse * light_dot_normal);
-		t_tuple reflectv = reflect(tuple_scal_mult(lightv, -1), normalv);
-		double reflect_dot_eye = tuple_dot(reflectv, eyev);
-		if (reflect_dot_eye <= 0)
-			specular = color(0, 0, 0);
-		else
-		{
-			double factor = pow(reflect_dot_eye, material.shininess);
-			specular = tuple_scal_mult(light->rgb, material.specular * factor);
-		}
+		double factor = pow(reflect_dot_eye, material.shininess);
+		specular = tuple_scal_mult(light->rgb, material.specular * light->brightness * factor);
 	}
 	return (color_add(diffuse, specular));
 }
@@ -69,27 +85,26 @@ t_comps	prepare_computations(t_intersection inter, t_ray r)
 	}
 	else
 		ret.inside = false;
+	ret.over_point = tuple_add(ret.p, tuple_scal_mult(ret.normalv, EPSILON));
 	return (ret);
 }
 
 t_rgb	shade_hit(const t_conf *conf, t_comps comps)
 {
+	t_rgb		am;
 	t_rgb		ret;
-	t_rgb		ambient;
 	t_material	material;
 	size_t		i;
 
 	material = comps.shape->material;
-	t_rgb am_color = color_mult(material.rgb, conf->am.rgb);
-	ambient = color_scal_mult(am_color, material.ambient);
-	ret = color(0, 0, 0);
+	am = color_mult(material.rgb, conf->am.rgb);
+	ret = color_scal_mult(am, material.ambient * conf->am.ratio);
 	i = 0;
 	while (i < conf->lights->len)
 	{
-		ret = color_add(ret, lighting(material, conf->lights->arr[i], comps.p, comps.eyev, comps.normalv));
+		ret = color_add(ret, lighting(conf, material, conf->lights->arr[i], comps));
 		i++;
 	}
-	ret = color_add(ret, ambient);
 	return (ret);
 }
 
