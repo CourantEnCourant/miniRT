@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include "minirt.h"
 #include "tuple.h"
 
@@ -39,12 +40,20 @@ static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 
 void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 {
+	double	phi;
+	double	theta;
+	t_mat	rot;
+
 	init_shape(&self->base, PLANE, coord, rgb);
 	self->normal = tuple_normalize(normal);
+	phi = acos(self->normal.arr[Y]);
+	theta = atan2(self->normal.arr[X], self->normal.arr[Z]);
+	rot = mat_mul(mat_rotate_y(theta), mat_rotate_x(phi));
 	self->base.transform = mat_translate(
 			coord.arr[X],
 			coord.arr[Y],
 			coord.arr[Z]);
+	self->base.transform = mat_mul(self->base.transform, rot);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;

@@ -63,19 +63,20 @@ static void	sort_xs(t_xs *xs)
 	}
 }
 
-t_xs	intersect_world(t_ray ray, const t_conf *conf)
+t_xs	intersect_world(const t_ray ray, const t_conf *conf)
 {
 	t_xs	ret;
 	size_t	i;
 	t_shape	*shape;
+	t_ray	local_ray;
 
 	ret.count = 0;
 	i = 0;
 	while (i < conf->shapes->len)
 	{
 		shape = conf->shapes->arr[i++];
-		ray = transform(ray, mat_inv(shape->transform));
-		shape->intersect(shape, &ret, ray);
+		local_ray = transform(ray, mat_inv(shape->transform));
+		shape->intersect(shape, &ret, local_ray);
 	}
 	sort_xs(&ret);
 	return (ret);
