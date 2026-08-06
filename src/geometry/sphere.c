@@ -28,7 +28,6 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	double	c;
 	double	disc;
 
-	ray = transform(ray, mat_inv(self->transform));
 	sp_to_ray = tuple_sub(ray.orig, point(0, 0, 0));
 	a = tuple_dot(ray.dir, ray.dir);
 	b = 2 * tuple_dot(ray.dir, sp_to_ray);

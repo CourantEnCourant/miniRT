@@ -23,7 +23,6 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 {
 	double	t;
 
-	ray = transform(ray, mat_inv(self->transform));
 	if (deq(ray.dir.arr[Y], 0))
 		return ;
 	t = -ray.orig.arr[Y] / ray.dir.arr[Y];

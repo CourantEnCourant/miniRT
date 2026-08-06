@@ -74,6 +74,7 @@ t_xs	intersect_world(t_ray ray, const t_conf *conf)
 	while (i < conf->shapes->len)
 	{
 		shape = conf->shapes->arr[i++];
+		ray = transform(ray, mat_inv(shape->transform));
 		shape->intersect(shape, &ret, ray);
 	}
 	sort_xs(&ret);
