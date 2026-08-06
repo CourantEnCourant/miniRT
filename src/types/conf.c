@@ -166,7 +166,7 @@ static bool	add_plane(t_darray *shapes, t_darray *param)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1], param->gc))
 		return (false);
-	if (!parse_coord(&normal, param->arr[2], param->gc))
+	if (!parse_normal(&normal, param->arr[2], param->gc))
 		return (false);
 	if (!parse_rgb(&rgb, param->arr[3], param->gc))
 		return (false);
@@ -239,7 +239,7 @@ static bool	add_cone(t_darray *shapes, t_darray *param)
 	double		radius;
 	double		height;
 	t_rgb		rgb;
- 
+
 	if (param->len != 5)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1], param->gc))
@@ -266,7 +266,7 @@ static bool	add_hyper(t_darray *shapes, t_darray *param)
 	double		a;
 	double		height;
 	t_rgb		rgb;
- 
+
 	if (param->len != 6)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1], param->gc))
