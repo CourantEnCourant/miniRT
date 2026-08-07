@@ -111,6 +111,7 @@ static bool	init_camera(t_camera *cam, t_darray *param)
 		up = vector(0, 0, 1);
 	cam->transform = view_transform(cam->coord,
 			tuple_add(cam->coord, cam->normal), up);
+	cam->transform_inv = mat_inv(cam->transform);
 	return (cam->is_valid(cam));
 }
 

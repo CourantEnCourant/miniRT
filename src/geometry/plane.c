@@ -54,6 +54,7 @@ void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 			coord.arr[Y],
 			coord.arr[Z]);
 	self->base.transform = mat_mul(self->base.transform, rot);
+	self->base.transform_inv = mat_inv(self->base.transform);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;

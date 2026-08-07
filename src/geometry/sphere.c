@@ -53,6 +53,7 @@ void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 	init_shape(&self->base, SPHERE, coord, rgb);
 	self->radius = radius;
 	self->base.transform = mat_mul(mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]), mat_scal(radius, radius, radius));
+	self->base.transform_inv = mat_inv(self->base.transform);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;
