@@ -13,8 +13,8 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# define WIN_W 800
-# define WIN_H 600
+# define WIN_W 1920
+# define WIN_H 1080
 # define XS_SIZE 100
 # ifdef __APPLE__
 #  define KEY_ESC 53
