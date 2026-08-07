@@ -48,9 +48,9 @@ static bool	parse_coord(t_tuple *coord, char str[], t_gc *gc)
 	tmp = gc_split(str, ',', gc);
 	if (tmp->len != 3)
 		return (dest_darray(tmp, gc_free), false);
-	*coord = point(atof(tmp->arr[0]),
-			atof(tmp->arr[1]),
-			atof(tmp->arr[2]));
+	*coord = point(ft_atof(tmp->arr[0]),
+			ft_atof(tmp->arr[1]),
+			ft_atof(tmp->arr[2]));
 	dest_darray(tmp, gc_free);
 	return (true);
 }
@@ -62,9 +62,9 @@ static bool	parse_normal(t_tuple *normal, char str[], t_gc *gc)
 	tmp = gc_split(str, ',', gc);
 	if (tmp->len != 3)
 		return (dest_darray(tmp, gc_free), false);
-	*normal = vector(atof(tmp->arr[0]),
-			atof(tmp->arr[1]),
-			atof(tmp->arr[2]));
+	*normal = vector(ft_atof(tmp->arr[0]),
+			ft_atof(tmp->arr[1]),
+			ft_atof(tmp->arr[2]));
 	dest_darray(tmp, gc_free);
 	return (true);
 }
@@ -73,7 +73,7 @@ static bool	init_am(t_am *am, t_darray *param)
 {
 	if (param->len != 3)
 		return (false);
-	am->ratio = atof(param->arr[1]);
+	am->ratio = ft_atof(param->arr[1]);
 	if (!parse_rgb(&am->rgb, param->arr[2], param->gc))
 		return (false);
 	return (am->is_valid(am));
@@ -92,7 +92,7 @@ static bool	init_camera(t_camera *cam, t_darray *param)
 	if (!parse_normal(&cam->normal, param->arr[2] ,param->gc))
 		return (false);
 	cam->normal = tuple_normalize(cam->normal);
-	cam->hfov_rad = degr_to_rad(atof(param->arr[3]));
+	cam->hfov_rad = degr_to_rad(ft_atof(param->arr[3]));
 	half_view = tan(cam->hfov_rad / 2);
 	aspect = (double)WIN_W / WIN_H;
 	if (aspect >= 1)
@@ -125,7 +125,7 @@ static bool	add_light(t_darray *lights, t_darray *param)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1] ,param->gc))
 		return (false);
-	brightness = atof(param->arr[2]);
+	brightness = ft_atof(param->arr[2]);
 	if (brightness < 0 || brightness > 1)
 		return (false);
 	if (!parse_rgb(&rgb, param->arr[3], param->gc))
@@ -145,7 +145,7 @@ static bool	add_sphere(t_darray *shapes, t_darray *param)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1], param->gc))
 		return (false);
-	radius = atof(param->arr[2]) / 2.0;
+	radius = ft_atof(param->arr[2]) / 2.0;
 	if (radius <= 0)
 		return (false);
 	if (!parse_rgb(&rgb, param->arr[3], param->gc))
@@ -192,10 +192,10 @@ static bool	add_cyl(t_darray *shapes, t_darray *param)
 		return (false);
 	if (!parse_normal(&normal, param->arr[2], param->gc))
 		return (false);
-	radius = atof(param->arr[3]) / 2.0;
+	radius = ft_atof(param->arr[3]) / 2.0;
 	if (radius <= 0)
 		return (false);
-	height = atof(param->arr[4]);
+	height = ft_atof(param->arr[4]);
 	if (height <= 0)
 		return (false);
 	if (!parse_rgb(&rgb, param->arr[5], param->gc))
@@ -221,10 +221,10 @@ static bool	add_cone(t_darray *shapes, t_darray *param)
 		return (false);
 	if (!parse_normal(&normal, param->arr[2], param->gc))
 		return (false);
-	radius = atof(param->arr[3]) / 2.0;
+	radius = ft_atof(param->arr[3]) / 2.0;
 	if (radius <= 0)
 		return (false);
-	height = atof(param->arr[4]);
+	height = ft_atof(param->arr[4]);
 	if (height <= 0)
 		return (false);
 	if (!parse_rgb(&rgb, param->arr[5], param->gc))
