@@ -209,24 +209,27 @@ static bool	add_cone(t_darray *shapes, t_darray *param)
 {
 	t_cone		*cone;
 	t_tuple		coord;
+	t_tuple		normal;
 	double		radius;
 	double		height;
 	t_rgb		rgb;
 
-	if (param->len != 5)
+	if (param->len != 6)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1], param->gc))
 		return (false);
-	radius = atof(param->arr[2]) / 2.0;
+	if (!parse_normal(&normal, param->arr[2], param->gc))
+		return (false);
+	radius = atof(param->arr[3]) / 2.0;
 	if (radius <= 0)
 		return (false);
-	height = atof(param->arr[3]);
+	height = atof(param->arr[4]);
 	if (height <= 0)
 		return (false);
-	if (!parse_rgb(&rgb, param->arr[4], param->gc))
+	if (!parse_rgb(&rgb, param->arr[5], param->gc))
 		return (false);
 	cone = gc_malloc(sizeof(t_cone), shapes->gc);
-	init_cone(cone, coord, rgb, radius, height);
+	init_cone(cone, coord, rgb, normal, radius, height);
 	shapes->push(shapes, cone);
 	return (true);
 }

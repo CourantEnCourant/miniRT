@@ -139,7 +139,7 @@ struct s_cone
 	double	height;
 };
 void			init_cone(t_cone *self, t_tuple coord, t_rgb rgb,
-			double radius, double height);
+		t_tuple normal, double radius, double height);
 
 typedef struct s_am		t_am;
 struct s_am
