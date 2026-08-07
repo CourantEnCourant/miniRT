@@ -128,9 +128,8 @@ struct s_cylinder
 	double	radius;
 	double	height;
 };
-void			init_cyl1(t_cyl *self, t_tuple coord, t_rgb rgb,
-					t_tuple normal);
-void			init_cyl2(t_cyl *self, double radius, double height);
+void			init_cyl(t_cyl *self, t_tuple coord, t_rgb rgb,
+					t_tuple normal, double radius, double height);
 
 typedef struct s_paraboloid t_para;
 struct s_paraboloid

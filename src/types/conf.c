@@ -189,7 +189,7 @@ static bool	add_cyl(t_darray *shapes, t_darray *param)
 		return (false);
 	if (!parse_coord(&coord, param->arr[1], param->gc))
 		return (false);
-	if (!parse_coord(&normal, param->arr[2], param->gc))
+	if (!parse_normal(&normal, param->arr[2], param->gc))
 		return (false);
 	radius = atof(param->arr[3]) / 2.0;
 	if (radius <= 0)
@@ -200,8 +200,7 @@ static bool	add_cyl(t_darray *shapes, t_darray *param)
 	if (!parse_rgb(&rgb, param->arr[5], param->gc))
 		return (false);
 	cyl = gc_malloc(sizeof(t_cyl), shapes->gc);
-	init_cyl1(cyl, coord, rgb, normal);
-	init_cyl2(cyl, radius, height);
+	init_cyl(cyl, coord, rgb, normal, radius, height);
 	shapes->push(shapes, cyl);
 	return (true);
 }
