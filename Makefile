@@ -1,7 +1,7 @@
 NAME = miniRT
 
 CC = cc
-CFLAGS = -Wextra -Werror -Wall -g3
+CFLAGS = -Wextra -Werror -Wall -O2
 AR = ar rcs
 RM = rm -rf
 
