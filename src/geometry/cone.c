@@ -20,97 +20,75 @@ static const char	*get_type(const t_shape *self)
 	return ("cone");
 }
 
-static void	cap_intersect(const t_cone *cone, t_xs *xs, t_ray ray)
+static void	add_hit(const t_cone *cone, t_xs *xs, t_ray ray, double t)
 {
-	double	cap_y;
-	double	t;
-	double	x;
-	double	z;
+	double	y;
 
-	if (deq(ray.dir.arr[Y], 0))
-		return ;
-	cap_y = cone->base.coord.arr[Y] + cone->height;
-	t = (cap_y - ray.orig.arr[Y]) / ray.dir.arr[Y];
-	x = ray.orig.arr[X] + t * ray.dir.arr[X] - cone->base.coord.arr[X];
-	z = ray.orig.arr[Z] + t * ray.dir.arr[Z] - cone->base.coord.arr[Z];
-	if (x * x + z * z <= cone->radius * cone->radius)
+	y = ray.orig.arr[Y] + t * ray.dir.arr[Y];
+	if (-cone->height / 2 < y && y < cone->height / 2)
 	{
 		xs->xs[xs->count].t = t;
-		xs->xs[xs->count++].shape = (t_shape *)cone;
+		xs->xs[xs->count++].shape = (t_shape *)&cone->base;
 	}
 }
 
-static void	add_if_in_range(const t_cone *cone, t_xs *xs, t_tuple oc,
-		t_ray ray, double t)
+static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 {
-	double  y;
-
-	y = oc.arr[Y] + t * ray.dir.arr[Y];
-	if (y >= 0 && y <= cone->height)
-	{
-		xs->xs[xs->count].t = t;
-		xs->xs[xs->count++].shape = (t_shape *)cone;
-	}
-}
-
-static void	side_intersect(const t_cone *cone, t_xs *xs, t_ray ray)
-{
-	t_tuple	oc;
-	double	k;
 	double	a;
 	double	b;
 	double	c;
 	double	disc;
 
-	oc = tuple_sub(ray.orig, cone->base.coord);
-	k = cone->radius / cone->height;
-	a = ray.dir.arr[X] * ray.dir.arr[X] + ray.dir.arr[Z] * ray.dir.arr[Z]
-		- k * k * ray.dir.arr[Y] * ray.dir.arr[Y];
-	b = 2 * (oc.arr[X] * ray.dir.arr[X] + oc.arr[Z] * ray.dir.arr[Z]
-		- k * k * oc.arr[Y] * ray.dir.arr[Y]);
-	c = oc.arr[X] * oc.arr[X] + oc.arr[Z] * oc.arr[Z]
-		- k * k * oc.arr[Y] * oc.arr[Y];
+	a = ray.dir.arr[X] * ray.dir.arr[X] - ray.dir.arr[Y] * ray.dir.arr[Y]
+		+ ray.dir.arr[Z] * ray.dir.arr[Z];
+	b = 2 * (ray.orig.arr[X] * ray.dir.arr[X]
+			- ray.orig.arr[Y] * ray.dir.arr[Y]
+			+ ray.orig.arr[Z] * ray.dir.arr[Z]);
+	c = ray.orig.arr[X] * ray.orig.arr[X] - ray.orig.arr[Y] * ray.orig.arr[Y]
+		+ ray.orig.arr[Z] * ray.orig.arr[Z];
 	if (deq(a, 0))
 	{
 		if (!deq(b, 0))
-			add_if_in_range(cone, xs, oc, ray, -c / b);
+			add_hit((t_cone *)self, xs, ray, -c / (2 * b));
 		return ;
 	}
 	disc = b * b - 4 * a * c;
 	if (disc < 0)
 		return ;
-	add_if_in_range(cone, xs, oc, ray, (-b - sqrt(disc)) / (2 * a));
-	add_if_in_range(cone, xs, oc, ray, (-b + sqrt(disc)) / (2 * a));
-}
-
-static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
-{
-	const t_cone	*cone;
-
-	cone = (const t_cone *)self;
-	side_intersect(cone, xs, ray);
-	cap_intersect(cone, xs, ray);
+	add_hit((t_cone *)self, xs, ray, (-b - sqrt(disc)) / (2 * a));
+	add_hit((t_cone *)self, xs, ray, (-b + sqrt(disc)) / (2 * a));
 }
 
 static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 {
-	const t_cone	*cone;
-	double			k2;
+	double	y;
 
-	cone = (const t_cone *)self;
-	k2 = (cone->radius / cone->height) * (cone->radius / cone->height);
-	return (quadric_normal_at(p, 0, cone->height, false,
-			2 * k2 * p.arr[Y]));
+	(void)self;
+	y = sqrt((p.arr[X] * p.arr[X] + p.arr[Z] * p.arr[Z]));
+	if (p.arr[Y] > 0)
+		y = -y;
+	return (vector(p.arr[X], y, p.arr[Z]));
 }
 
-void	init_cone(t_cone *self, t_tuple coord, t_rgb rgb, double radius,
-		double height)
+void	init_cone(t_cone *self, t_tuple coord, t_rgb rgb, t_tuple normal,
+		double radius, double height)
 {
+	double	phi;
+	double	theta;
+
 	init_shape(&self->base, CONE, coord, rgb);
+	normal = tuple_normalize(normal);
 	self->radius = radius;
 	self->height = height;
-	self->base.transform = mat_translate(
-			coord.arr[X], coord.arr[Y], coord.arr[Z]);
+	self->base.transform = mat_scal(radius, 1, radius);
+	phi = acos(normal.arr[Y]);
+	theta = atan2(normal.arr[X], normal.arr[Z]);
+	self->base.transform = mat_mul(
+			mat_mul(mat_rotate_y(theta), mat_rotate_x(phi)),
+			self->base.transform);
+	self->base.transform = mat_mul(
+			mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]),
+			self->base.transform);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;
