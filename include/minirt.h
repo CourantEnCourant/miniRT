@@ -91,11 +91,13 @@ struct s_shape
 	t_material	material;
 	t_mat		transform;
 	t_mat		transform_inv;
+	t_mat		transform_inv_t;
 	const char	*(*get_type)(const t_shape *self);
 	void		(*intersect)(const t_shape *self, t_xs *xs, t_ray ray);
 	t_tuple		(*local_normal_at)(const t_shape *self, t_tuple p);
 };
 void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
+void			set_matrices(t_shape *self, t_mat transform);
 t_tuple			world_normal_at(const t_shape *self, t_tuple p);
 
 typedef struct s_sphere		t_sphere;
