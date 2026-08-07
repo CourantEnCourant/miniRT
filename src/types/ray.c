@@ -75,7 +75,7 @@ t_xs	intersect_world(const t_ray ray, const t_conf *conf)
 	while (i < conf->shapes->len)
 	{
 		shape = conf->shapes->arr[i++];
-		local_ray = transform(ray, mat_inv(shape->transform));
+		local_ray = transform(ray, shape->transform_inv);
 		shape->intersect(shape, &ret, local_ray);
 	}
 	sort_xs(&ret);
@@ -112,8 +112,8 @@ t_ray	ray_for_pixel(const t_camera *camera, double px, double py)
 	yoffset = (py + 0.5) * camera->pixel_size;
 	world_x = camera->half_width - xoffset;
 	world_y = camera->half_height - yoffset;
-	pixel = mat_mul_tuple(mat_inv(camera->transform), point(world_x, world_y, -1));
-	ret.orig = mat_mul_tuple(mat_inv(camera->transform), point(0, 0, 0));
+	pixel = mat_mul_tuple(camera->transform_inv, point(world_x, world_y, -1));
+	ret.orig = mat_mul_tuple(camera->transform_inv, point(0, 0, 0));
 	ret.dir = tuple_normalize(tuple_sub(pixel, ret.orig));
 	return (ret);
 }

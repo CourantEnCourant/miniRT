@@ -90,6 +90,7 @@ struct s_shape
 	t_tuple		coord;
 	t_material	material;
 	t_mat		transform;
+	t_mat		transform_inv;
 	const char	*(*get_type)(const t_shape *self);
 	void		(*intersect)(const t_shape *self, t_xs *xs, t_ray ray);
 	t_tuple		(*local_normal_at)(const t_shape *self, t_tuple p);
@@ -154,6 +155,7 @@ struct s_camera
 	double	half_height;
 	double	pixel_size;
 	t_mat	transform;
+	t_mat	transform_inv;
 	bool	(*is_valid)(const t_camera * self);
 };
 
