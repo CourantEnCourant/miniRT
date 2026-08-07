@@ -220,7 +220,8 @@ struct s_rend
 	t_gc	*gc;
 	void	(*render)(const t_renderer *self, const t_conf *conf);
 };
-void	init_renderer(t_renderer *self, t_conf *conf, t_gc *gc);
+void	init_renderer(t_renderer *self, t_conf *conf, t_gc *gc,
+			const char title[]);
 void	dest_renderer(t_renderer *self);
 
 #endif

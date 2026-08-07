@@ -34,6 +34,6 @@ int	main(int argc, char *argv[])
 	gc = new_gc();
 	init_conf_from_file(&conf, fd, gc);
 	conf.repr(&conf);
-	init_renderer(&renderer, &conf, gc);
+	init_renderer(&renderer, &conf, gc, argv[1]);
 	renderer.render(&renderer, &conf);
 }
