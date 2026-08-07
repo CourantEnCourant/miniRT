@@ -75,21 +75,22 @@ void	init_cone(t_cone *self, t_tuple coord, t_rgb rgb, t_tuple normal,
 {
 	double	phi;
 	double	theta;
+	t_mat	trans;
 
 	init_shape(&self->base, CONE, coord, rgb);
 	normal = tuple_normalize(normal);
 	self->radius = radius;
 	self->height = height;
-	self->base.transform = mat_scal(radius, 1, radius);
+	trans = mat_scal(radius, 1, radius);
 	phi = acos(normal.arr[Y]);
 	theta = atan2(normal.arr[X], normal.arr[Z]);
-	self->base.transform = mat_mul(
+	trans = mat_mul(
 			mat_mul(mat_rotate_y(theta), mat_rotate_x(phi)),
-			self->base.transform);
-	self->base.transform = mat_mul(
+			trans);
+	trans = mat_mul(
 			mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]),
-			self->base.transform);
-	self->base.transform_inv = mat_inv(self->base.transform);
+			trans);
+	set_matrices(&self->base, trans);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;

@@ -43,18 +43,19 @@ void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 	double	phi;
 	double	theta;
 	t_mat	rot;
+	t_mat	trans;
 
 	init_shape(&self->base, PLANE, coord, rgb);
 	self->normal = tuple_normalize(normal);
 	phi = acos(self->normal.arr[Y]);
 	theta = atan2(self->normal.arr[X], self->normal.arr[Z]);
 	rot = mat_mul(mat_rotate_y(theta), mat_rotate_x(phi));
-	self->base.transform = mat_translate(
+	trans = mat_translate(
 			coord.arr[X],
 			coord.arr[Y],
 			coord.arr[Z]);
-	self->base.transform = mat_mul(self->base.transform, rot);
-	self->base.transform_inv = mat_inv(self->base.transform);
+	trans = mat_mul(trans, rot);
+	set_matrices(&self->base, trans);
 	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;
