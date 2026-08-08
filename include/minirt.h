@@ -27,7 +27,7 @@
 # include "gc_libft.h"
 # include "tuple.h"
 
-typedef int	(*t_fn)(void);
+typedef int				(*t_fn)(void);
 
 enum e_rgb
 {
@@ -36,7 +36,7 @@ enum e_rgb
 	B,
 };
 
-typedef t_tuple				t_rgb;
+typedef t_tuple			t_rgb;
 t_rgb			color(double r, double g, double b);
 t_rgb			color_add(t_rgb c1, t_rgb c2);
 t_rgb			color_mult(t_rgb c1, t_rgb c2);
@@ -51,7 +51,7 @@ enum e_type
 	SPHERE,
 };
 
-typedef	struct	s_material
+typedef struct s_material
 {
 	t_rgb	rgb;
 	double	ambient;
@@ -59,16 +59,15 @@ typedef	struct	s_material
 	double	specular;
 	double	shininess;
 }	t_material;
-t_material	default_material(void);
+t_material		default_material(void);
 
-typedef struct s_ray	t_ray;
-struct s_ray
+typedef struct s_ray
 {
 	t_tuple	orig;
 	t_tuple	dir;
-};
+}	t_ray;
 
-typedef struct s_shape		t_shape;
+typedef struct s_shape	t_shape;
 
 typedef struct s_intersection
 {
@@ -89,38 +88,35 @@ struct s_shape
 	t_mat		transform;
 	t_mat		transform_inv;
 	t_mat		transform_inv_t;
-	const char	*(*get_type)(const t_shape *self);
 	void		(*intersect)(const t_shape *self, t_xs *xs, t_ray ray);
-	t_tuple		(*local_normal_at)(const t_shape *self, t_tuple p);
+	t_tuple		(*local_normal_at)(const t_shape * self, t_tuple p);
 };
 void			init_shape(t_shape *s, enum e_type t, t_tuple coord, t_rgb rgb);
 void			set_matrices(t_shape *self, t_mat transform);
 t_tuple			world_normal_at(const t_shape *self, t_tuple p);
 
-typedef struct s_sphere		t_sphere;
-struct s_sphere
+typedef struct s_sphere
 {
 	t_shape	base;
-};
-void			init_sphere(t_sphere *s, t_tuple coord, t_rgb rgb, double rad);
+}	t_sphere;
+bool			add_sphere(t_darray *shapes, t_darray *param);
 t_tuple			reflect(t_tuple in, t_tuple normal);
 
-typedef struct s_plane		t_plane;
-struct s_plane
+typedef struct s_plane
 {
 	t_shape	base;
-};
-void			init_plane(t_plane *s, t_tuple coord, t_rgb rgb,
-					t_tuple normal);
+}	t_plane;
+bool			add_plane(t_darray *shapes, t_darray *param);
 
-typedef struct s_cylinder	t_cyl;
-struct s_cylinder
+typedef struct s_cyl
 {
 	t_shape	base;
 	double	height;
-};
-void			init_cyl(t_cyl *self, t_tuple coord, t_rgb rgb,
+}	t_cyl;
+void			init_cyl1(t_cyl *self, t_tuple coord, t_rgb rgb);
+void			init_cyl2(t_cyl *self,
 					t_tuple normal, double radius, double height);
+bool			add_cyl(t_darray *shapes, t_darray *param);
 
 typedef struct s_cone	t_cone;
 struct s_cone
@@ -128,16 +124,18 @@ struct s_cone
 	t_shape	base;
 	double	height;
 };
-void			init_cone(t_cone *self, t_tuple coord, t_rgb rgb,
-		t_tuple normal, double radius, double height);
+void			init_cone1(t_cone *self, t_tuple coord, t_rgb rgb);
+void			init_cone2(t_cone *self,
+					t_tuple normal, double radius, double height);
+bool			add_cone(t_darray *shapes, t_darray *param);
 
 typedef struct s_am		t_am;
 struct s_am
 {
 	double	ratio;
 	t_rgb	rgb;
-	bool	(*is_valid)(const t_am * self);
 };
+bool			init_am(t_am *am, t_darray *param);
 
 typedef struct s_camera	t_camera;
 struct s_camera
@@ -150,8 +148,8 @@ struct s_camera
 	double	pixel_size;
 	t_mat	transform;
 	t_mat	transform_inv;
-	bool	(*is_valid)(const t_camera * self);
 };
+bool			init_camera(t_camera *cam, t_darray *param);
 
 typedef struct s_light	t_light;
 struct s_light
@@ -160,10 +158,10 @@ struct s_light
 	double	brightness;
 	t_rgb	rgb;
 };
-t_light	*new_light(t_tuple coord, double brightness, t_rgb rgb, t_gc *gc);
+bool			add_light(t_darray *lights, t_darray *param);
 
-t_tuple	ray_at(t_ray ray, double t);
-t_ray	ray_for_pixel(const t_camera *cam, double px, double py);
+t_tuple			ray_at(t_ray ray, double t);
+t_ray			ray_for_pixel(const t_camera *cam, double px, double py);
 
 typedef struct s_comps
 {
@@ -175,7 +173,7 @@ typedef struct s_comps
 	t_tuple	normalv;
 	bool	inside;
 }	t_comps;
-t_comps	prepare_computations(t_intersection inter, t_ray r);
+t_comps			prepare_computations(t_intersection inter, t_ray r);
 
 typedef struct s_conf	t_conf;
 struct s_conf
@@ -185,17 +183,18 @@ struct s_conf
 	t_darray	*lights;
 	t_gc		*gc;
 	t_darray	*shapes;
-	void		(*repr)(const t_conf *self);
 };
-bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc);
-void	dest_conf(t_conf *self);
-t_mat	view_transform(t_tuple from, t_tuple to, t_tuple up);
+bool			init_conf_from_file(t_conf *self, int fd, t_gc *gc);
+void			dest_conf(t_conf *self);
 
 void			add_xs(t_xs *xs, const t_shape *shape, double t);
 void			intersect_world(t_xs *xs, t_ray ray, const t_conf *conf);
 bool			shadow_hit(const t_conf *conf, t_ray ray, double distance);
 t_ray			transform(t_ray ray, const t_mat *matrix);
+t_rgb			ray_color(t_ray r, const t_conf *conf);
 t_rgb			shade_hit(const t_conf *conf, t_comps comps);
+t_rgb			lighting(const t_conf *conf, t_material material,
+					const t_light *light, t_comps comps);
 
 typedef struct s_rend	t_renderer;
 struct s_rend
@@ -211,8 +210,12 @@ struct s_rend
 	t_gc	*gc;
 	void	(*render)(const t_renderer *self, const t_conf *conf);
 };
-void	init_renderer(t_renderer *self, t_conf *conf, t_gc *gc,
-			const char title[]);
-void	dest_renderer(t_renderer *self);
+void			init_renderer(t_renderer *self, t_conf *conf, t_gc *gc,
+					const char title[]);
+void			render(const t_renderer *self, const t_conf *conf);
+
+bool			parse_rgb(t_rgb *rgb, char str[], t_gc *gc);
+bool			parse_coord(t_tuple *coord, char str[], t_gc *gc);
+bool			parse_normal(t_tuple *normal, char str[], t_gc *gc);
 
 #endif

@@ -20,24 +20,21 @@ t_mat	mat_mul(t_mat A, t_mat B)
 	size_t	j;
 	size_t	k;
 
-	i = 0;
-	while (i < A.size)
+	i = -1;
+	while (++i < A.size)
 	{
-		j = 0;
-		while (j < A.size)
+		j = -1;
+		while (++j < A.size)
 		{
-			k = 0;
-			while (k < A.size)
+			k = -1;
+			while (++k < A.size)
 			{
 				ret.arr[i][j] = A.arr[i][0] * B.arr[0][j]
 					+ A.arr[i][1] * B.arr[1][j]
 					+ A.arr[i][2] * B.arr[2][j]
 					+ A.arr[i][3] * B.arr[3][j];
-				k++;
 			}
-			j++;
 		}
-		i++;
 	}
 	ret.size = A.size;
 	return (ret);
