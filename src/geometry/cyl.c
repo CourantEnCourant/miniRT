@@ -26,10 +26,7 @@ static void	add_hit(const t_cyl *cyl, t_xs *xs, t_ray ray, double t)
 
 	y = ray.orig.arr[Y] + t * ray.dir.arr[Y];
 	if (-cyl->height / 2 < y && y < cyl->height / 2)
-	{
-		xs->xs[xs->count].t = t;
-		xs->xs[xs->count++].shape = (t_shape *)&cyl->base;
-	}
+		add_xs(xs, &cyl->base, t);
 }
 
 static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
@@ -49,8 +46,9 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	disc = b * b - 4 * a * c;
 	if (disc < 0)
 		return ;
-	add_hit((t_cyl *)self, xs, ray, (-b - sqrt(disc)) / (2 * a));
-	add_hit((t_cyl *)self, xs, ray, (-b + sqrt(disc)) / (2 * a));
+	disc = sqrt(disc);
+	add_hit((t_cyl *)self, xs, ray, (-b - disc) / (2 * a));
+	add_hit((t_cyl *)self, xs, ray, (-b + disc) / (2 * a));
 }
 
 static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
@@ -66,12 +64,11 @@ void	init_cyl(t_cyl *self, t_tuple coord, t_rgb rgb, t_tuple normal, double radi
 	t_mat	trans;
 
 	init_shape(&self->base, CYL, coord, rgb);
-	self->normal = tuple_normalize(normal);
-	self->radius = radius;
+	normal = tuple_normalize(normal);
 	self->height = height;
 	trans = mat_scal(radius, 1, radius);
-	phi = acos(self->normal.arr[Y]);
-	theta = atan2(self->normal.arr[X], self->normal.arr[Z]);
+	phi = acos(normal.arr[Y]);
+	theta = atan2(normal.arr[X], normal.arr[Z]);
 	trans = mat_mul(
 			mat_mul(mat_rotate_y(theta), mat_rotate_x(phi)),
 			trans);

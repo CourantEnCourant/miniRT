@@ -14,23 +14,7 @@
 #include "minirt.h"
 #include "tuple.h"
 
-t_ray	init_ray(t_tuple point, t_tuple vec)
-{
-	t_ray	ret;
-
-	ret.orig = point;
-	ret.dir = vec;
-	return (ret);
-}
-
-bool	ray_eq(t_ray r1, t_ray r2)
-{
-	if (tuple_eq(r1.orig, r2.orig) && tuple_eq(r1.dir, r2.dir))
-		return (true);
-	return (false);
-}
-
-t_ray	transform(t_ray ray, t_mat matrix)
+t_ray	transform(t_ray ray, const t_mat *matrix)
 {
 	ray.orig = mat_mul_tuple(matrix, ray.orig);
 	ray.dir = mat_mul_tuple(matrix, ray.dir);
@@ -42,61 +26,50 @@ t_tuple	ray_at(t_ray ray, double t)
 	return (tuple_add(ray.orig, tuple_scal_mult(ray.dir, t)));
 }
 
-static void	sort_xs(t_xs *xs)
+void	add_xs(t_xs *xs, const t_shape *shape, double t)
 {
-	t_intersection	tmp;
-	int				i;
-	int				j;
-
-	i = 1;
-	while (i < (int)xs->count)
-	{
-		tmp = xs->xs[i];
-		j = i - 1;
-		while (j >= 0 && xs->xs[j].t > tmp.t)
-		{
-			xs->xs[j + 1] = xs->xs[j];
-			j--;
-		}
-		xs->xs[j + 1] = tmp;
-		i++;
-	}
+	if (t < 0)
+		return ;
+	if (xs->best.shape && xs->best.t <= t)
+		return ;
+	xs->best.t = t;
+	xs->best.shape = (t_shape *)shape;
 }
 
-t_xs	intersect_world(const t_ray ray, const t_conf *conf)
+void	intersect_world(t_xs *xs, const t_ray ray, const t_conf *conf)
 {
-	t_xs	ret;
 	size_t	i;
 	t_shape	*shape;
 	t_ray	local_ray;
 
-	ret.count = 0;
+	xs->best.t = -1;
+	xs->best.shape = NULL;
 	i = 0;
 	while (i < conf->shapes->len)
 	{
 		shape = conf->shapes->arr[i++];
-		local_ray = transform(ray, shape->transform_inv);
-		shape->intersect(shape, &ret, local_ray);
+		local_ray = transform(ray, &shape->transform_inv);
+		shape->intersect(shape, xs, local_ray);
 	}
-	sort_xs(&ret);
-	return (ret);
 }
 
-t_intersection	hit(const t_xs *xs)
+bool	shadow_hit(const t_conf *conf, const t_ray ray, double distance)
 {
-	t_intersection	none;
-	size_t			i;
+	t_xs	xs;
+	size_t	i;
+	t_shape	*shape;
 
 	i = 0;
-	while (i < xs->count)
+	while (i < conf->shapes->len)
 	{
-		if (xs->xs[i].t >= 0)
-			return (xs->xs[i]);
-		i++;
+		shape = conf->shapes->arr[i++];
+		xs.best.t = -1;
+		xs.best.shape = NULL;
+		shape->intersect(shape, &xs, transform(ray, &shape->transform_inv));
+		if (xs.best.shape && xs.best.t < distance)
+			return (true);
 	}
-	none.t = -1;
-	none.shape = NULL;
-	return (none);
+	return (false);
 }
 
 t_ray	ray_for_pixel(const t_camera *camera, double px, double py)
@@ -112,8 +85,8 @@ t_ray	ray_for_pixel(const t_camera *camera, double px, double py)
 	yoffset = (py + 0.5) * camera->pixel_size;
 	world_x = camera->half_width - xoffset;
 	world_y = camera->half_height - yoffset;
-	pixel = mat_mul_tuple(camera->transform_inv, point(world_x, world_y, -1));
-	ret.orig = mat_mul_tuple(camera->transform_inv, point(0, 0, 0));
+	pixel = mat_mul_tuple(&camera->transform_inv, point(world_x, world_y, -1));
+	ret.orig = mat_mul_tuple(&camera->transform_inv, point(0, 0, 0));
 	ret.dir = tuple_normalize(tuple_sub(pixel, ret.orig));
 	return (ret);
 }

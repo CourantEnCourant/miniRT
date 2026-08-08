@@ -26,21 +26,14 @@ static inline void	put_pixel(char *dst, t_rgb rgb)
 	*(unsigned int *)dst = rgb_to_int(rgb);
 }
 
-static bool	is_shadowed(const t_conf *conf, t_tuple p, const t_light *light)
+static bool	is_shadowed(const t_conf *conf, t_tuple p, t_tuple lightv,
+	double distance)
 {
-	t_tuple			v;
-	t_ray			r;
-	t_xs			xs;
-	t_intersection	h;
-	double			distance;
+	t_ray	r;
 
-	v = tuple_sub(light->coord, p);
-	distance = tuple_mod(v);
 	r.orig = p;
-	r.dir = tuple_normalize(v);
-	xs = intersect_world(r, conf);
-	h = hit(&xs);
-	return (h.shape && h.t < distance);
+	r.dir = lightv;
+	return (shadow_hit(conf, r, distance));
 }
 
 static t_rgb	lighting(const t_conf *conf, t_material material,
@@ -49,13 +42,16 @@ static t_rgb	lighting(const t_conf *conf, t_material material,
 	t_rgb	diffuse;
 	t_rgb	specular;
 	t_tuple	lightv;
+	double	distance;
 	double	light_dot_normal;
 
-	lightv = tuple_normalize(tuple_sub(light->coord, comps.over_point));
+	lightv = tuple_sub(light->coord, comps.over_point);
+	distance = tuple_mod(lightv);
+	lightv = tuple_scal_mult(lightv, 1.0 / distance);
 	light_dot_normal = tuple_dot(lightv, comps.normalv);
 	if (light_dot_normal < 0)
 		return (color(0, 0, 0));
-	if (is_shadowed(conf, comps.over_point, light))
+	if (is_shadowed(conf, comps.over_point, lightv, distance))
 		return (color(0, 0, 0));
 	diffuse = color_scal_mult(color_mult(material.rgb, light->rgb),
 			material.diffuse * light->brightness * light_dot_normal);
@@ -112,14 +108,12 @@ t_rgb	shade_hit(const t_conf *conf, t_comps comps)
 
 static t_rgb	ray_color(t_ray r, const t_conf *conf)
 {
-	t_xs			xs;
-	t_intersection	inter;
+	t_xs	xs;
 
-	xs = intersect_world(r, conf);
-	inter = hit(&xs);
-	if (!inter.shape)
+	intersect_world(&xs, r, conf);
+	if (!xs.best.shape)
 		return (color(0, 0, 0));
-	return (shade_hit(conf, prepare_computations(inter, r)));
+	return (shade_hit(conf, prepare_computations(xs.best, r)));
 }
 
 static void	render_frame(const t_renderer *self, const t_conf *conf)

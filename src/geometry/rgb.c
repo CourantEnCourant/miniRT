@@ -28,11 +28,6 @@ t_rgb	color_mult(t_rgb c1, t_rgb c2)
 	return (tuple_hadamar(c1, c2));
 }
 
-t_rgb	color_sub(t_rgb c1, t_rgb c2)
-{
-	return (tuple_sub(c1, c2));
-}
-
 t_rgb	color_scal_mult(t_rgb c, double scale)
 {
 	return (tuple_scal_mult(c, scale));

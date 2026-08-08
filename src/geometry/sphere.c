@@ -35,10 +35,9 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	disc = b * b - 4 * a * c;
 	if (disc < 0)
 		return ;
-	xs->xs[xs->count].t = (-b - sqrt(disc)) / (2 * a);
-	xs->xs[xs->count++].shape = (t_shape *)self;
-	xs->xs[xs->count].t = (-b + sqrt(disc)) / (2 * a);
-	xs->xs[xs->count++].shape = (t_shape *)self;
+	disc = sqrt(disc);
+	add_xs(xs, self, (-b - disc) / (2 * a));
+	add_xs(xs, self, (-b + disc) / (2 * a));
 }
 
 static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
@@ -53,7 +52,6 @@ void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 	t_mat	trans;
 
 	init_shape(&self->base, SPHERE, coord, rgb);
-	self->radius = radius;
 	trans = mat_mul(
 			mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]),
 			mat_scal(radius, radius, radius));

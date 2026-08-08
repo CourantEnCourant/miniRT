@@ -27,8 +27,7 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	if (deq(ray.dir.arr[Y], 0))
 		return ;
 	t = -ray.orig.arr[Y] / ray.dir.arr[Y];
-	xs->xs[xs->count].t = t;
-	xs->xs[xs->count++].shape = (t_shape *)self;
+	add_xs(xs, self, t);
 }
 
 static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
@@ -46,9 +45,9 @@ void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 	t_mat	trans;
 
 	init_shape(&self->base, PLANE, coord, rgb);
-	self->normal = tuple_normalize(normal);
-	phi = acos(self->normal.arr[Y]);
-	theta = atan2(self->normal.arr[X], self->normal.arr[Z]);
+	normal = tuple_normalize(normal);
+	phi = acos(normal.arr[Y]);
+	theta = atan2(normal.arr[X], normal.arr[Z]);
 	rot = mat_mul(mat_rotate_y(theta), mat_rotate_x(phi));
 	trans = mat_translate(
 			coord.arr[X],
