@@ -14,7 +14,9 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include "gc.h"
+#include "libft.h"
 #include "mlx.h"
 #include "minirt.h"
 #include "tuple.h"
@@ -145,9 +147,21 @@ static void	render_frame(const t_renderer *self, const t_conf *conf)
 	}
 }
 
+static int	elapsed_ms(struct timeval start, struct timeval end)
+{
+	return ((end.tv_sec - start.tv_sec) * 1000
+		+ (end.tv_usec - start.tv_usec) / 1000);
+}
+
 static void	render(const t_renderer *self, const t_conf *conf)
 {
+	struct timeval	start;
+	struct timeval	end;
+
+	gettimeofday(&start, NULL);
 	render_frame(self, conf);
+	gettimeofday(&end, NULL);
+	ft_printf("Rendered in %d ms\n", elapsed_ms(start, end));
 	mlx_put_image_to_window(self->mlx, self->mlx_win, self->img, 0, 0);
 	mlx_loop(self->mlx);
 }
