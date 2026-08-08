@@ -11,14 +11,12 @@
 /* ************************************************************************** */
 
 #include <math.h>
+#include <stdbool.h>
+#include "datastructures.h"
+#include "gc.h"
+#include "libft.h"
 #include "minirt.h"
 #include "tuple.h"
-
-static const char	*get_type(const t_shape *self)
-{
-	(void)self;
-	return ("plane");
-}
 
 static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 {
@@ -37,7 +35,7 @@ static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 	return (vector(0, 1, 0));
 }
 
-void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
+static void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 {
 	double	phi;
 	double	theta;
@@ -55,7 +53,27 @@ void	init_plane(t_plane *self, t_tuple coord, t_rgb rgb, t_tuple normal)
 			coord.arr[Z]);
 	trans = mat_mul(trans, rot);
 	set_matrices(&self->base, trans);
-	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;
+}
+
+bool	add_plane(t_darray *shapes, t_darray *param)
+{
+	t_plane	*plane;
+	t_tuple	coord;
+	t_tuple	normal;
+	t_rgb	rgb;
+
+	if (param->len != 4)
+		return (false);
+	if (!parse_coord(&coord, param->arr[1], param->gc))
+		return (false);
+	if (!parse_normal(&normal, param->arr[2], param->gc))
+		return (false);
+	if (!parse_rgb(&rgb, param->arr[3], param->gc))
+		return (false);
+	plane = gc_malloc(sizeof(t_plane), shapes->gc);
+	init_plane(plane, coord, rgb, normal);
+	shapes->push(shapes, plane);
+	return (true);
 }

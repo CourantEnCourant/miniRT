@@ -14,12 +14,6 @@
 #include "minirt.h"
 #include "tuple.h"
 
-static const char	*get_type(const t_shape *self)
-{
-	(void)self;
-	return ("cone");
-}
-
 static void	add_hit(const t_cone *cone, t_xs *xs, t_ray ray, double t)
 {
 	double	y;
@@ -68,14 +62,21 @@ static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 	return (vector(p.arr[X], y, p.arr[Z]));
 }
 
-void	init_cone(t_cone *self, t_tuple coord, t_rgb rgb, t_tuple normal,
-		double radius, double height)
+void	init_cone1(t_cone *self, t_tuple coord, t_rgb rgb)
 {
-	double	phi;
-	double	theta;
-	t_mat	trans;
-
 	init_shape(&self->base, CONE, coord, rgb);
+	self->base.intersect = intersect;
+	self->base.local_normal_at = local_normal_at;
+}
+
+void	init_cone2(t_cone *self, t_tuple normal, double radius, double height)
+{
+	double		phi;
+	double		theta;
+	t_mat		trans;
+	t_tuple		coord;
+
+	coord = self->base.coord;
 	normal = tuple_normalize(normal);
 	self->height = height;
 	trans = mat_scal(radius, 1, radius);
@@ -88,7 +89,4 @@ void	init_cone(t_cone *self, t_tuple coord, t_rgb rgb, t_tuple normal,
 			mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]),
 			trans);
 	set_matrices(&self->base, trans);
-	self->base.get_type = get_type;
-	self->base.intersect = intersect;
-	self->base.local_normal_at = local_normal_at;
 }

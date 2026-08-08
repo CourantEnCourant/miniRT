@@ -18,7 +18,9 @@ MLX = $(MLX_DIR)/libmlx.a
 
 INCLUDE = -I ./include -I ./lib/minilibx
 SRC = ./src/geometry/cone.c \
+	  ./src/geometry/cone2.c \
 	  ./src/geometry/cyl.c \
+	  ./src/geometry/cyl2.c \
 	  ./src/geometry/material.c \
 	  ./src/geometry/plane.c \
 	  ./src/geometry/rgb.c \
@@ -27,12 +29,16 @@ SRC = ./src/geometry/cone.c \
 	  ./src/geometry/sphere.c \
 	  ./src/types/ambient_light.c \
 	  ./src/types/camera.c \
+	  ./src/types/comps.c \
 	  ./src/types/conf.c \
 	  ./src/types/light.c \
 	  ./src/types/ray.c \
 	  ./src/types/renderer.c \
+	  ./src/types/renderer2.c \
+	  ./src/types/xs.c \
 	  ./src/main.c \
 	  ./src/math_helper.c \
+	  ./src/parse_helper.c \
 	  ./src/str_helper.c
 
 OBJ = $(SRC:.c=.o)

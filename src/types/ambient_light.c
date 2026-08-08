@@ -11,9 +11,21 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
+#include "datastructures.h"
+#include "libft.h"
 #include "minirt.h"
 
-bool	am_is_valid(const t_am *self)
+static bool	is_valid(const t_am *self)
 {
 	return (0.0 <= self->ratio && self->ratio <= 1.0);
+}
+
+bool	init_am(t_am *am, t_darray *param)
+{
+	if (param->len != 3)
+		return (false);
+	am->ratio = ft_atof(param->arr[1]);
+	if (!parse_rgb(&am->rgb, param->arr[2], param->gc))
+		return (false);
+	return (is_valid(am));
 }

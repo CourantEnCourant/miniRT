@@ -11,14 +11,12 @@
 /* ************************************************************************** */
 
 #include <math.h>
+#include <stdbool.h>
+#include "datastructures.h"
+#include "gc.h"
+#include "libft.h"
 #include "minirt.h"
 #include "tuple.h"
-
-static const char	*get_type(const t_shape *self)
-{
-	(void)self;
-	return ("sphere");
-}
 
 static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 {
@@ -46,8 +44,7 @@ static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
 	return (tuple_sub(p, point(0, 0, 0)));
 }
 
-
-void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
+static void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 {
 	t_mat	trans;
 
@@ -56,7 +53,6 @@ void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 			mat_translate(coord.arr[X], coord.arr[Y], coord.arr[Z]),
 			mat_scal(radius, radius, radius));
 	set_matrices(&self->base, trans);
-	self->base.get_type = get_type;
 	self->base.intersect = intersect;
 	self->base.local_normal_at = local_normal_at;
 }
@@ -64,4 +60,26 @@ void	init_sphere(t_sphere *self, t_tuple coord, t_rgb rgb, double radius)
 t_tuple	reflect(t_tuple in, t_tuple normal)
 {
 	return (tuple_sub(in, tuple_scal_mult(normal, 2 * tuple_dot(in, normal))));
+}
+
+bool	add_sphere(t_darray *shapes, t_darray *param)
+{
+	t_sphere	*sphere;
+	t_tuple		coord;
+	double		radius;
+	t_rgb		rgb;
+
+	if (param->len != 4)
+		return (false);
+	if (!parse_coord(&coord, param->arr[1], param->gc))
+		return (false);
+	radius = ft_atof(param->arr[2]) / 2.0;
+	if (radius <= 0)
+		return (false);
+	if (!parse_rgb(&rgb, param->arr[3], param->gc))
+		return (false);
+	sphere = gc_malloc(sizeof(t_sphere), shapes->gc);
+	init_sphere(sphere, coord, rgb, radius);
+	shapes->push(shapes, sphere);
+	return (true);
 }

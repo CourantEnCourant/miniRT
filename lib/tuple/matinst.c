@@ -22,9 +22,9 @@ t_mat	mat_rotate_x(double radian)
 	cosr = cos(radian);
 	sinr = sin(radian);
 	return ((t_mat){{{1, 0, 0, 0},
-		{0, cosr, -sinr, 0},
-		{0, sinr, cosr, 0},
-		{0, 0, 0, 1}}, 4});
+			{0, cosr, -sinr, 0},
+			{0, sinr, cosr, 0},
+			{0, 0, 0, 1}}, 4});
 }
 
 t_mat	mat_rotate_y(double radian)
@@ -35,15 +35,15 @@ t_mat	mat_rotate_y(double radian)
 	cosr = cos(radian);
 	sinr = sin(radian);
 	return ((t_mat){{{cosr, 0, sinr, 0},
-		{0, 1, 0, 0},
-		{-sinr, 0, cosr, 0},
-		{0, 0, 0, 1}}, 4});
+			{0, 1, 0, 0},
+			{-sinr, 0, cosr, 0},
+			{0, 0, 0, 1}}, 4});
 }
 
 t_mat	mat_scal(double x, double y, double z)
 {
 	return ((t_mat){{{x, 0, 0, 0},
-		{0, y, 0, 0},
-		{0, 0, z, 0},
-		{0, 0, 0, 1}}, 4});
+			{0, y, 0, 0},
+			{0, 0, z, 0},
+			{0, 0, 0, 1}}, 4});
 }
