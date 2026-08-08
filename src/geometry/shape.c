@@ -32,8 +32,8 @@ t_tuple	world_normal_at(const t_shape *self, t_tuple p)
 {
 	t_tuple	normal;
 
-	normal = self->local_normal_at(self, mat_mul_tuple(self->transform_inv, p));
-	normal = mat_mul_tuple(self->transform_inv_t, normal);
+	normal = self->local_normal_at(self, mat_mul_tuple(&self->transform_inv, p));
+	normal = mat_mul_tuple(&self->transform_inv_t, normal);
 	normal.arr[W] = 0;
 	return (tuple_normalize(normal));
 }

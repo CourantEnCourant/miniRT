@@ -26,10 +26,7 @@ static void	add_hit(const t_cone *cone, t_xs *xs, t_ray ray, double t)
 
 	y = ray.orig.arr[Y] + t * ray.dir.arr[Y];
 	if (-cone->height / 2 < y && y < cone->height / 2)
-	{
-		xs->xs[xs->count].t = t;
-		xs->xs[xs->count++].shape = (t_shape *)&cone->base;
-	}
+		add_xs(xs, &cone->base, t);
 }
 
 static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
@@ -55,8 +52,9 @@ static void	intersect(const t_shape *self, t_xs *xs, t_ray ray)
 	disc = b * b - 4 * a * c;
 	if (disc < 0)
 		return ;
-	add_hit((t_cone *)self, xs, ray, (-b - sqrt(disc)) / (2 * a));
-	add_hit((t_cone *)self, xs, ray, (-b + sqrt(disc)) / (2 * a));
+	disc = sqrt(disc);
+	add_hit((t_cone *)self, xs, ray, (-b - disc) / (2 * a));
+	add_hit((t_cone *)self, xs, ray, (-b + disc) / (2 * a));
 }
 
 static t_tuple	local_normal_at(const t_shape *self, t_tuple p)
@@ -79,7 +77,6 @@ void	init_cone(t_cone *self, t_tuple coord, t_rgb rgb, t_tuple normal,
 
 	init_shape(&self->base, CONE, coord, rgb);
 	normal = tuple_normalize(normal);
-	self->radius = radius;
 	self->height = height;
 	trans = mat_scal(radius, 1, radius);
 	phi = acos(normal.arr[Y]);

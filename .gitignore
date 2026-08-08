@@ -4,6 +4,7 @@ miniRT
 # Minilibx
 /lib/minilibx/
 /include/mlx.h
+*.md
 
 # Prerequisites
 *.d

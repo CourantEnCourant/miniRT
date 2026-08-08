@@ -46,26 +46,6 @@ double	mat_det(t_mat A)
 	return (ret);
 }
 
-bool	mat_eq(t_mat A, t_mat B)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (i < A.size)
-	{
-		j = 0;
-		while (j < A.size)
-		{
-			if (!deq(A.arr[i][j], B.arr[i][j]))
-				return (false);
-			j++;
-		}
-		i++;
-	}
-	return (true);
-}
-
 t_mat	mat_inv(t_mat A)
 {
 	t_mat	ret;
