@@ -18,6 +18,11 @@
 
 bool	endswith(const char *str, const char *end);
 
+static bool	is_valid_conf(const t_conf *conf)
+{
+	return (conf->am_is_valid && conf->camera_is_valid);
+}
+
 int	main(int argc, char *argv[])
 {
 	int			fd;
@@ -32,7 +37,12 @@ int	main(int argc, char *argv[])
 	if (fd == -1)
 		return (ft_dprintf(STDERR_FILENO, "Infile error\n"), 1);
 	gc = new_gc();
-	init_conf_from_file(&conf, fd, gc);
+	if (!init_conf_from_file(&conf, fd, gc) || !is_valid_conf(&conf))
+		return (close(fd),
+			dest_conf(&conf),
+			dest_gc(gc),
+			ft_dprintf(STDERR_FILENO, "Error\n"), 1);
+	close(fd);
 	init_renderer(&renderer, &conf, gc, argv[1]);
 	renderer.render(&renderer, &conf);
 }

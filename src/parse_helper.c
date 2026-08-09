@@ -18,6 +18,14 @@
 #include "minirt.h"
 #include "tuple.h"
 
+static bool	is_valid_color(const t_rgb *rgb)
+{
+	return (0.0 <= rgb->arr[R] && rgb->arr[R] <= 1.0
+		&& 0.0 <= rgb->arr[G] && rgb->arr[G] <= 1.0
+		&& 0.0 <= rgb->arr[B] && rgb->arr[B] <= 1.0
+		&& rgb->arr[W] == 0.0);
+}
+
 bool	parse_rgb(t_rgb *rgb, char str[], t_gc *gc)
 {
 	t_darray	*tmp;
@@ -29,7 +37,7 @@ bool	parse_rgb(t_rgb *rgb, char str[], t_gc *gc)
 			ft_atoi(tmp->arr[1]) / 255.0,
 			ft_atoi(tmp->arr[2]) / 255.0);
 	dest_darray(tmp, gc_free);
-	return (true);
+	return (is_valid_color(rgb));
 }
 
 bool	parse_coord(t_tuple *coord, char str[], t_gc *gc)
@@ -46,6 +54,14 @@ bool	parse_coord(t_tuple *coord, char str[], t_gc *gc)
 	return (true);
 }
 
+static bool	is_valid_normal(const t_tuple *normal)
+{
+	return (-1.0 <= normal->arr[X] && normal->arr[X] <= 1.0
+		&& -1.0 <= normal->arr[Y] && normal->arr[Y] <= 1.0
+		&& -1.0 <= normal->arr[Z] && normal->arr[Z] <= 1.0
+		&& !deq(tuple_mod(*normal), 0));
+}
+
 bool	parse_normal(t_tuple *normal, char str[], t_gc *gc)
 {
 	t_darray	*tmp;
@@ -57,5 +73,5 @@ bool	parse_normal(t_tuple *normal, char str[], t_gc *gc)
 			ft_atof(tmp->arr[1]),
 			ft_atof(tmp->arr[2]));
 	dest_darray(tmp, gc_free);
-	return (true);
+	return (is_valid_normal(normal));
 }

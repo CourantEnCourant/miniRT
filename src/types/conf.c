@@ -26,16 +26,18 @@ static void	init_conf(t_conf *self, t_gc *gc)
 	self->gc = gc;
 	self->shapes = new_darray(gc);
 	self->lights = new_darray(gc);
+	self->am_is_valid = false;
+	self->camera_is_valid = false;
 }
 
-static bool	parse_line(t_conf *self, t_darray *param)
+static bool	parse_line(t_conf *self, t_darray *param, t_conf *conf)
 {
 	if (param->len == 0)
 		return (true);
 	if (ft_strcmp(param->arr[0], "A") == 0)
-		return (init_am(&self->am, param));
+		return (init_am(&self->am, param, conf));
 	else if (ft_strcmp(param->arr[0], "C") == 0)
-		return (init_camera(&self->camera, param));
+		return (init_camera(&self->camera, param, conf));
 	else if (ft_strcmp(param->arr[0], "L") == 0)
 		return (add_light(self->lights, param));
 	else if (ft_strcmp(param->arr[0], "sp") == 0)
@@ -64,7 +66,7 @@ bool	init_conf_from_file(t_conf *self, int fd, t_gc *gc)
 	while (line)
 	{
 		param = gc_split(line, ' ', gc);
-		flag = parse_line(self, param);
+		flag = parse_line(self, param, self);
 		dest_darray(param, gc_free);
 		gc_free(line, gc);
 		if (!flag)
