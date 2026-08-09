@@ -22,6 +22,8 @@
 # endif
 # define EVENT_DESTROY 17
 # define MASK_DESTROY 0
+# define EVENT_EXPOSE 12
+# define MASK_EXPOSE (1L << 15)
 
 # include "datastructures.h"
 # include "gc_libft.h"

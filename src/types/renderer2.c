@@ -32,6 +32,12 @@ static int	close_window(t_renderer *renderer)
 	exit(0);
 }
 
+static int	expose_hook(t_renderer *self)
+{
+	mlx_put_image_to_window(self->mlx, self->mlx_win, self->img, 0, 0);
+	return (0);
+}
+
 static int	key_hook(int keycode, void *param)
 {
 	if (keycode == KEY_ESC)
@@ -53,4 +59,6 @@ void	init_renderer(t_renderer *self, t_conf *conf, t_gc *gc,
 	mlx_key_hook(self->mlx_win, key_hook, self);
 	mlx_hook(self->mlx_win, EVENT_DESTROY, MASK_DESTROY,
 		(t_fn)(intptr_t)close_window, self);
+	mlx_hook(self->mlx_win, EVENT_EXPOSE, MASK_EXPOSE,
+		(t_fn)(intptr_t)expose_hook, self);
 }
