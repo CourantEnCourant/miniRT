@@ -14,7 +14,6 @@
 #include <stdbool.h>
 #include "datastructures.h"
 #include "gc.h"
-#include "libft.h"
 #include "minirt.h"
 #include "tuple.h"
 

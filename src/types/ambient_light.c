@@ -15,17 +15,15 @@
 #include "libft.h"
 #include "minirt.h"
 
-static bool	is_valid(const t_am *self)
+bool	init_am(t_am *am, t_darray *param, t_conf *conf)
 {
-	return (0.0 <= self->ratio && self->ratio <= 1.0);
-}
-
-bool	init_am(t_am *am, t_darray *param)
-{
-	if (param->len != 3)
+	if (conf->am_is_valid || param->len != 3)
 		return (false);
 	am->ratio = ft_atof(param->arr[1]);
+	if (am->ratio < 0 || am->ratio > 1)
+		return (false);
 	if (!parse_rgb(&am->rgb, param->arr[2], param->gc))
 		return (false);
-	return (is_valid(am));
+	conf->am_is_valid = true;
+	return (true);
 }

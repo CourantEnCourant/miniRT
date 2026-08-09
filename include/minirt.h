@@ -129,13 +129,15 @@ void			init_cone2(t_cone *self,
 					t_tuple normal, double radius, double height);
 bool			add_cone(t_darray *shapes, t_darray *param);
 
+typedef struct s_conf	t_conf;
+
 typedef struct s_am		t_am;
 struct s_am
 {
 	double	ratio;
 	t_rgb	rgb;
 };
-bool			init_am(t_am *am, t_darray *param);
+bool			init_am(t_am *am, t_darray *param, t_conf *conf);
 
 typedef struct s_camera	t_camera;
 struct s_camera
@@ -149,7 +151,7 @@ struct s_camera
 	t_mat	transform;
 	t_mat	transform_inv;
 };
-bool			init_camera(t_camera *cam, t_darray *param);
+bool			init_camera(t_camera *cam, t_darray *param, t_conf *conf);
 
 typedef struct s_light	t_light;
 struct s_light
@@ -175,11 +177,12 @@ typedef struct s_comps
 }	t_comps;
 t_comps			prepare_computations(t_intersection inter, t_ray r);
 
-typedef struct s_conf	t_conf;
 struct s_conf
 {
 	t_am		am;
+	bool		am_is_valid;
 	t_camera	camera;
+	bool		camera_is_valid;
 	t_darray	*lights;
 	t_gc		*gc;
 	t_darray	*shapes;
