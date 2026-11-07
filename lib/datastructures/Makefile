@@ -2,7 +2,7 @@ NAME = datastructures.a
 TEST = test
 
 CC = cc
-CFLAGS = -Wextra -Werror -Wall -g3
+CFLAGS = -Wextra -Werror -Wall -g3 -O2
 AR = ar rcs
 RM = rm -f
 
