@@ -13,6 +13,13 @@ else
 	MLX_FLAGS = -Llib/minilibx -lmlx -lXext -lX11 -lm -lz
 endif
 
+ARCH := $(shell uname -m)
+ifeq ($(ARCH), arm64)
+	TUPLE_LIB = ./lib/tuple_simd/tuple_simd.a
+else
+	TUPLE_LIB = ./lib/tuple/tuple.a
+endif
+
 MLX_DIR = ./lib/minilibx
 MLX = $(MLX_DIR)/libmlx.a
 
@@ -48,7 +55,7 @@ LIB_ARCHIVES = ./lib/datastructures/datastructures.a \
 			   ./lib/gc/gc.a \
 			   ./lib/gc_libft/gc_libft.a \
 			   ./lib/libft/libft.a \
-			   ./lib/tuple/tuple.a
+			   $(TUPLE_LIB)
 
 all: $(NAME)
 
