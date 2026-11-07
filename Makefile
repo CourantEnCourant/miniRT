@@ -39,7 +39,8 @@ SRC = ./src/geometry/cone.c \
 	  ./src/main.c \
 	  ./src/math_helper.c \
 	  ./src/parse_helper.c \
-	  ./src/str_helper.c
+	  ./src/str_helper.c \
+	  ./src/thread.c
 
 OBJ = $(SRC:.c=.o)
 

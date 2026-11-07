@@ -6,6 +6,8 @@
 
 A small ray tracer written in C with MiniLibX. It reads a scene description file (`*.rt`), renders it with the Phong reflection model and displays the result in a window.
 
+Rendering is multithreaded: one thread per online CPU core.
+
 ---
 
 # Showcase
