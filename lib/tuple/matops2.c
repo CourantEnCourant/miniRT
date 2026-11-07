@@ -18,7 +18,6 @@ t_mat	mat_mul(t_mat A, t_mat B)
 	t_mat	ret;
 	size_t	i;
 	size_t	j;
-	size_t	k;
 
 	i = -1;
 	while (++i < A.size)
@@ -26,14 +25,10 @@ t_mat	mat_mul(t_mat A, t_mat B)
 		j = -1;
 		while (++j < A.size)
 		{
-			k = -1;
-			while (++k < A.size)
-			{
-				ret.arr[i][j] = A.arr[i][0] * B.arr[0][j]
-					+ A.arr[i][1] * B.arr[1][j]
-					+ A.arr[i][2] * B.arr[2][j]
-					+ A.arr[i][3] * B.arr[3][j];
-			}
+			ret.arr[i][j] = A.arr[i][0] * B.arr[0][j]
+				+ A.arr[i][1] * B.arr[1][j]
+				+ A.arr[i][2] * B.arr[2][j]
+				+ A.arr[i][3] * B.arr[3][j];
 		}
 	}
 	ret.size = A.size;
@@ -44,18 +39,12 @@ t_tuple	mat_mul_tuple(const t_mat *A, t_tuple t)
 {
 	t_tuple	ret;
 	size_t	i;
-	size_t	j;
 
 	i = 0;
 	while (i < 4)
 	{
-		j = 0;
-		while (j < 4)
-		{
-			ret.arr[i] = t.arr[0] * A->arr[i][0] + t.arr[1] * A->arr[i][1]
-				+ t.arr[2] * A->arr[i][2] + t.arr[3] * A->arr[i][3];
-			j++;
-		}
+		ret.arr[i] = t.arr[0] * A->arr[i][0] + t.arr[1] * A->arr[i][1]
+			+ t.arr[2] * A->arr[i][2] + t.arr[3] * A->arr[i][3];
 		i++;
 	}
 	return (ret);
